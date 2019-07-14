@@ -3,17 +3,24 @@ const { gql } = require('apollo-server')
 module.exports = gql`
 	type User {
 		_id: ID
-		name: String
 		email: String
+		name: String
 		picture: String
 	}
 
 	type Poem {
 		_id: ID!
 		createdBy: User!
+		sections: [Section!]
 		title: String!
 		url: String
-		sections: [Section!]
+	}
+	
+	type Section {
+		firstLine: String
+		order: Number
+		poem: Poem!
+		stanzas: [Stanza!]
 	}
 
 	type Stanza {
@@ -21,13 +28,7 @@ module.exports = gql`
 		body: String
 		leadWord: String
 		section: Section!
-	}
-
-	type Section {
-		firstLine: String
-		order: Number
 		poem: Poem!
-		stanzas: [Stanza!]!
 	}
 
 	input SectionInput {
@@ -38,6 +39,7 @@ module.exports = gql`
 
 	input StanzaInput {
 		section: ID!
+		poem: ID!
 		leadWord: String!
 		body: String
 	}
@@ -63,10 +65,10 @@ module.exports = gql`
 		
 		createSection(poemId: ID!, input: SectionInput): Section
 		updateSection(_id: ID!, input: SectionInput): Section
-		deleteSection(_id: ID!): Poem
+		deleteSection(_id: ID!, poemId: ID!): Poem
 		
-		createStanza(stanzaId: ID!, input: StanzaInput): Stanza
+		createStanza(input: StanzaInput): Stanza
 		updateStanza(_id: ID!, input: StanzaInput): Stanza
-		deleteStanza(_id: ID!): Section
+		deleteStanza(_id: ID!, sectionId): Section
 	}
 `

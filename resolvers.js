@@ -1,8 +1,8 @@
 const { AuthenticationError, ApolloError } = require('apollo-server')
-const Form = require('./models/Form')
+const Poem = require('./models/Poem')
 const User = require('./models/User')
-const FormField = require('./models/FormField')
-const FormFieldResponse = require('./models/FormFieldResponse')
+const Section = require('./models/Section')
+const Stanza = require('./models/Stanza')
 const ObjectId = require('mongoose').Types.ObjectId
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -22,49 +22,22 @@ module.exports = {
 	Query: {
 		me: authenticated((root, args, ctx) => ctx.currentUser),
 
-		getResponses: authenticated(async (root, { formId }) => {
-			// to do: figure out how to best authenticate if the user requesting the responses is the author of the form (for serverside validation) and if it's even necessary
-			return FormField.aggregate([
-				{ $match: { form: ObjectId(formId) } },
-				{
-					$lookup: {
-						from: 'formfieldresponses',
-						localField: '_id',
-						foreignField: 'formField',
-						as: 'responses',
-					},
-				},
-			]).then(response => response)
+		getPoems: authenticated(async (root, args, ctx) => {
+			const poems = await Poem.find({ createdBy: ctx.currentUser._id })
+
+			return poems
 		}),
 
-		getForms: authenticated(async (root, args, ctx) => {
-			const forms = await Form.find({ createdBy: ctx.currentUser._id })
-
-			return forms
-		}),
-
-		async getForm(root, { _id }) {
-			const form = await Form.findOne({
+		async getPoem(root, { _id }) {
+			const poem = await Poem.findOne({
 				_id,
-			}).populate('formFields')
+			}).populate('stanzas')
 
-			return form
+			return poem
 		},
 	},
 
 	Mutation: {
-		async submitForm(root, { input }) {
-			const responses = input.map(response => ({
-				...response,
-				form: ObjectId(response.form),
-				formField: ObjectId(response.formField),
-			}))
-
-			return FormFieldResponse.collection.insertMany(responses).then(result => {
-				return result.ops
-			})
-		},
-
 		async login(root, args) {
 			const user = await User.findOne({ email: args.email }).exec()
 
@@ -106,76 +79,107 @@ module.exports = {
 			}
 		},
 
-		createForm: authenticated(async (root, args, ctx) => {
-			const newForm = new Form({
-				...args.input,
+		createPoem: authenticated(async (root, { title }, ctx) => {
+			const newPoem = new Poem({
+				title,
 				createdBy: ctx.currentUser._id,
 			})
-			newForm.url = `/${ctx.currentUser.name.replace(/ /g, '')}/${newForm._id}`
+			newPoem.url = `/${ctx.currentUser.name.replace(/ /g, '')}/${newPoem._id}`
 
-			return await newForm.save()
+			return newPoem.save()
 		}),
 
-		deleteForm: authenticated(async (root, { formId: _id }, ctx) => {
-			const form = await Form.findOneAndDelete({
-				_id,
-				createdBy: ObjectId(ctx.currentUser._id),
-			})
-			if (!form) {
-				throw new AuthenticationError(
-					'You are not authorized to delete this form',
-				)
-			}
-			await FormField.deleteMany({
-				form: _id,
-			})
-			await FormFieldResponse.deleteMany({
-				form: _id,
-			})
-			return form
-		}),
-
-		deleteField: authenticated(async (root, { _id, formId }) => {
-			await FormField.findByIdAndRemove(_id)
-			await FormFieldResponse.deleteMany({
-				formField: _id,
-			})
-			await Form.findOneAndUpdate(
-				{ _id: formId },
-				{ $pull: { formFields: _id } },
-			)
-		}),
-
-		createFormField: authenticated(async (root, { formId, input }) => {
-			const formField = await new FormField({
-				...input,
-				form: formId,
-			}).save()
-
-			await Form.findOneAndUpdate(
-				{
-					_id: formId,
-				},
-				{ $addToSet: { formFields: formField._id } },
-				{ new: true },
-			)
-
-			return formField
-		}),
-
-		updateFormField: authenticated(async (root, { _id, input }, ctx) => {
-			return await FormField.findOneAndUpdate({ _id }, input, { new: true })
-		}),
-
-		updateForm: authenticated(async (root, { _id, input }, ctx) => {
-			const form = await Form.findOneAndUpdate(
+		updatePoem: authenticated(async (root, { _id, input }, ctx) => {
+			const poem = await Poem.findOneAndUpdate(
 				{ _id, createdBy: ctx.currentUser._id },
 				input,
 				{ new: true },
 			)
-			const formUpdated = await Form.populate(form, 'formFields')
+			const poemUpdated = await Poem.populate(poem, 'poemFields')
 
-			return formUpdated
+			return poemUpdated
+		}),
+
+		deletePoem: authenticated(async (root, { _id }, ctx) => {
+			const poem = await Poem.findOneAndDelete({
+				_id,
+				createdBy: ObjectId(ctx.currentUser._id),
+			})
+			if (!poem) {
+				throw new AuthenticationError(
+					'You are not authorized to delete this poem',
+				)
+			}
+			
+			await Section.deleteMany({
+				poem: _id,
+			})
+
+			await Stanza.deleteMany({
+				poem: _id,
+			})
+
+			return poem
+		}),
+
+		createSection: authenticated(async (root, { poemId, input }) => {
+			const section = await new Section({
+				...input,
+				poem: poemId,
+			}).save()
+
+			await Poem.findOneAndUpdate(
+				{
+					_id: poemId,
+				},
+				{ $addToSet: { sections: section._id } },
+				{ new: true },
+			)
+
+			return section
+		}),
+
+		updateSection: authenticated(async (root, { _id, input }, ctx) => {
+			return await Section.findOneAndUpdate({ _id }, input, { new: true })
+		}),
+
+		deleteSection: authenticated(async (root, { _id, poemId }) => {
+			await Section.findByIdAndRemove(_id)
+			await Stanza.deleteMany({
+				section: _id,
+			})
+			await Poem.findOneAndUpdate(
+				{ _id: poemId },
+				{ $pull: { sections: _id } },
+			)
+		}),
+
+		createStanza: authenticated(async (root, { input }) => {
+			const stanza = await new Stanza({
+				...input,
+			}).save()
+
+			await Section.findOneAndUpdate(
+				{
+					_id: input.poem,
+				},
+				{ $addToSet: { stanzas: stanza._id } },
+				{ new: true },
+			)
+
+			return stanza
+		}),
+
+		updateStanza: authenticated(async (root, { _id, input }, ctx) => {
+			return await Stanza.findOneAndUpdate({ _id }, input, { new: true })
+		}),
+
+		deleteStanza: authenticated(async (root, { _id, sectionId }) => {
+			await Stanza.findByIdAndRemove(_id)
+			await Section.findOneAndUpdate(
+				{ _id: sectionId },
+				{ $pull: { stanzas: _id } },
+			)
 		}),
 	},
 }
