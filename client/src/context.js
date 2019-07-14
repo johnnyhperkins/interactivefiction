@@ -22,9 +22,9 @@ const Context = createContext({
 		message: '',
 		action: null,
 	},
-	forms: [],
-	currentForm: null,
-	currentFormFields: [],
+	poems: [],
+	currentPoem: null,
+	currentSections: [],
 })
 
 export default Context

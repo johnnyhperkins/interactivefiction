@@ -23,7 +23,7 @@ module.exports = {
 		me: authenticated((root, args, ctx) => ctx.currentUser),
 
 		getPoems: authenticated(async (root, args, ctx) => {
-			const poems = await Poem.find({ createdBy: ctx.currentUser._id })
+			const poems = await Poem.find({ author: ctx.currentUser._id })
 
 			return poems
 		}),
@@ -82,7 +82,7 @@ module.exports = {
 		createPoem: authenticated(async (root, { title }, ctx) => {
 			const newPoem = new Poem({
 				title,
-				createdBy: ctx.currentUser._id,
+				author: ctx.currentUser._id,
 			})
 			newPoem.url = `/${ctx.currentUser.name.replace(/ /g, '')}/${newPoem._id}`
 
@@ -91,7 +91,7 @@ module.exports = {
 
 		updatePoem: authenticated(async (root, { _id, input }, ctx) => {
 			const poem = await Poem.findOneAndUpdate(
-				{ _id, createdBy: ctx.currentUser._id },
+				{ _id, author: ctx.currentUser._id },
 				input,
 				{ new: true },
 			)
@@ -103,7 +103,7 @@ module.exports = {
 		deletePoem: authenticated(async (root, { _id }, ctx) => {
 			const poem = await Poem.findOneAndDelete({
 				_id,
-				createdBy: ObjectId(ctx.currentUser._id),
+				author: ObjectId(ctx.currentUser._id),
 			})
 			if (!poem) {
 				throw new AuthenticationError(

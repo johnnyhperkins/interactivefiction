@@ -27,6 +27,7 @@ export const LOGIN_MUTATION = gql`
 		}
 	}
 `
+
 // Poem
 
 export const CREATE_POEM_MUTATION = gql`
@@ -34,10 +35,6 @@ export const CREATE_POEM_MUTATION = gql`
 		createPoem(title: $title) {
 			_id
 			title
-			createdBy {
-				_id
-				name
-			}
 		}
 	}
 `
@@ -53,7 +50,7 @@ export const UPDATE_POEM_MUTATION = `
 				order
 				stanzas
 			}
-			createdBy {
+			author {
 				_id
 				name
 			}
@@ -71,7 +68,7 @@ export const DELETE_POEM_MUTATION = gql`
 // Section
 
 export const CREATE_SECTION_MUTATION = gql`
-	mutation($poemId: ID!, $firstLine: String, $order: Number) {
+	mutation($poemId: ID!, $firstLine: String, $order: Int) {
 		createSection(poemId: $poemId, input: { firstLine: $firstLine, order: $order }) {
 			_id
 			firstLine
@@ -84,7 +81,7 @@ export const CREATE_SECTION_MUTATION = gql`
 `
 
 export const UPDATE_SECTION_MUTATION = `
-	mutation($_id: ID!, $firstLine: String, $order: Number) {
+	mutation($_id: ID!, $firstLine: String, $order: Int) {
 		updateSection(_id: $_id, input: { firstLine: $firstLine, order: $order }) {
 			firstLine
 			order

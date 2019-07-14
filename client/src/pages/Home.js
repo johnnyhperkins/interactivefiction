@@ -21,21 +21,21 @@ import handleError from '../utils/handleError'
 import { snackbarMessage } from '../utils/snackbarMessage'
 import Context from '../context'
 import {
-	CREATE_FORM_MUTATION,
-	DELETE_FORM_MUTATION,
+	CREATE_POEM_MUTATION,
+	DELETE_POEM_MUTATION,
 } from '../graphql/mutations'
-import { GET_FORMS_QUERY } from '../graphql/queries'
+import { GET_POEMS_QUERY } from '../graphql/queries'
 
 const Home = ({ classes, history, client }) => {
 	const { dispatch } = useContext(Context)
-	const [ addForm, setAddForm ] = useState(false)
+	const [ addPoem, setAddPoem ] = useState(false)
 	const [ title, setTitle ] = useState('')
 
-	const startDeleteForm = (formId, deleteForm) => {
+	const startDeletePoem = (poemId, deletePoem) => {
 		const action = async () => {
-			const res = await deleteForm({ variables: { formId } })
+			const res = await deletePoem({ variables: { poemId } })
 			if (Boolean(res)) {
-				snackbarMessage('Form Deleted', dispatch)
+				snackbarMessage('Poem Deleted', dispatch)
 			}
 		}
 
@@ -43,56 +43,56 @@ const Home = ({ classes, history, client }) => {
 			type: 'TOGGLE_WARNING_MODAL',
 			payload: {
 				modalOpen: true,
-				title: 'Are you sure you want to delete this form?',
-				message: 'All fields and responses will be permanently deleted.',
+				title: 'Are you sure you want to delete this poem?',
+				message: 'This cannot be undone.',
 				action,
 			},
 		})
 	}
 
 	const handleClick = id => {
-		history.push(`/form/${id}`)
+		history.push(`/poem/${id}`)
 	}
 
-	const handleCreateForm = createForm => {
+	const handleCreatePoem = createPoem => {
 		return async () => {
-			const { errors } = await createForm({
+			const { errors } = await createPoem({
 				variables: { title },
 			})
 			if (errors) return handleError(errors, dispatch)
-			setAddForm(false)
+			setAddPoem(false)
 			setTitle('')
-			snackbarMessage('Form added', dispatch)
+			snackbarMessage('Poem added', dispatch)
 		}
 	}
 
-	const renderFormItems = forms => {
-		return forms.map(form => {
+	const renderPoems = poems => {
+		return poems.map(poem => {
 			return (
-				<ListItem key={form._id}>
+				<ListItem key={poem._id}>
 					<ListItemIcon
 						className={classes.pointer}
-						onClick={() => handleClick(form._id)}>
+						onClick={() => handleClick(poem._id)}>
 						<EditIcon />
 					</ListItemIcon>
-					<ListItemText primary={form.title} />
+					<ListItemText primary={poem.title} />
 					<Mutation
-						mutation={DELETE_FORM_MUTATION}
+						mutation={DELETE_POEM_MUTATION}
 						onError={err => handleError(err, dispatch)}
-						update={(cache, { data: { deleteForm: { _id } } }) => {
-							const { getForms } = cache.readQuery({
-								query: GET_FORMS_QUERY,
+						update={(cache, { data: { deletePoem: { _id } } }) => {
+							const { getPoems } = cache.readQuery({
+								query: GET_POEMS_QUERY,
 							})
 
 							cache.writeQuery({
-								query: GET_FORMS_QUERY,
+								query: GET_POEMS_QUERY,
 								data: {
-									getForms: getForms.filter(form => form._id !== _id),
+									getPoems: getPoems.filter(poem => poem._id !== _id),
 								},
 							})
 						}}>
-						{deleteForm => (
-							<Button onClick={() => startDeleteForm(form._id, deleteForm)}>
+						{deletePoem => (
+							<Button onClick={() => startDeletePoem(poem._id, deletePoem)}>
 								<DeleteIcon className={classes.deleteIcon} />
 							</Button>
 						)}
@@ -106,34 +106,34 @@ const Home = ({ classes, history, client }) => {
 		<div className={classes.root}>
 			<Grid container justify="center">
 				<Grid item sm={6}>
-					<Typography variant="h5">My Forms</Typography>
+					<Typography variant="h5">My Poems</Typography>
 					<Divider className={classes.divider} />
 					<List>
-						<Query query={GET_FORMS_QUERY}>
-							{({ loading, error, data: { getForms: forms } }) => {
+						<Query query={GET_POEMS_QUERY}>
+							{({ loading, error, data: { getPoems: poems } }) => {
 								if (loading) return <ReactLoading color="#2196f3" />
 								if (error) {
 									return <Typography>{error.message}</Typography>
 								}
 
-								return forms.length ? (
-									renderFormItems(forms)
+								return poems.length ? (
+									renderPoems(poems)
 								) : (
 									<ListItem>
-										<ListItemText primary="Click the plus button to create a form." />
+										<ListItemText primary="Click the plus button to create a poem." />
 									</ListItem>
 								)
 							}}
 						</Query>
 						<Divider className={classes.divider} />
-						<ListItem className={classes.addFormItem}>
+						<ListItem className={classes.addPoemItem}>
 							<div className={classes.centerVertical}>
 								<ListItemIcon
 									className={classes.pointer}
-									onClick={() => setAddForm(!addForm)}>
+									onClick={() => setAddPoem(!addPoem)}>
 									<AddIcon />
 								</ListItemIcon>
-								{addForm && (
+								{addPoem && (
 									<TextField
 										label="Title"
 										variant="outlined"
@@ -144,22 +144,22 @@ const Home = ({ classes, history, client }) => {
 									/>
 								)}
 							</div>
-							{addForm && (
+							{addPoem && (
 								<Mutation
-									mutation={CREATE_FORM_MUTATION}
+									mutation={CREATE_POEM_MUTATION}
 									errorPolicy="all"
-									update={(cache, { data: { createForm } }) => {
-										const { getForms } = cache.readQuery({
-											query: GET_FORMS_QUERY,
+									update={(cache, { data: { createPoem } }) => {
+										const { getPoems } = cache.readQuery({
+											query: GET_POEMS_QUERY,
 										})
 										cache.writeQuery({
-											query: GET_FORMS_QUERY,
-											data: { getForms: getForms.concat([ createForm ]) },
+											query: GET_POEMS_QUERY,
+											data: { getPoems: getPoems.concat([ createPoem ]) },
 										})
 									}}>
-									{createForm => (
-										<Button onClick={handleCreateForm(createForm)}>
-											Create Form
+									{createPoem => (
+										<Button onClick={handleCreatePoem(createPoem)}>
+											Create Poem
 										</Button>
 									)}
 								</Mutation>
@@ -185,7 +185,7 @@ const styles = {
 	deleteIcon: {
 		color: 'red',
 	},
-	addFormItem: {
+	addPoemItem: {
 		minHeight: 78,
 		display: 'flex',
 		justifyContent: 'space-between',

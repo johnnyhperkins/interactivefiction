@@ -9,8 +9,8 @@ import { snackbarMessage } from '../utils/snackbarMessage'
 import Context from '../context'
 import { useClient } from '../client'
 import {
-	UPDATE_FORM_MUTATION,
-	DELETE_FIELD_MUTATION,
+	UPDATE_POEM_MUTATION,
+	DELETE_STANZA_MUTATION,
 } from '../graphql/mutations'
 
 const FieldContainer = styled.div`
@@ -48,7 +48,7 @@ const Fields = ({ formFields, setFormFields, formId }) => {
 
 	const deleteField = async () => {
 		try {
-			await client.request(DELETE_FIELD_MUTATION, {
+			await client.request(DELETE_STANZA_MUTATION, {
 				_id: idToDelete,
 				formId,
 			})
@@ -63,7 +63,7 @@ const Fields = ({ formFields, setFormFields, formId }) => {
 
 	const updateFieldOrderInDB = async fieldIds => {
 		try {
-			await client.request(UPDATE_FORM_MUTATION, {
+			await client.request(UPDATE_POEM_MUTATION, {
 				_id: formId,
 				formFields: fieldIds,
 			})

@@ -10,7 +10,7 @@ module.exports = gql`
 
 	type Poem {
 		_id: ID!
-		createdBy: User!
+		author: User!
 		sections: [Section!]
 		title: String!
 		url: String
@@ -18,7 +18,7 @@ module.exports = gql`
 	
 	type Section {
 		firstLine: String
-		order: Number
+		order: Int
 		poem: Poem!
 		stanzas: [Stanza!]
 	}
@@ -34,7 +34,7 @@ module.exports = gql`
 	input SectionInput {
 		poem: ID!
 		firstLine: String!
-		order: Number
+		order: Int
 	}
 
 	input StanzaInput {
@@ -69,6 +69,6 @@ module.exports = gql`
 		
 		createStanza(input: StanzaInput): Stanza
 		updateStanza(_id: ID!, input: StanzaInput): Stanza
-		deleteStanza(_id: ID!, sectionId): Section
+		deleteStanza(_id: ID!, sectionId: ID!): Section
 	}
 `

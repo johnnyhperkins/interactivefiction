@@ -14,7 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import AddIcon from '@material-ui/icons/Add'
 import { ListItemIcon } from '@material-ui/core'
 
-import { CREATE_FIELD_MUTATION } from '../graphql/mutations'
+import { CREATE_STANZA_MUTATION } from '../graphql/mutations'
 import { snackbarMessage } from '../utils/snackbarMessage'
 import handleError from '../utils/handleError'
 import Context from '../context'
@@ -98,7 +98,7 @@ const AddField = ({
 					)}
 				</div>
 				{addField && (
-					<Mutation mutation={CREATE_FIELD_MUTATION}>
+					<Mutation mutation={CREATE_STANZA_MUTATION}>
 						{createFormField => (
 							<Button onClick={handleCreateFormField(createFormField)}>
 								Add Field

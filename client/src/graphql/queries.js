@@ -24,7 +24,7 @@ export const GET_POEM_QUERY = `
 			_id
 			title
 			url
-			createdBy {
+			author {
 				_id
 				name
 			}

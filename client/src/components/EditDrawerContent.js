@@ -12,7 +12,7 @@ import handleError from '../utils/handleError'
 import { snackbarMessage } from '../utils/snackbarMessage'
 import Context from '../context'
 import { useClient } from '../client'
-import { UPDATE_FIELD_MUTATION } from '../graphql/mutations'
+import { UPDATE_POEM_MUTATION } from '../graphql/mutations'
 
 const EditDrawerContent = ({ classes, formFields, setFormFields, onClose }) => {
 	const client = useClient()
@@ -28,7 +28,7 @@ const EditDrawerContent = ({ classes, formFields, setFormFields, onClose }) => {
 
 	const handleUpdateField = async () => {
 		try {
-			await client.request(UPDATE_FIELD_MUTATION, {
+			await client.request(UPDATE_POEM_MUTATION, {
 				_id: drawer._id,
 				type,
 				label,

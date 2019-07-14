@@ -58,7 +58,7 @@ const Login = ({ classes }) => {
 						onFailure={onFailure}
 						buttonText="Login with Google"
 						theme="dark"
-						clientId="26591134947-f8m3eed1ihedd8m4mhq5ro57vbdf9ri6.apps.googleusercontent.com"
+						clientId="739229287262-ibkp5mgk5matdci2l5n599gpbqvp5nsj.apps.googleusercontent.com"
 					/>
 				</Grid>
 			</Grid>

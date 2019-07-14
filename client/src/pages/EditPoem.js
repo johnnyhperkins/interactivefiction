@@ -14,38 +14,35 @@ import handleError from '../utils/handleError'
 import { snackbarMessage } from '../utils/snackbarMessage'
 import Context from '../context'
 import { useClient } from '../client'
-import Responses from '../components/Responses'
 
 import AddField from '../components/AddField'
 import Fields from '../components/Fields'
 import EditDrawerContent from '../components/EditDrawerContent'
 
-import { GET_FORM_QUERY } from '../graphql/queries'
-import { UPDATE_FORM_MUTATION } from '../graphql/mutations'
+import { GET_POEM_QUERY } from '../graphql/queries'
+import { UPDATE_POEM_MUTATION } from '../graphql/mutations'
 
-const EditForm = ({ classes, match, history }) => {
+const EditPoem = ({ classes, match, history }) => {
 	const { dispatch, state: { ui: { drawer: { open } } } } = useContext(Context)
 	const [ title, setTitle ] = useState('')
 	const [ url, setUrl ] = useState('')
-	const [ formFields, setFormFields ] = useState(null)
-
-	const [ responsesOpen, setResponsesOpen ] = useState(false)
+	const [ sections, setSections ] = useState([])
 
 	const [ addField, setAddField ] = useState(false)
 	const [ editTitle, setEditTitle ] = useState(false)
 
-	const { id: formId } = match.params
+	const { id: poemId } = match.params
 
 	const client = useClient()
 
 	useEffect(() => {
-		getForm()
+		getPoem()
 	}, [])
 
-	const handleUpdateForm = async () => {
+	const handleUpdatePoem = async () => {
 		try {
-			await client.request(UPDATE_FORM_MUTATION, {
-				_id: formId,
+			await client.request(UPDATE_POEM_MUTATION, {
+				_id: poemId,
 				title,
 			})
 			setEditTitle(false)
@@ -57,17 +54,17 @@ const EditForm = ({ classes, match, history }) => {
 		}
 	}
 
-	const getForm = async () => {
+	const getPoem = async () => {
 		try {
 			const {
-				getForm: { title, url, formFields },
-			} = await client.request(GET_FORM_QUERY, {
-				_id: formId,
+				getPoem: { title, url, sections },
+			} = await client.request(GET_POEM_QUERY, {
+				_id: poemId,
 			})
 
 			setUrl(url)
 			setTitle(title)
-			setFormFields(formFields)
+			setSections(sections)
 		} catch (err) {
 			handleError(err, dispatch)
 		}
@@ -96,77 +93,61 @@ const EditForm = ({ classes, match, history }) => {
 						value={title}
 						onChange={e => setTitle(e.target.value)}
 					/>
-					<Button onClick={() => handleUpdateForm()}>Save</Button>
+					<Button onClick={() => handleUpdatePoem()}>Save</Button>
 				</div>
 			)
 		}
 		return (
 			<Typography variant="h4">
-				{responsesOpen ? 'Responses' : title}
-				{responsesOpen && (
-					<EditIcon
-						onClick={() => {
-							setEditTitle(!editTitle)
-						}}
-					/>
-				)}
+				{title}
+				<EditIcon
+					onClick={() => {
+						setEditTitle(!editTitle)
+					}}
+				/>
 			</Typography>
 		)
 	}
 
 	return (
-		formFields && (
+		sections && (
 			<div className={classes.root}>
 				<Grid container justify="center">
 					<Grid item sm={6}>
 						{renderTitle(editTitle)}
-						{Boolean(formFields.length) && (
+						{Boolean(sections.length) && (
 							<div>
 								<Link to={url} small="true">
-									View Form
+									View Poem
 								</Link>
-								<span
-									onClick={() => setResponsesOpen(!responsesOpen)}
-									className={classes.smallLink}>
-									{responsesOpen ? 'Hide Responses' : 'Show Responses'}
-								</span>
 							</div>
 						)}
 
 						<Divider className={classes.divider} />
-						{!responsesOpen ? (
 							<div>
 								<Fields
-									setFormFields={setFormFields}
-									formId={formId}
-									formFields={formFields}
+									setSections={setSections}
+									poemId={poemId}
+									sections={sections}
 								/>
 
 								<Divider className={classes.divider} />
 
 								<AddField
-									formFields={formFields}
-									formId={formId}
+									sections={sections}
+									poemId={poemId}
 									addField={addField}
 									setAddField={setAddField}
-									setFormFields={setFormFields}
+									setSections={setSections}
 								/>
-							</div>
-						) : (
-							<Responses
-								formId={formId}
-								classes={classes}
-								client={client}
-								dispatch={dispatch}
-							/>
-						)}
+							</div> 
 					</Grid>
 
 					<Drawer open={open} anchor="right" onClose={onClose}>
 						<EditDrawerContent
 							classes={classes}
-							formFields={formFields}
-							setFormFields={setFormFields}
+							sections={sections}
+							setSections={setSections}
 							onClose={onClose}
 						/>
 					</Drawer>
@@ -231,4 +212,4 @@ const styles = {
 	},
 }
 
-export default withStyles(styles)(EditForm)
+export default withStyles(styles)(EditPoem)
