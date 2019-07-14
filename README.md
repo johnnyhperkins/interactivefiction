@@ -1,12 +1,8 @@
-# BorderBox
+# Interactive Poetry Project
 
-### [View BorderBox Live](https://borderbox.johnnyhperkins.now.sh)
+### [Interactive Poetry Project](https://interactive-poetry.johnnyhperkins.now.sh)
 
-BorderBox is a drag and drop form creator built with React Hooks, GraphQL/Apollo, and Mongoose.
-
-## Functionality
-
-Create forms with any number of text or textarea fields, drag and drop to re-order them, and finally publish the form with a unique public url to share. The owner of the form has access to a reporting screen of all registered answers.
+Interactive Poetry is an idea pioneered by Hala Alyan and first published in Thrush. This project uses React Hooks, GraphQL/Apollo, and Mongoose.
 
 ## Local set up
 

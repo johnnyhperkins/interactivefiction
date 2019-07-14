@@ -1,6 +1,6 @@
 {
-	"version": 2,
-	"name": "BorderBox",
+	"version": 1,
+	"name": "InteractivePoetry",
 	"builds": [
 		{
 			"src": "package.json",
