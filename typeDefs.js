@@ -8,52 +8,44 @@ module.exports = gql`
 		picture: String
 	}
 
-	type Form {
+	type Poem {
 		_id: ID!
 		createdBy: User!
 		title: String!
 		url: String
-		formFields: [FormField!]
+		sections: [Section!]
 	}
 
-	type FormFieldResponse {
+	type Stanza {
 		_id: ID!
-		form: Form
-		user: String
-		formField: FormField
-		value: String
+		body: String
+		leadWord: String
+		section: Section!
 	}
 
-	type FormField {
-		_id: ID!
-		type: String
-		label: String
-		form: Form
-		responses: [FormFieldResponse]!
+	type Section {
+		firstLine: String
+		order: Number
+		poem: Poem!
+		stanzas: [Stanza!]!
 	}
 
-	input FormInput {
-		title: String
-		formFields: [ID!]
+	input SectionInput {
+		poem: ID!
+		firstLine: String!
+		order: Number
 	}
 
-	input FormFieldInput {
-		type: String
-		label: String
-	}
-
-	input FormFieldResponseInput {
-		form: ID!
-		formField: ID!
-		user: String
-		value: String
+	input StanzaInput {
+		section: ID!
+		leadWord: String!
+		body: String
 	}
 
 	type Query {
 		me: User
-		getForms: [Form!]!
-		getForm(_id: ID!): Form!
-		getResponses(formId: ID!): [FormField!]!
+		getPoems: [Poem!]!
+		getPoem(_id: ID!): Poem!
 	}
 
 	type AuthPayload {
@@ -62,14 +54,19 @@ module.exports = gql`
 	}
 
 	type Mutation {
-		createForm(input: FormInput!): Form
-		updateForm(_id: ID!, input: FormInput): Form
+		createPoem(title: String!): Poem
+		updatePoem(_id: ID!, title: String): Poem
+		deletePoem(_id: ID!): Poem
+
 		signup(email: String!, password: String!, name: String!): AuthPayload
 		login(email: String!, password: String!): AuthPayload
-		deleteForm(formId: ID!): Form
-		createFormField(formId: ID!, input: FormFieldInput): FormField
-		updateFormField(_id: ID!, input: FormFieldInput): FormField
-		deleteField(_id: ID!, formId: ID!): FormField
-		submitForm(input: [FormFieldResponseInput]): [FormFieldResponse!]!
+		
+		createSection(poemId: ID!, input: SectionInput): Section
+		updateSection(_id: ID!, input: SectionInput): Section
+		deleteSection(_id: ID!): Poem
+		
+		createStanza(stanzaId: ID!, input: StanzaInput): Stanza
+		updateStanza(_id: ID!, input: StanzaInput): Stanza
+		deleteStanza(_id: ID!): Section
 	}
 `

@@ -15,7 +15,6 @@ import AddIcon from '@material-ui/icons/Add'
 import { ListItemIcon } from '@material-ui/core'
 
 import { CREATE_FIELD_MUTATION } from '../graphql/mutations'
-import { FIELD_TYPES } from '../constants'
 import { snackbarMessage } from '../utils/snackbarMessage'
 import handleError from '../utils/handleError'
 import Context from '../context'
@@ -92,13 +91,7 @@ const AddField = ({
 									<MenuItem value="">
 										<em>Select</em>
 									</MenuItem>
-									{Object.values(FIELD_TYPES).map((input, idx) => {
-										return (
-											<MenuItem key={idx} value={input}>
-												{input}
-											</MenuItem>
-										)
-									})}
+									
 								</Select>
 							</FormControl>
 						</div>
