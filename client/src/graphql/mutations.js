@@ -27,11 +27,11 @@ export const LOGIN_MUTATION = gql`
 		}
 	}
 `
-// Form
+// Poem
 
-export const CREATE_FORM_MUTATION = gql`
+export const CREATE_POEM_MUTATION = gql`
 	mutation($title: String!) {
-		createForm(input: { title: $title }) {
+		createPoem(title: $title) {
 			_id
 			title
 			createdBy {
@@ -41,16 +41,17 @@ export const CREATE_FORM_MUTATION = gql`
 		}
 	}
 `
-export const UPDATE_FORM_MUTATION = `
-	mutation($_id: ID!, $title: String, $formFields: [ID!]) {
-		updateForm(_id: $_id, input: { title: $title, formFields: $formFields }) {
+export const UPDATE_POEM_MUTATION = `
+	mutation($_id: ID!, $title: String, $sections: [ID!]) {
+		updatePoem(_id: $_id, input: { title: $title, sections: $sections }) {
 			_id
 			title
 			url
-			formFields {
+			sections {
 				_id
-				type
-				label
+				firstLine
+				order
+				stanzas
 			}
 			createdBy {
 				_id
@@ -60,52 +61,73 @@ export const UPDATE_FORM_MUTATION = `
 	}
 `
 
-export const DELETE_FORM_MUTATION = gql`
-	mutation($formId: ID!) {
-		deleteForm(formId: $formId) {
+export const DELETE_POEM_MUTATION = gql`
+	mutation($_id: ID!) {
+		deletePoem(_id: $_id) {
 			_id
 		}
 	}
 `
-// Field
+// Section
 
-export const DELETE_FIELD_MUTATION = `
-	mutation($_id: ID!, $formId: ID!) {
-		deleteField(_id: $_id, formId: $formId) {
+export const CREATE_SECTION_MUTATION = gql`
+	mutation($poemId: ID!, $firstLine: String, $order: Number) {
+		createSection(poemId: $poemId, input: { firstLine: $firstLine, order: $order }) {
 			_id
-		}
-	}
-`
-
-export const CREATE_FIELD_MUTATION = gql`
-	mutation($formId: ID!, $type: String, $label: String) {
-		createFormField(formId: $formId, input: { type: $type, label: $label }) {
-			_id
-			type
-			label
-			form {
+			firstLine
+			order
+			poem {
 				_id
 			}
 		}
 	}
 `
 
-export const UPDATE_FIELD_MUTATION = `
-	mutation($_id: ID!, $type: String, $label: String) {
-		updateFormField(_id: $_id, input: { type: $type, label: $label }) {
-			type
-			label
+export const UPDATE_SECTION_MUTATION = `
+	mutation($_id: ID!, $firstLine: String, $order: Number) {
+		updateSection(_id: $_id, input: { firstLine: $firstLine, order: $order }) {
+			firstLine
+			order
 		}
 	}
 `
 
-// Submit
-
-export const SUBMIT_FORM_MUTATION = `
-	mutation($input: [FormFieldResponseInput]) {
-		submitForm(input: $input) {
+export const DELETE_SECTION_MUTATION = `
+	mutation($_id: ID!, $poemId: ID!) {
+		deleteSection(_id: $_id, poemId: $poemId) {
 			_id
-			value
+		}
+	}
+`
+
+// Stanza
+
+export const CREATE_STANZA_MUTATION = gql`
+	mutation($poem: ID!, $section: ID!, $leadWord: String, $body: String) {
+		createStanza(input: { poem: $poem, section: $section, leadWord: $leadWord, body: $body }) {
+			_id
+			leadWord
+			body
+			section {
+				_id
+			}
+		}
+	}
+`
+
+export const UPDATE_STANZA_MUTATION = `
+	mutation($_id: ID!, $leadWord: String, $body: String, ) {
+		updateStanza(_id: $_id, input: { leadWord: $leadWord, body: $body }) {
+			leadWord
+			body
+		}
+	}
+`
+
+export const DELETE_STANZA_MUTATION = `
+	mutation($_id: ID!, $sectionId: ID!) {
+		deleteStanza(_id: $_id, sectionId: $sectionId) {
+			_id
 		}
 	}
 `
