@@ -31,7 +31,7 @@ module.exports = {
 		async getPoem(root, { _id }) {
 			const poem = await Poem.findOne({
 				_id,
-			}).populate('stanzas')
+			}).populate('sections')
 
 			return poem
 		},

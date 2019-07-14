@@ -9,53 +9,32 @@ export const ME_QUERY = `query{
   }
 }`
 
-export const GET_FORMS_QUERY = gql`
+export const GET_POEMS_QUERY = gql`
 	query {
-		getForms {
+		getPoems {
 			_id
 			title
 		}
 	}
 `
 
-export const GET_RESPONSES_QUERY = `query($formId: ID!) {
-  getResponses(formId: $formId) {
-    label
-    responses {
-      _id
-      value
-      user
-    }
-    
-  }
-}`
-
-export const GET_FORM_QUERY = `
+export const GET_POEM_QUERY = `
 	query($_id: ID!) {
-		getForm(_id: $_id) {
+		getPoem(_id: $_id) {
 			_id
 			title
 			url
 			createdBy {
 				_id
+				name
 			}
-			formFields {
+			sections {
 				_id
-				type
-				label
-			}
-		}
-	}
-`
-
-export const GET_FORM_DATA = `
-	query($_id: ID!) {
-		getForm(_id: $_id) {
-			title
-			formFields {
-				_id
-				type
-				label
+				firstLine
+				stanzas {
+					leadWord
+					body
+				}
 			}
 		}
 	}
