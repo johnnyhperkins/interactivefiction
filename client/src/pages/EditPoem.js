@@ -29,7 +29,7 @@ import Section from '../components/Section'
 import EditDrawerContent from '../components/EditDrawerContent'
 
 import { GET_POEM_QUERY } from '../graphql/queries'
-import { UPDATE_POEM_MUTATION, DELETE_SECTION_MUTATION } from '../graphql/mutations'
+import { UPDATE_POEM_MUTATION, UPDATE_POEM_MUTATION_STRING, DELETE_SECTION_MUTATION } from '../graphql/mutations'
 
 import styles from '../styles'
 
@@ -165,10 +165,11 @@ const EditPoem = ({ classes, match, history }) => {
 		)
 	}
 
-	const updateFieldOrderInDB = async sectionIds => {
+	const updateSectionOrderInDB = async sectionIds => {
 		try {
-			await client.request(UPDATE_POEM_MUTATION, {
+			await client.request(UPDATE_POEM_MUTATION_STRING, {
 				_id: poemId,
+				title,
 				sections: sectionIds,
 			})
 
@@ -205,7 +206,7 @@ const EditPoem = ({ classes, match, history }) => {
 		const sectionIds = newSections.map(section => section._id)
 
 		setSections(newSections)
-		updateFieldOrderInDB(sectionIds)
+		updateSectionOrderInDB(sectionIds)
 	}
 
 	return (
@@ -234,38 +235,7 @@ const EditPoem = ({ classes, match, history }) => {
 								</div>
 							</ListItem>
 						</List>
-						
-						{sections.map((section, idx) => {
-							return (
-								<>
-								<Mutation
-									mutation={DELETE_SECTION_MUTATION}
-									onError={err => handleError(err, dispatch)}
-									update={(cache, { data: { deleteSection: { _id, poemId } } }) => {
-										const { getPoem } = cache.readQuery({
-											query: GET_POEM_QUERY,
-											variables: { _id: poemId }
-										})
-
-										cache.writeQuery({
-											query: GET_POEM_QUERY,
-											data: {
-												getPoem: getPoem.sections.filter(section => section._id !== _id),
-											},
-										})
-									}}>
-									{deletePoem => (
-										<Button onClick={() => startDeleteSection(section._id, deletePoem)}>
-											<DeleteIcon className={classes.deleteIcon} />
-										</Button>
-									)}
-								</Mutation>
-								<Section key={idx} section={section} />
-								</>
-							)
-						})}
-						
-						{/* {Boolean(sections.length) &&
+						{Boolean(sections.length) &&
 							<DragDropContext onDragEnd={onDragEnd}>
 								<Droppable droppableId={poemId}>
 									{provided => (
@@ -274,7 +244,31 @@ const EditPoem = ({ classes, match, history }) => {
 												return (
 													<Draggable draggableId={section._id} key={section._id} index={idx}>
 														{provided => (
-															<Section section={section} provided={provided} />
+															<>
+																<Mutation
+																	mutation={DELETE_SECTION_MUTATION}
+																	onError={err => handleError(err, dispatch)}
+																	update={(cache, { data: { deleteSection: { _id, poemId } } }) => {
+																		const { getPoem } = cache.readQuery({
+																			query: GET_POEM_QUERY,
+																			variables: { _id: poemId }
+																		})
+				
+																		cache.writeQuery({
+																			query: GET_POEM_QUERY,
+																			data: {
+																				getPoem: getPoem.sections.filter(section => section._id !== _id),
+																			},
+																		})
+																	}}>
+																	{deletePoem => (
+																		<Button onClick={() => startDeleteSection(section._id, deletePoem)}>
+																			<DeleteIcon className={classes.deleteIcon} />
+																		</Button>
+																	)}
+																</Mutation>
+																<Section key={idx} section={section} provided={provided} />
+															</>
 														)}
 													</Draggable>
 												)
@@ -284,7 +278,7 @@ const EditPoem = ({ classes, match, history }) => {
 									)}
 								</Droppable>
 							</DragDropContext>
-						} */}
+						}
 						
 						{/* <AddSection poemId={poemId} sections={sections} setSections={setSections}/> */}
 						

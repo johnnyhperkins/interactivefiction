@@ -54,7 +54,7 @@ module.exports = gql`
 
 	type Mutation {
 		createPoem(title: String!): Poem
-		updatePoem(_id: ID!, title: String): Poem
+		updatePoem(_id: ID!, title: String, sections: [ID!]): Poem
 		deletePoem(_id: ID!): Poem
 
 		signup(email: String!, password: String!, name: String!): AuthPayload

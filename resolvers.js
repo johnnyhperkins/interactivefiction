@@ -97,12 +97,12 @@ module.exports = {
 			return newPoem.save()
 		}),
 
-		updatePoem: authenticated(async (root, { _id, title }, ctx) => {
+		updatePoem: authenticated(async (root, { _id, title, sections }, ctx) => {
 			const poem = await Poem.findOneAndUpdate(
 				{ _id, author: ctx.currentUser._id },
-				{ title },
+				{ title, sections },
 				{ new: true },
-			)
+			).populate('sections')
 	
 			return poem
 		}),

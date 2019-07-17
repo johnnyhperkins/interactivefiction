@@ -40,8 +40,8 @@ export const CREATE_POEM_MUTATION = gql`
 `
 
 export const UPDATE_POEM_MUTATION = gql`
-	mutation($_id: ID!, $title: String) {
-		updatePoem(_id: $_id, title: $title) {
+	mutation($_id: ID!, $title: String, $sections: [SectionInput!]) {
+		updatePoem(_id: $_id, title: $title, sections: $sections) {
 			_id
 			title
 			url
@@ -49,16 +49,24 @@ export const UPDATE_POEM_MUTATION = gql`
 	}
 `
 
-// sections {
-// 	_id
-// 	firstLine
-// 	order
-// 	stanzas
-// }
-// author {
-// 	_id
-// 	name
-// }
+export const UPDATE_POEM_MUTATION_STRING = `
+mutation($_id: ID!, $title: String, $sections: [ID!]) {
+	updatePoem(_id: $_id, title: $title, sections: $sections) {
+		_id
+		title
+		url
+		sections {
+			_id
+			firstLine
+			order
+			stanzas {
+				leadWord
+				body
+			}
+		}
+	}
+}
+`
 
 export const DELETE_POEM_MUTATION = gql`
 	mutation($_id: ID!) {

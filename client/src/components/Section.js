@@ -13,12 +13,14 @@ const SectionContainer = styled.div`
 	border: 1px solid #777;
 `
 
-const Section = ({ section, classes
-	// provided 
+const Section = ({ section, classes, provided 
 }) => {
 
 	return (
-		<SectionContainer>
+		<SectionContainer
+			{...provided.draggableProps}
+			{...provided.dragHandleProps}
+			ref={provided.innerRef}>
 			<Grid container justify="center">
 				<Grid item sm={12}>
 					<Typography variant="body1" align='center' className={classes.marginBottom30}>{section.firstLine}</Typography>
@@ -33,19 +35,6 @@ const Section = ({ section, classes
 				}
 			</Grid>
 		</SectionContainer>
-		// <Grid container justify="center"
-		// 	{...provided.draggableProps}
-		// 	{...provided.dragHandleProps}
-		// 	ref={provided.innerRef}> 
-		// 	{section.stanzas.map((stanza, idx) => {				
-		// 	return (
-		// 		<Grid item sm={4}>
-		// 			<Stanza key={idx} stanza={stanza} />
-		// 		</Grid>
-		// 		)
-		// 	})
-		// })
-		// </Grid>
 	)
 }
 
