@@ -1,15 +1,16 @@
 import React from 'react'
-import { withRouter } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import styled from 'styled-components'
+// import styles from '../styles' // what the fuck??!?!
+
 
 const Stanza = ({ stanza: { leadWord, body }, classes }) => {
 
 	return (
 		<div>
       <Typography variant="body1" className={classes.leadWord}>{leadWord}</Typography>
-      <Typography variant="body1">{body}</Typography>
+      <Typography variant="body1" align="center">{body}</Typography>
     </div>
 	)
 }
@@ -17,8 +18,9 @@ const Stanza = ({ stanza: { leadWord, body }, classes }) => {
 const styles = {
 	leadWord: {
 		marginBottom: 20,
-		fontWeight: 'bold'
-	}
+		fontStyle: 'italic',
+		textAlign: 'center'
+	},
 }
 
-export default withRouter(withStyles(styles)(Stanza))
+export default withStyles(styles)(Stanza)

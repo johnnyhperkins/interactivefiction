@@ -151,14 +151,12 @@ module.exports = {
 		}),
 
 		deleteSection: authenticated(async (root, { _id, poemId }) => {
-			await Section.findByIdAndRemove(_id)
-			await Stanza.deleteMany({
-				section: _id,
-			})
+			const section = await Section.findByIdAndRemove(_id)
 			await Poem.findOneAndUpdate(
 				{ _id: poemId },
 				{ $pull: { sections: _id } },
 			)
+			return section
 		}),
 
 		// createStanza: authenticated(async (root, { input }) => {

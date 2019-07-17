@@ -1,9 +1,11 @@
 import React from 'react'
-
+import { withRouter } from 'react-router-dom'
+import { withStyles } from '@material-ui/core/styles'
 import Stanza from './Stanza'
 import styled from 'styled-components'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import styles from '../styles'
 
 const SectionContainer = styled.div`
 	padding: 10px;
@@ -11,7 +13,7 @@ const SectionContainer = styled.div`
 	border: 1px solid #777;
 `
 
-const Section = ({ section,
+const Section = ({ section, classes
 	// provided 
 }) => {
 
@@ -19,7 +21,7 @@ const Section = ({ section,
 		<SectionContainer>
 			<Grid container justify="center">
 				<Grid item sm={12}>
-					<Typography variant="body1" align='center'>{section.firstLine}</Typography>
+					<Typography variant="body1" align='center' className={classes.marginBottom30}>{section.firstLine}</Typography>
 				</Grid>
 				{section.stanzas.map((stanza, idx) => {
 					return (
@@ -47,4 +49,4 @@ const Section = ({ section,
 	)
 }
 
-export default Section
+export default withStyles(styles)(Section)

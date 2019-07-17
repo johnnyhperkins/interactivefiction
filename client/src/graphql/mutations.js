@@ -91,7 +91,7 @@ export const UPDATE_SECTION_MUTATION = `
 	}
 `
 
-export const DELETE_SECTION_MUTATION = `
+export const DELETE_SECTION_MUTATION = gql`
 	mutation($_id: ID!, $poemId: ID!) {
 		deleteSection(_id: $_id, poemId: $poemId) {
 			_id

@@ -35,7 +35,7 @@ const Home = ({ classes, history, client }) => {
 
 	const startDeletePoem = (poemId, deletePoem) => {
 		const action = async () => {
-			const res = await deletePoem({ variables: { poemId } })
+			const res = await deletePoem({ variables: { _id: poemId } })
 			if (Boolean(res)) {
 				snackbarMessage('Poem Deleted', dispatch)
 			}

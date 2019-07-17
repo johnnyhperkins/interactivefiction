@@ -16,6 +16,7 @@ import AddIcon from '@material-ui/icons/Add'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
+import DeleteIcon from '@material-ui/icons/DeleteTwoTone'
 
 import Link from '../components/misc/Link'
 import handleError from '../utils/handleError'
@@ -28,7 +29,7 @@ import Section from '../components/Section'
 import EditDrawerContent from '../components/EditDrawerContent'
 
 import { GET_POEM_QUERY } from '../graphql/queries'
-import { UPDATE_POEM_MUTATION } from '../graphql/mutations'
+import { UPDATE_POEM_MUTATION, DELETE_SECTION_MUTATION } from '../graphql/mutations'
 
 import styles from '../styles'
 
@@ -67,6 +68,26 @@ const EditPoem = ({ classes, match, history }) => {
 	}
 
 	const addSection = () => history.push(`/poem/${poemId}/section`)
+
+	const startDeleteSection = (_id, deleteSection) => {
+		const action = async () => {
+			const res = await deleteSection({ variables: { _id, poemId } })
+			if (Boolean(res)) {
+				setSections(sections.filter(section => section._id !== _id))
+				snackbarMessage('Section Deleted', dispatch)
+			}
+		}
+
+		dispatch({
+			type: 'TOGGLE_WARNING_MODAL',
+			payload: {
+				modalOpen: true,
+				title: 'Are you sure you want to delete this section?',
+				message: 'This cannot be undone.',
+				action,
+			},
+		})
+	}
 
 	const getPoem = async () => {
 		try {
@@ -216,7 +237,31 @@ const EditPoem = ({ classes, match, history }) => {
 						
 						{sections.map((section, idx) => {
 							return (
+								<>
+								<Mutation
+									mutation={DELETE_SECTION_MUTATION}
+									onError={err => handleError(err, dispatch)}
+									update={(cache, { data: { deleteSection: { _id, poemId } } }) => {
+										const { getPoem } = cache.readQuery({
+											query: GET_POEM_QUERY,
+											variables: { _id: poemId }
+										})
+
+										cache.writeQuery({
+											query: GET_POEM_QUERY,
+											data: {
+												getPoem: getPoem.sections.filter(section => section._id !== _id),
+											},
+										})
+									}}>
+									{deletePoem => (
+										<Button onClick={() => startDeleteSection(section._id, deletePoem)}>
+											<DeleteIcon className={classes.deleteIcon} />
+										</Button>
+									)}
+								</Mutation>
 								<Section key={idx} section={section} />
+								</>
 							)
 						})}
 						

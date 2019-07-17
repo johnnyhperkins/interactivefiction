@@ -11,6 +11,12 @@ export default {
 		fontSize: '24px',
 	},
 
+	leadWord: {
+		marginBottom: 20,
+		fontStyle: 'italic',
+		textAlign: 'center'
+	},
+
 	formItem: {
 		display: 'flex',
 		justifyContent: 'space-between',
