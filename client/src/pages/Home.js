@@ -13,7 +13,7 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import DeleteIcon from '@material-ui/icons/DeleteTwoTone'
-import { ListItemIcon } from '@material-ui/core'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
 
 import ReactLoading from 'react-loading'
 
@@ -25,6 +25,8 @@ import {
 	DELETE_POEM_MUTATION,
 } from '../graphql/mutations'
 import { GET_POEMS_QUERY } from '../graphql/queries'
+
+import styles from '../styles'
 
 const Home = ({ classes, history, client }) => {
 	const { dispatch } = useContext(Context)
@@ -170,37 +172,6 @@ const Home = ({ classes, history, client }) => {
 			</Grid>
 		</div>
 	)
-}
-
-const styles = {
-	root: {
-		padding: '50px 0 0 0',
-	},
-	textField: {
-		margin: '0 15px',
-		width: '90%',
-		background: '#fff',
-		flexGrow: 2,
-	},
-	deleteIcon: {
-		color: 'red',
-	},
-	addPoemItem: {
-		minHeight: 78,
-		display: 'flex',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-	},
-	centerVertical: {
-		display: 'flex',
-		alignItems: 'center',
-	},
-	divider: {
-		margin: '15px 0',
-	},
-	pointer: {
-		cursor: 'pointer',
-	},
 }
 
 export default withStyles(styles)(Home)

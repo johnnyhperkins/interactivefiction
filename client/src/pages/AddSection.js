@@ -17,6 +17,7 @@ import Context from '../context'
 import { useClient } from '../client'
 
 import { CREATE_SECTION_MUTATION, CREATE_STANZA_MUTATION } from '../graphql/mutations'
+import styles from '../styles'
 
 const SectionContainer = styled.div`
 	padding: 10px;
@@ -29,8 +30,6 @@ const AddSection = ({ classes, match, history }) => {
   const [ body, setBody ] = useState('')
   const [ leadWord, setLeadWord ] = useState('')
   const [ stanzas, setStanzas ] = useState([])
-  
-	// const [ addStanza, setStanza ] = useState(false)
 
 	const { id: poemId } = match.params
 
@@ -40,6 +39,10 @@ const AddSection = ({ classes, match, history }) => {
     setStanzas([...stanzas, { leadWord, body }])
     setLeadWord('')
     setBody('')
+  }
+
+  const handleCancel = () => {
+    history.goBack()
   }
 
 	const handleCreateSection = async () => {
@@ -59,15 +62,18 @@ const AddSection = ({ classes, match, history }) => {
 	}
 
 	return (
-    <Container>
-      <TextField
-        placeholder="First Line"
-        label="First Line"
-        className={classes.editFirstLineField}
-        value={firstLine}
-        onChange={e => setFirstLine(e.target.value)}
-      />
-      <Grid container justify="center">
+    <Container justify="center">
+      <Grid container>
+        <Grid item xs={12}>
+          <TextField
+            placeholder="First Line"
+            label="First Line"
+            fullWidth
+            className={classes.marginBottom30}
+            value={firstLine}
+            onChange={e => setFirstLine(e.target.value)}
+          />
+        </Grid>
         {stanzas.map((stanza, idx) => {
           return (
             <Grid key={idx} item sm={4} className={classes.border}>
@@ -98,55 +104,10 @@ const AddSection = ({ classes, match, history }) => {
           </Grid>
           }
       </Grid>
-      <Button onClick={handleCreateSection}>Save</Button>
+      <Button onClick={handleCreateSection} className={classes.submitButton}>Save</Button>
+      <Button onClick={handleCancel} className={classes.submitButton}>Cancel</Button>
     </Container>
 	)
-}
-
-const styles = {
-	
-	snackbarMessage: {
-		textTransform: 'uppercase',
-		fontWeight: 'bold',
-	},
-	border: {
-    border: '1px solid #444',
-    padding: 15
-  },
-	editFirstLineField: {
-		fontSize: '24px',
-	},
-	textField: {
-		margin: '0 15px 0 0',
-	},
-	deleteIcon: {
-		color: 'red',
-	},
-	smallLink: {
-		color: '#777',
-		display: 'inline-block',
-		marginRight: 10,
-		textDecoration: 'underline',
-		marginTop: 10,
-		fontSize: 14,
-		cursor: 'pointer',
-		fontFamily: 'Roboto',
-	},
-	formControl: {
-		width: '100%',
-		marginTop: 15,
-	},
-	formItem: {
-		display: 'flex',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-	},
-	submitButton: {
-		marginTop: 15,
-	},
-	divider: {
-		margin: '15px 0',
-	},
 }
 
 export default withStyles(styles)(AddSection)

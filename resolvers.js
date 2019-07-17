@@ -97,15 +97,14 @@ module.exports = {
 			return newPoem.save()
 		}),
 
-		updatePoem: authenticated(async (root, { _id, input }, ctx) => {
+		updatePoem: authenticated(async (root, { _id, title }, ctx) => {
 			const poem = await Poem.findOneAndUpdate(
 				{ _id, author: ctx.currentUser._id },
-				input,
+				{ title },
 				{ new: true },
 			)
-			const poemUpdated = await Poem.populate(poem, 'poemFields')
-
-			return poemUpdated
+	
+			return poem
 		}),
 
 		deletePoem: authenticated(async (root, { _id }, ctx) => {

@@ -2736,6 +2736,11 @@ split-string@^3.0.1, split-string@^3.0.2:
   dependencies:
     extend-shallow "^3.0.0"
 
+standardjs@^1.0.0-alpha:
+  version "1.0.0-alpha"
+  resolved "https://registry.yarnpkg.com/standardjs/-/standardjs-1.0.0-alpha.tgz#179174133be70ee6bd25f5a6e4ccc6ebfb942306"
+  integrity sha1-F5F0EzvnDua9JfWm5MzG6/uUIwY=
+
 static-extend@^0.1.1:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/static-extend/-/static-extend-0.1.2.tgz#60809c39cbff55337226fd5e0b520f341f1fb5c6"

@@ -38,7 +38,8 @@ export const CREATE_POEM_MUTATION = gql`
 		}
 	}
 `
-export const UPDATE_POEM_MUTATION = `
+
+export const UPDATE_POEM_MUTATION = gql`
 	mutation($_id: ID!, $title: String) {
 		updatePoem(_id: $_id, title: $title) {
 			_id

@@ -3,10 +3,10 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
 
-const Container = ({ classes, children }) => {
+const Container = ({ classes, children, ...rest }) => {
 	return (	
     <div className={classes.root}>
-      <Grid container justify="center">
+      <Grid container {...rest}>
         <Grid item sm={6}>
           {children}
         </Grid>
