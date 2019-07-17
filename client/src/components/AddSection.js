@@ -19,93 +19,74 @@ import { snackbarMessage } from '../utils/snackbarMessage'
 import handleError from '../utils/handleError'
 import Context from '../context'
 
-const AddField = ({
+const AddSection = ({
 	classes,
-	formFields,
-	formId,
-	addField,
-	setAddField,
-	setFormFields,
+	sections,
+	setSections,
+	poemId
 }) => {
 	const { dispatch } = useContext(Context)
-	const [ newFieldLabel, setNewFieldLabel ] = useState('')
-	const [ newFieldType, setNewFieldType ] = useState('')
+	const [ stanzas, setStanzas ] = useState([])
+	// will need to keep stanza data in local state til creating the section then assign them all ids once section is created
+	const [ firstLine, setFirstLine ] = useState('')
 
-	const handleCreateFormField = createFormField => {
+	const handleCreateSection = createSection => {
 		return async () => {
 			const {
-				data: { createFormField: formField },
+				data: { createSection: section },
 				errors,
-			} = await createFormField({
+			} = await createSection({
 				variables: {
-					formId,
-					type: newFieldType,
-					label: newFieldLabel,
+					poem: poemId,
+					firstLine,
+					stanzas,
 				},
 			})
 
 			if (errors) return handleError(errors, dispatch)
 
-			setFormFields([ ...formFields, formField ])
-			setNewFieldLabel('')
-			setNewFieldType('')
-			snackbarMessage('Field added', dispatch)
+			setSections([ ...sections, section ])
+			setFirstLine('')
+			snackbarMessage('Section added', dispatch)
 		}
 	}
 	return (
 		<List>
-			{!formFields.length && (
+			{!sections.length && (
 				<ListItem>
-					<ListItemText primary="Click the plus button to create a field." />
+					<ListItemText primary="Click the plus button to create a section." />
 				</ListItem>
 			)}
-			<ListItem className={classes.addFormItem}>
+			<ListItem className={classes.addSection}>
 				<div className={classes.centerVertical}>
-					<ListItemIcon
+					{/* <ListItemIcon
 						className={classes.pointer}
-						onClick={() => setAddField(!addField)}>
+						onClick={() => setAddSection(!addSection)}>
 						<AddIcon />
-					</ListItemIcon>
-					{addField && (
+					</ListItemIcon> */}
+					{/* {addSection && ( */}
 						<div>
 							<TextField
-								placeholder="Label"
-								label="Label"
-								className={`${classes.textField} ${classes.addField}`}
+								placeholder="First Line"
+								label="First Line"
+								className={`${classes.textField} ${classes.addSection}`}
 								margin="none"
-								value={newFieldLabel}
-								onChange={e => setNewFieldLabel(e.target.value)}
+								value={firstLine}
+								onChange={e => setFirstLine(e.target.value)}
 							/>
-							<FormControl
-								className={`${classes.formControl} ${classes.addField}`}>
-								<InputLabel htmlFor="field-type">Select Type</InputLabel>
-								<Select
-									value={newFieldType}
-									label="Type"
-									variant="outlined"
-									onChange={e => setNewFieldType(e.target.value)}
-									inputProps={{
-										name: 'type',
-										id: 'field-type',
-									}}>
-									<MenuItem value="">
-										<em>Select</em>
-									</MenuItem>
-									
-								</Select>
-							</FormControl>
+							{/* <AddStanza sectionId={section.} /> */}
 						</div>
-					)}
+					{/* )} */}
 				</div>
-				{addField && (
+				{/* {addSection && ( */}
 					<Mutation mutation={CREATE_STANZA_MUTATION}>
-						{createFormField => (
-							<Button onClick={handleCreateFormField(createFormField)}>
-								Add Field
+						{createSection => (
+							<Button onClick={handleCreateSection(createSection)}>
+								Add Section
 							</Button>
 						)}
 					</Mutation>
-				)}
+				{/* )} */}
 			</ListItem>
 		</List>
 	)
@@ -119,11 +100,11 @@ const styles = {
 		width: '100%',
 		marginTop: 15,
 	},
-	addField: {
+	addSection: {
 		width: 200,
 		marginTop: 0,
 	},
-	addFormItem: {
+	addSection: {
 		minHeight: 78,
 		display: 'flex',
 		justifyContent: 'space-between',
@@ -140,4 +121,4 @@ const styles = {
 	},
 }
 
-export default withStyles(styles)(AddField)
+export default withStyles(styles)(AddSection)

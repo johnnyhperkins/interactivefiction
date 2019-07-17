@@ -5,7 +5,7 @@ const SectionSchema = new mongoose.Schema(
 		firstLine: String,
 		order: Number,
 		poem: { type: mongoose.Schema.ObjectId, ref: 'Poem' },
-		stanzas: [ { type: mongoose.Schema.ObjectId, ref: 'Stanza' } ],
+		stanzas: Array,
 	},
 	{ timestamps: true },
 )

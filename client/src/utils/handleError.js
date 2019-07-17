@@ -3,6 +3,7 @@ const handleError = (errors, dispatch) => {
 	let message
 
 	if (errors.graphQLErrors) {
+		debugger
 		message = errors.graphQLErrors[0].message
 	} else if (errors.networkError) {
 		message = errors.networkError[0].message

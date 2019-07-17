@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch } from 'react-router-dom'
 import Splash from './pages/Splash'
 import DisplayPoem from './pages/DisplayPoem'
 import EditPoem from './pages/EditPoem'
+import AddSection from './pages/AddSection'
 import withRoot from './withRoot'
 import Home from './pages/Home'
 
@@ -14,6 +15,7 @@ const AppRouter = () => {
 		<Router>
 			<Switch>
 				<ProtectedRoute exact path="/poem/:id" component={EditPoem} />
+				<ProtectedRoute exact path="/poem/:id/section" component={AddSection} />
 				<PublicRoute exact path="/:username/:poem_id" component={DisplayPoem} />
 				<ProtectedRoute exact path="/" component={Home} />
 				<PublicRoute path="/login" component={Splash} />

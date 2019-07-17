@@ -39,3 +39,27 @@ export const GET_POEM_QUERY = `
 		}
 	}
 `
+
+// export const GET_SECTIONS_QUERY = `
+// 	query($poemId: ID!) {
+// 		getSections(poemId: $poemId) {
+// 			firstLine
+// 			stanzas {
+// 				leadWord
+// 				body
+// 			}
+// 		}
+// 	}
+// `
+
+
+export const GET_STANZAS_QUERY = `
+	query($sectionId: ID!) {
+		getStanzas(sectionId: $sectionId) {
+			stanzas {
+				leadWord
+				body
+			}
+		}
+	}
+`

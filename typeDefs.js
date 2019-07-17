@@ -17,37 +17,34 @@ module.exports = gql`
 	}
 	
 	type Section {
+		_id: ID!
 		firstLine: String
 		order: Int
 		poem: Poem!
 		stanzas: [Stanza!]
 	}
 
-	type Stanza {
-		_id: ID!
-		body: String
-		leadWord: String
-		section: Section!
-		poem: Poem!
-	}
-
 	input SectionInput {
-		poem: ID!
 		firstLine: String!
+		stanzas: [StanzaInput!]
 		order: Int
 	}
 
-	input StanzaInput {
-		section: ID!
-		poem: ID!
-		leadWord: String!
+	type Stanza {
 		body: String
+		leadWord: String
+	}
+
+	input StanzaInput {
+		body: String
+		leadWord: String
 	}
 
 	type Query {
 		me: User
 		getPoems: [Poem!]!
 		getPoem(_id: ID!): Poem!
+		getSections(poemId: ID!): [Section!]!
 	}
 
 	type AuthPayload {
@@ -67,8 +64,8 @@ module.exports = gql`
 		updateSection(_id: ID!, input: SectionInput): Section
 		deleteSection(_id: ID!, poemId: ID!): Poem
 		
-		createStanza(input: StanzaInput): Stanza
-		updateStanza(_id: ID!, input: StanzaInput): Stanza
-		deleteStanza(_id: ID!, sectionId: ID!): Section
+		# createStanza(input: StanzaInput): Stanza
+		# updateStanza(_id: ID!, input: StanzaInput): Stanza
+		# deleteStanza(_id: ID!, sectionId: ID!): Section
 	}
 `

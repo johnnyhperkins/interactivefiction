@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Query, Mutation } from 'react-apollo'
 
 import Grid from '@material-ui/core/Grid'

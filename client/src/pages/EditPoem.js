@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
+import styled from 'styled-components'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
@@ -15,12 +17,18 @@ import { snackbarMessage } from '../utils/snackbarMessage'
 import Context from '../context'
 import { useClient } from '../client'
 
-import AddField from '../components/AddField'
-import Fields from '../components/Fields'
+// import Stanza from '../components/Stanza'
+import AddSection from '../components/AddSection'
+import Section from '../components/Section'
 import EditDrawerContent from '../components/EditDrawerContent'
 
 import { GET_POEM_QUERY } from '../graphql/queries'
 import { UPDATE_POEM_MUTATION } from '../graphql/mutations'
+
+const SectionContainer = styled.div`
+	padding: 10px;
+	margin-bottom: 10px;
+`
 
 const EditPoem = ({ classes, match, history }) => {
 	const { dispatch, state: { ui: { drawer: { open } } } } = useContext(Context)
@@ -28,8 +36,9 @@ const EditPoem = ({ classes, match, history }) => {
 	const [ url, setUrl ] = useState('')
 	const [ sections, setSections ] = useState([])
 
-	const [ addField, setAddField ] = useState(false)
+	// const [ addStanza, setStanza ] = useState(false)
 	const [ editTitle, setEditTitle ] = useState(false)
+	// const [ addSection, setAddSection ] = useState(false)
 
 	const { id: poemId } = match.params
 
@@ -54,6 +63,8 @@ const EditPoem = ({ classes, match, history }) => {
 		}
 	}
 
+	const addSection = () => history.push(`/poem/${poemId}/section`)
+
 	const getPoem = async () => {
 		try {
 			const {
@@ -61,7 +72,7 @@ const EditPoem = ({ classes, match, history }) => {
 			} = await client.request(GET_POEM_QUERY, {
 				_id: poemId,
 			})
-
+			
 			setUrl(url)
 			setTitle(title)
 			setSections(sections)
@@ -109,6 +120,49 @@ const EditPoem = ({ classes, match, history }) => {
 		)
 	}
 
+	const updateFieldOrderInDB = async sectionIds => {
+		try {
+			await client.request(UPDATE_POEM_MUTATION, {
+				_id: poemId,
+				sections: sectionIds,
+			})
+
+			snackbarMessage('Updated', dispatch)
+		} catch (err) {
+			handleError(err, dispatch)
+		}
+	}
+
+	const reorder = (list, startIndex, endIndex) => {
+		const result = Array.from(list)
+		const [ removed ] = result.splice(startIndex, 1)
+		result.splice(endIndex, 0, removed)
+
+		return result
+	}
+
+	const onDragEnd = result => {
+		const { destination, source } = result
+
+		if (
+			!destination ||
+			(destination.droppableId === source.droppableId &&
+				destination.index === source.index)
+		)
+			return
+
+		const newSections = reorder(
+			sections,
+			result.source.index,
+			result.destination.index,
+		)
+
+		const sectionIds = newSections.map(section => section._id)
+
+		setSections(newSections)
+		updateFieldOrderInDB(sectionIds)
+	}
+
 	return (
 		sections && (
 			<div className={classes.root}>
@@ -122,25 +176,36 @@ const EditPoem = ({ classes, match, history }) => {
 								</Link>
 							</div>
 						)}
-
 						<Divider className={classes.divider} />
-							<div>
-								<Fields
-									setSections={setSections}
-									poemId={poemId}
-									sections={sections}
-								/>
-
-								<Divider className={classes.divider} />
-
-								<AddField
-									sections={sections}
-									poemId={poemId}
-									addField={addField}
-									setAddField={setAddField}
-									setSections={setSections}
-								/>
-							</div> 
+						{sections.map((section, idx) => {
+							return (
+								<Section key={idx} section={section} />
+							)
+						})}
+						<Typography variant="body1" onClick={addSection}>Add Section</Typography>
+						{/* {Boolean(sections.length) &&
+							<DragDropContext onDragEnd={onDragEnd}>
+								<Droppable droppableId={poemId}>
+									{provided => (
+										<SectionContainer ref={provided.innerRef} {...provided.droppableProps}>
+											{sections.map((section, idx) => {
+												return (
+													<Draggable draggableId={section._id} key={section._id} index={idx}>
+														{provided => (
+															<Section section={section} provided={provided} />
+														)}
+													</Draggable>
+												)
+											})}
+											{provided.placeholder}
+										</SectionContainer>
+									)}
+								</Droppable>
+							</DragDropContext>
+						} */}
+						
+						{/* <AddSection poemId={poemId} sections={sections} setSections={setSections}/> */}
+						
 					</Grid>
 
 					<Drawer open={open} anchor="right" onClose={onClose}>
