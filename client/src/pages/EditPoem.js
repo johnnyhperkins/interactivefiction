@@ -24,12 +24,17 @@ import { snackbarMessage } from '../utils/snackbarMessage'
 import Context from '../context'
 import { useClient } from '../client'
 
-import AddSection from '../components/AddSection'
 import Section from '../components/Section'
 import EditDrawerContent from '../components/EditDrawerContent'
 
-import { GET_POEM_QUERY } from '../graphql/queries'
-import { UPDATE_POEM_MUTATION, UPDATE_POEM_MUTATION_STRING, DELETE_SECTION_MUTATION } from '../graphql/mutations'
+import { 
+	GET_POEM_QUERY,
+	GET_POEMS_QUERY,
+	GET_POEM_QUERY_STRING } from '../graphql/queries'
+import { 
+	UPDATE_POEM_MUTATION, 
+	UPDATE_POEM_MUTATION_STRING, 
+	DELETE_SECTION_MUTATION } from '../graphql/mutations'
 
 import styles from '../styles'
 
@@ -58,9 +63,13 @@ const EditPoem = ({ classes, match, history }) => {
 
 	const handleUpdatePoem = updatePoem => {
 		return async () => {
-			const { errors } = await updatePoem({
-				variables: { _id: poemId, title },
+			const { errors, data } = await updatePoem({
+				variables: { 
+					_id: poemId, 
+					input: { title } 
+				},
 			})
+			debugger
 			if (errors) return handleError(errors, dispatch)
 			setEditTitle(false)
 			snackbarMessage('Saved', dispatch)
@@ -93,7 +102,7 @@ const EditPoem = ({ classes, match, history }) => {
 		try {
 			const {
 				getPoem: { title, url, sections },
-			} = await client.request(GET_POEM_QUERY, {
+			} = await client.request(GET_POEM_QUERY_STRING, {
 				_id: poemId,
 			})
 			
@@ -125,14 +134,14 @@ const EditPoem = ({ classes, match, history }) => {
 						mutation={UPDATE_POEM_MUTATION}
 						errorPolicy="all"
 						update={(cache, { data: { updatePoem } }) => {
-							const { getPoem } = cache.readQuery({
-								query: GET_POEM_QUERY,
-								variables: { _id: poemId }
+							
+							const { getPoems } = cache.readQuery({
+								query: GET_POEMS_QUERY,
 							})
-
+							
 							cache.writeQuery({
 								query: GET_POEM_QUERY,
-								data: { getPoem: getPoem.concat([ updatePoem ]) },
+								data: { getPoems: getPoems.concat([ updatePoem ]) },
 							})
 						}}>
 						{updatePoem => (
@@ -169,8 +178,9 @@ const EditPoem = ({ classes, match, history }) => {
 		try {
 			await client.request(UPDATE_POEM_MUTATION_STRING, {
 				_id: poemId,
-				title,
-				sections: sectionIds,
+				input: {
+					sections: sectionIds
+				},
 			})
 
 			snackbarMessage('Updated', dispatch)
@@ -267,7 +277,7 @@ const EditPoem = ({ classes, match, history }) => {
 																		</Button>
 																	)}
 																</Mutation>
-																<Section key={idx} section={section} provided={provided} />
+																<Section key={idx} poemId={poemId} section={section} provided={provided} />
 															</>
 														)}
 													</Draggable>
@@ -279,8 +289,6 @@ const EditPoem = ({ classes, match, history }) => {
 								</Droppable>
 							</DragDropContext>
 						}
-						
-						{/* <AddSection poemId={poemId} sections={sections} setSections={setSections}/> */}
 						
 					</Grid>
 

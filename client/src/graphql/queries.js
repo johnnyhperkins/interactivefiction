@@ -14,11 +14,24 @@ export const GET_POEMS_QUERY = gql`
 		getPoems {
 			_id
 			title
+			url
+			author {
+				_id
+				name
+			}
+			sections {
+				_id
+				firstLine
+				stanzas {
+					leadWord
+					body
+				}
+			}
 		}
 	}
 `
 
-export const GET_POEM_QUERY = `
+export const GET_POEM_QUERY = gql`
 	query($_id: ID!) {
 		getPoem(_id: $_id) {
 			_id
@@ -40,9 +53,31 @@ export const GET_POEM_QUERY = `
 	}
 `
 
-// export const GET_SECTIONS_QUERY = `
-// 	query($poemId: ID!) {
-// 		getSections(poemId: $poemId) {
+export const GET_POEM_QUERY_STRING = `
+	query($_id: ID!) {
+		getPoem(_id: $_id) {
+			_id
+			title
+			url
+			author {
+				_id
+				name
+			}
+			sections {
+				_id
+				firstLine
+				stanzas {
+					leadWord
+					body
+				}
+			}
+		}
+	}
+`
+
+// export const GET_SECTION_QUERY = gql`
+// 	query($_id: ID!) {
+// 		getSection(_id: $_id) {
 // 			firstLine
 // 			stanzas {
 // 				leadWord
@@ -51,7 +86,6 @@ export const GET_POEM_QUERY = `
 // 		}
 // 	}
 // `
-
 
 export const GET_STANZAS_QUERY = `
 	query($sectionId: ID!) {

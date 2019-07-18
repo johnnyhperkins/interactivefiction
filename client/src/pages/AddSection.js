@@ -16,7 +16,7 @@ import { snackbarMessage } from '../utils/snackbarMessage'
 import Context from '../context'
 import { useClient } from '../client'
 
-import { CREATE_SECTION_MUTATION, CREATE_STANZA_MUTATION } from '../graphql/mutations'
+import { CREATE_SECTION_MUTATION } from '../graphql/mutations'
 import styles from '../styles'
 
 const SectionContainer = styled.div`

@@ -23,7 +23,7 @@ module.exports = {
 		me: authenticated((root, args, ctx) => ctx.currentUser),
 
 		getPoems: authenticated(async (root, args, ctx) => {
-			const poems = await Poem.find({ author: ctx.currentUser._id })
+			const poems = await Poem.find({ author: ctx.currentUser._id }).populate('sections').populate('author')
 
 			return poems
 		}),
@@ -97,13 +97,24 @@ module.exports = {
 			return newPoem.save()
 		}),
 
-		updatePoem: authenticated(async (root, { _id, title, sections }, ctx) => {
+		// updateSectionOrder: authenticated(async (root, { poemId, sections }, ctx) => {
+		// 	const poem = await Poem.findOneAndUpdate(
+		// 		{ _id: poemId, author: ctx.currentUser._id },
+		// 		{ sections },
+		// 		{ new: true },
+		// 	)
+	
+		// 	return poem
+		// }),
+
+		updatePoem: authenticated(async (root, { _id, input }, ctx) => {
+			debugger
 			const poem = await Poem.findOneAndUpdate(
 				{ _id, author: ctx.currentUser._id },
-				{ title, sections },
+				{...input},
 				{ new: true },
 			).populate('sections')
-	
+			
 			return poem
 		}),
 
@@ -119,10 +130,6 @@ module.exports = {
 			}
 			
 			await Section.deleteMany({
-				poem: _id,
-			})
-
-			await Stanza.deleteMany({
 				poem: _id,
 			})
 

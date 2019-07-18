@@ -25,7 +25,7 @@ module.exports = gql`
 	}
 
 	input SectionInput {
-		firstLine: String!
+		firstLine: String
 		stanzas: [StanzaInput!]
 		order: Int
 	}
@@ -40,6 +40,11 @@ module.exports = gql`
 		leadWord: String
 	}
 
+	input PoemInput {
+		title: String
+		sections: [ID!]
+	}
+
 	type Query {
 		me: User
 		getPoems: [Poem!]!
@@ -52,15 +57,17 @@ module.exports = gql`
 		user: User
 	}
 
+
 	type Mutation {
 		createPoem(title: String!): Poem
-		updatePoem(_id: ID!, title: String, sections: [ID!]): Poem
+		updatePoem(_id: ID!, input: PoemInput): Poem
 		deletePoem(_id: ID!): Poem
 
 		signup(email: String!, password: String!, name: String!): AuthPayload
 		login(email: String!, password: String!): AuthPayload
 		
 		createSection(poemId: ID!, input: SectionInput): Section
+		# updateSectionOrder(poemId: ID!, sections: [ID!]): Poem
 		updateSection(_id: ID!, input: SectionInput): Section
 		deleteSection(_id: ID!, poemId: ID!): Poem
 		
