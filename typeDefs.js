@@ -66,13 +66,8 @@ module.exports = gql`
 		signup(email: String!, password: String!, name: String!): AuthPayload
 		login(email: String!, password: String!): AuthPayload
 		
-		createSection(poemId: ID!, input: SectionInput): Section
-		# updateSectionOrder(poemId: ID!, sections: [ID!]): Poem
+		createSection(poemId: ID!, input: SectionInput): Section		
 		updateSection(_id: ID!, input: SectionInput): Section
 		deleteSection(_id: ID!, poemId: ID!): Poem
-		
-		# createStanza(input: StanzaInput): Stanza
-		# updateStanza(_id: ID!, input: StanzaInput): Stanza
-		# deleteStanza(_id: ID!, sectionId: ID!): Section
 	}
 `

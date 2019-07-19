@@ -15,87 +15,87 @@ import { useClient } from '../client'
 import { UPDATE_POEM_MUTATION } from '../graphql/mutations'
 
 const EditDrawerContent = ({ classes, formFields, setFormFields, onClose }) => {
-	const client = useClient()
-	const { dispatch, state: { ui: { drawer } } } = useContext(Context)
+  const client = useClient()
+  const { dispatch, state: { ui: { drawer } } } = useContext(Context)
 
-	const [ label, setLabel ] = useState('')
-	const [ type, setType ] = useState('')
+  const [label, setLabel] = useState('')
+  const [type, setType] = useState('')
 
-	useEffect(() => {
-		setLabel(drawer.label)
-		setType(drawer.type)
-	}, [])
+  useEffect(() => {
+    setLabel(drawer.label)
+    setType(drawer.type)
+  }, [])
 
-	const handleUpdateField = async () => {
-		try {
-			await client.request(UPDATE_POEM_MUTATION, {
-				_id: drawer._id,
-				type,
-				label,
-			})
+  const handleUpdateField = async () => {
+    try {
+      await client.request(UPDATE_POEM_MUTATION, {
+        _id: drawer._id,
+        type,
+        label,
+      })
 
-			const updatedFormFields = formFields.map(field => {
-				if (field._id === drawer._id) {
-					return {
-						...field,
-						type,
-						label,
-					}
-				}
+      const updatedFormFields = formFields.map(field => {
+        if (field._id === drawer._id) {
+          return {
+            ...field,
+            type,
+            label,
+          }
+        }
 
-				return field
-			})
+        return field
+      })
 
-			setFormFields(updatedFormFields)
-			setLabel('')
-			setType('')
-			onClose()
-			snackbarMessage('Field Updated', dispatch)
-		} catch (err) {
-			handleError(err, dispatch)
-		}
-	}
+      setFormFields(updatedFormFields)
+      setLabel('')
+      setType('')
+      onClose()
+      snackbarMessage('Field Updated', dispatch)
+    } catch (err) {
+      handleError(err, dispatch)
+    }
+  }
 
-	return (
-		<div className={classes.drawer}>
-			<Typography component="h2" variant="h5">
-				Edit Field
+  return (
+    <div className={classes.drawer}>
+      <Typography component="h2" variant="h5">
+        Edit Field
 			</Typography>
 
-			<TextField
-				placeholder="Label"
-				className={classes.textField}
-				margin="normal"
-				value={label}
-				onChange={e => setLabel(e.target.value)}
-			/>
+      <TextField
+        placeholder="Label"
+        className={classes.textField}
+        margin="normal"
+        value={label}
+        onChange={e => setLabel(e.target.value)}
+      />
 
-			<FormControl className={classes.formControl}>
-				<InputLabel htmlFor="field-type">Select Type</InputLabel>
-				<Select
-					value={type}
-					label="Type"
-					variant="outlined"
-					onChange={e => setType(e.target.value)}
-					inputProps={{
-						name: 'type',
-						id: 'field-type',
-					}}>
-					<MenuItem value="">
-						<em>Select</em>
-					</MenuItem>
-					
-				</Select>
-			</FormControl>
+      <FormControl className={classes.formControl}>
+        <InputLabel htmlFor="field-type">Select Type</InputLabel>
+        <Select
+          value={type}
+          label="Type"
+          variant="outlined"
+          onChange={e => setType(e.target.value)}
+          inputProps={{
+            name: 'type',
+            id: 'field-type',
+          }}>
+          <MenuItem value="">
+            <em>Select</em>
+          </MenuItem>
 
-			<Button
-				variant="outlined"
-				className={classes.submitButton}
-				onClick={() => handleUpdateField()}>
-				Update
+        </Select>
+      </FormControl>
+
+      <Button
+        variant="outlined"
+        className={classes.submitButton}
+        onClick={() => handleUpdateField()}>
+        Update
 			</Button>
-		</div>
-	)
+    </div>
+  )
 }
 
 export default EditDrawerContent

@@ -11,187 +11,186 @@ require('dotenv').config()
 const APP_SECRET = process.env.APP_SECRET
 
 const authenticated = next => (root, args, ctx, info) => {
-	if (!ctx.currentUser) {
-		throw new AuthenticationError('You must be logged in')
-	}
+  if (!ctx.currentUser) {
+    throw new AuthenticationError('You must be logged in')
+  }
 
-	return next(root, args, ctx, info)
+  return next(root, args, ctx, info)
 }
 
 module.exports = {
-	Query: {
-		me: authenticated((root, args, ctx) => ctx.currentUser),
+  Query: {
+    me: authenticated((root, args, ctx) => ctx.currentUser),
 
-		getPoems: authenticated(async (root, args, ctx) => {
-			const poems = await Poem.find({ author: ctx.currentUser._id }).populate('sections').populate('author')
+    getPoems: authenticated(async (root, args, ctx) => {
+      const poems = await Poem.find({ author: ctx.currentUser._id }).populate('sections').populate('author')
 
-			return poems
-		}),
+      return poems
+    }),
 
-		async getPoem(root, { _id }) {
-			const poem = await Poem.findOne({
-				_id,
-			}).populate('sections')
+    async getPoem(root, { _id }) {
+      const poem = await Poem.findOne({
+        _id
+      }).populate('sections')
 
-			return poem
-		},
+      return poem
+    },
 
-		async getSections(root, { poemId }) {
-			const sections = await Section.find({
-				poem: poemId
-			})
+    async getSections(root, { poemId }) {
+      const sections = await Section.find({
+        poem: poemId
+      })
 
-			return sections
-		},
-	},
+      return sections
+    }
+  },
 
-	Mutation: {
-		async login(root, args) {
-			const user = await User.findOne({ email: args.email }).exec()
+  Mutation: {
+    async login(root, args) {
+      const user = await User.findOne({ email: args.email }).exec()
 
-			if (!user) {
-				throw new AuthenticationError('No such user found')
-			}
+      if (!user) {
+        throw new AuthenticationError('No such user found')
+      }
 
-			const valid = await bcrypt.compare(args.password, user.password)
+      const valid = await bcrypt.compare(args.password, user.password)
 
-			if (!valid) {
-				throw new AuthenticationError('Invalid password')
-			}
+      if (!valid) {
+        throw new AuthenticationError('Invalid password')
+      }
 
-			const token = jwt.sign({ userId: user.id }, APP_SECRET)
+      const token = jwt.sign({ userId: user.id }, APP_SECRET)
 
-			return {
-				token,
-				user,
-			}
-		},
+      return {
+        token,
+        user
+      }
+    },
 
-		async signup(root, args) {
-			const userExists = await User.findOne({ email: args.email }).exec()
-			if (userExists) {
-				// throw error here?
-				return {
-					token: '',
-					user: null,
-				}
-			}
+    async signup(root, args) {
+      const userExists = await User.findOne({ email: args.email }).exec()
+      if (userExists) {
+        // throw error here?
+        return {
+          token: '',
+          user: null
+        }
+      }
 
-			const password = await bcrypt.hash(args.password, 8)
-			const user = await new User({ ...args, password }).save()
-			const token = jwt.sign({ userId: user.id }, APP_SECRET)
+      const password = await bcrypt.hash(args.password, 8)
+      const user = await new User({ ...args, password }).save()
+      const token = jwt.sign({ userId: user.id }, APP_SECRET)
 
-			return {
-				token,
-				user,
-			}
-		},
+      return {
+        token,
+        user
+      }
+    },
 
-		createPoem: authenticated(async (root, { title }, ctx) => {
-			const newPoem = new Poem({
-				title,
-				author: ctx.currentUser._id,
-			})
-			newPoem.url = `/${ctx.currentUser.name.replace(/ /g, '')}/${newPoem._id}`
-			
-			return newPoem.save()
-		}),
+    createPoem: authenticated(async (root, { title }, ctx) => {
+      const newPoem = new Poem({
+        title,
+        author: ctx.currentUser._id
+      })
+      newPoem.url = `/${ctx.currentUser.name.replace(/ /g, '')}/${newPoem._id}`
 
-		// updateSectionOrder: authenticated(async (root, { poemId, sections }, ctx) => {
-		// 	const poem = await Poem.findOneAndUpdate(
-		// 		{ _id: poemId, author: ctx.currentUser._id },
-		// 		{ sections },
-		// 		{ new: true },
-		// 	)
-	
-		// 	return poem
-		// }),
+      return newPoem.save()
+    }),
 
-		updatePoem: authenticated(async (root, { _id, input }, ctx) => {
-			
-			const poem = await Poem.findOneAndUpdate(
-				{ _id, author: ctx.currentUser._id },
-				input,
-				{ new: true },
-			).populate('sections')
+    // updateSectionOrder: authenticated(async (root, { poemId, sections }, ctx) => {
+    // 	const poem = await Poem.findOneAndUpdate(
+    // 		{ _id: poemId, author: ctx.currentUser._id },
+    // 		{ sections },
+    // 		{ new: true },
+    // 	)
 
-			return poem
-		}),
+    // 	return poem
+    // }),
 
-		deletePoem: authenticated(async (root, { _id }, ctx) => {
-			const poem = await Poem.findOneAndDelete({
-				_id,
-				author: ObjectId(ctx.currentUser._id),
-			})
-			if (!poem) {
-				throw new AuthenticationError(
-					'You are not authorized to delete this poem',
-				)
-			}
-			
-			await Section.deleteMany({
-				poem: _id,
-			})
+    updatePoem: authenticated(async (root, { _id, input }, ctx) => {
+      const poem = await Poem.findOneAndUpdate(
+        { _id, author: ctx.currentUser._id },
+        input,
+        { new: true }
+      ).populate('sections')
 
-			return poem
-		}),
+      return poem
+    }),
 
-		createSection: authenticated(async (root, { poemId, input }) => {
-			const section = await new Section({
-				...input,
-				poem: poemId,
-			}).save()
+    deletePoem: authenticated(async (root, { _id }, ctx) => {
+      const poem = await Poem.findOneAndDelete({
+        _id,
+        author: ObjectId(ctx.currentUser._id)
+      })
+      if (!poem) {
+        throw new AuthenticationError(
+          'You are not authorized to delete this poem'
+        )
+      }
 
-			await Poem.findOneAndUpdate(
-				{
-					_id: poemId,
-				},
-				{ $addToSet: { sections: section._id } },
-				{ new: true },
-			)
+      await Section.deleteMany({
+        poem: _id
+      })
 
-			return section
-		}),
+      return poem
+    }),
 
-		updateSection: authenticated(async (root, { _id, input }, ctx) => {
-			return await Section.findOneAndUpdate({ _id }, input, { new: true })
-		}),
+    createSection: authenticated(async (root, { poemId, input }) => {
+      const section = await new Section({
+        ...input,
+        poem: poemId
+      }).save()
 
-		deleteSection: authenticated(async (root, { _id, poemId }) => {
-			const section = await Section.findByIdAndRemove(_id)
-			await Poem.findOneAndUpdate(
-				{ _id: poemId },
-				{ $pull: { sections: _id } },
-			)
-			return section
-		}),
+      await Poem.findOneAndUpdate(
+        {
+          _id: poemId
+        },
+        { $addToSet: { sections: section._id } },
+        { new: true }
+      )
 
-		// createStanza: authenticated(async (root, { input }) => {
-		// 	const stanza = await new Stanza({
-		// 		...input,
-		// 	}).save()
+      return section
+    }),
 
-		// 	await Section.findOneAndUpdate(
-		// 		{
-		// 			_id: input.poem,
-		// 		},
-		// 		{ $addToSet: { stanzas: stanza._id } },
-		// 		{ new: true },
-		// 	)
+    updateSection: authenticated(async (root, { _id, input }, ctx) => {
+      return Section.findOneAndUpdate({ _id }, input, { new: true })
+    }),
 
-		// 	return stanza
-		// }),
+    deleteSection: authenticated(async (root, { _id, poemId }) => {
+      const section = await Section.findByIdAndRemove(_id)
+      await Poem.findOneAndUpdate(
+        { _id: poemId },
+        { $pull: { sections: _id } }
+      )
+      return section
+    })
 
-		// updateStanza: authenticated(async (root, { _id, input }, ctx) => {
-		// 	return await Stanza.findOneAndUpdate({ _id }, input, { new: true })
-		// }),
+    // createStanza: authenticated(async (root, { input }) => {
+    // 	const stanza = await new Stanza({
+    // 		...input,
+    // 	}).save()
 
-		// deleteStanza: authenticated(async (root, { _id, sectionId }) => {
-		// 	await Stanza.findByIdAndRemove(_id)
-		// 	await Section.findOneAndUpdate(
-		// 		{ _id: sectionId },
-		// 		{ $pull: { stanzas: _id } },
-		// 	)
-		// }),
-	},
+    // 	await Section.findOneAndUpdate(
+    // 		{
+    // 			_id: input.poem,
+    // 		},
+    // 		{ $addToSet: { stanzas: stanza._id } },
+    // 		{ new: true },
+    // 	)
+
+    // 	return stanza
+    // }),
+
+    // updateStanza: authenticated(async (root, { _id, input }, ctx) => {
+    // 	return await Stanza.findOneAndUpdate({ _id }, input, { new: true })
+    // }),
+
+    // deleteStanza: authenticated(async (root, { _id, sectionId }) => {
+    // 	await Stanza.findByIdAndRemove(_id)
+    // 	await Section.findOneAndUpdate(
+    // 		{ _id: sectionId },
+    // 		{ $pull: { stanzas: _id } },
+    // 	)
+    // }),
+  }
 }

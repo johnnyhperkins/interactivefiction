@@ -26,10 +26,12 @@
 		"react-loading": "^2.0.3",
 		"react-router-dom": "^4.3.1",
 		"react-scripts": "3.0.1",
-		"standard": "^13.0.2",
-		"standardjs": "^1.0.0-alpha",
 		"styled-components": "^4.2.0",
 		"subscriptions-transport-ws": "^0.9.15"
+	},
+	"devDependencies": {
+		"standard": "^13.0.2",
+		"standardjs": "^1.0.0-alpha"
 	},
 	"scripts": {
 		"now-build": "react-scripts build",
