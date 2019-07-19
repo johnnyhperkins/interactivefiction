@@ -150,31 +150,24 @@ export const DELETE_SECTION_MUTATION = gql`
 
 // Stanza
 
-// export const CREATE_STANZA_MUTATION = gql`
-// 	mutation($poem: ID!, $section: ID!, $leadWord: String, $body: String) {
-// 		createStanza(input: { poem: $poem, section: $section, leadWord: $leadWord, body: $body }) {
-// 			_id
-// 			leadWord
-// 			body
-// 			section {
-// 				_id
-// 			}
-// 		}
-// 	}
-// `
-
-// export const UPDATE_STANZA_MUTATION = `
-// 	mutation($_id: ID!, $leadWord: String, $body: String, ) {
-// 		updateStanza(_id: $_id, input: { leadWord: $leadWord, body: $body }) {
-// 			leadWord
-// 			body
-// 		}
-// 	}
-// `
+export const UPDATE_STANZA_MUTATION = `
+	mutation($sectionId: ID!, $stanzas: [StanzaInput!]) {
+		updateSection(_id: $sectionId, input: {
+			stanzas: $stanzas }) {
+      _id
+      firstLine
+      stanzas {
+        leadWord
+        body
+      }
+      order
+		}
+	}
+`
 
 // export const DELETE_STANZA_MUTATION = `
-// 	mutation($_id: ID!, $sectionId: ID!) {
-// 		deleteStanza(_id: $_id, sectionId: $sectionId) {
+// 	mutation($sectionId: ID!, $idx: Int) {
+// 		deleteStanza(sectionId: $sectionId, idx: $idx) {
 // 			_id
 // 		}
 // 	}

@@ -36,8 +36,8 @@ module.exports = gql`
 	}
 
 	input StanzaInput {
-		body: String
 		leadWord: String
+		body: String
 	}
 
 	input PoemInput {
@@ -69,5 +69,7 @@ module.exports = gql`
 		createSection(poemId: ID!, input: SectionInput): Section		
 		updateSection(_id: ID!, input: SectionInput): Section
 		deleteSection(_id: ID!, poemId: ID!): Poem
+
+    # updateStanza(sectionId: ID!, idx: Int, input: StanzaInput): Section
 	}
 `

@@ -117,7 +117,7 @@ const Home = ({ classes, history, client }) => {
                 if (error) {
                   return <Typography>{error.message}</Typography>
                 }
-                console.log(poems)
+
                 return poems.length ? (
                   renderPoems(poems)
                 ) : (

@@ -9,38 +9,35 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 
 import Stanza from './Stanza'
-// import styled from 'styled-components'
 import styles from '../styles'
 import Context from '../context'
 import handleError from '../utils/handleError'
 import { snackbarMessage } from '../utils/snackbarMessage'
 
-// import { GET_POEM_QUERY, GET_POEMS_QUERY } from '../graphql/queries'
 import { UPDATE_SECTION_MUTATION } from '../graphql/mutations'
 
 const Section = ({ section, classes, provided, poemId }) => {
-  const { dispatch, state: { ui: { drawer: { open } } } } = useContext(Context)
+  const { dispatch } = useContext(Context)
   const [firstLine, setFirstLine] = useState('')
-
-  // const [ sections, setSections ] = useState([])
   const [editFirstLine, setEditFirstLine] = useState(false)
 
   useEffect(() => {
     setFirstLine(section.firstLine)
   }, [])
 
-  // const startUpdateField = field => {
-  // 	const { type, label, _id } = field
-  // 	dispatch({
-  // 		type: 'TOGGLE_DRAWER',
-  // 		payload: {
-  // 			open: true,
-  // 			label,
-  // 			type,
-  // 			_id,
-  // 		},
-  // 	})
-  // }
+  const startUpdateStanza = (stanza, idx) => {
+    const { leadWord, body } = stanza
+    dispatch({
+      type: 'TOGGLE_DRAWER',
+      payload: {
+        open: true,
+        sectionId: section._id,
+        idx,
+        leadWord,
+        body
+      }
+    })
+  }
 
   const handleUpdateSection = updateSection => {
     return async () => {
@@ -58,25 +55,12 @@ const Section = ({ section, classes, provided, poemId }) => {
   }
 
   const renderFirstLine = bool => {
-    console.log(bool)
     if (bool) {
       return (
         <div className={classes.editTitle}>
           <Mutation
             mutation={UPDATE_SECTION_MUTATION}
-            errorPolicy='all'
-          // update={(cache, { data: { updateSection } }) => {
-          //   // const { getPoems } = cache.readQuery({
-          //   // query: GET_POEMS_QUERY,
-          //   // variables: { _id: poemId }
-          //   // })
-
-          //   // cache.writeQuery({
-          //   //  query: GET_POEMS_QUERY,
-          //   //  data: { getPoem: getPoem.concat([ updatePoem ]) },
-          //   // })
-          // }}
-          >
+            errorPolicy='all'>
             {updateSection => (
               <>
                 <TextField
@@ -115,7 +99,7 @@ const Section = ({ section, classes, provided, poemId }) => {
       </Grid>
       {section.stanzas.map((stanza, idx) => {
         return (
-          <Grid item sm={4} key={idx}>
+          <Grid item sm={4} key={idx} onClick={() => startUpdateStanza(stanza, idx)} className={classes.pointer}>
             <Stanza stanza={stanza} />
           </Grid>
         )

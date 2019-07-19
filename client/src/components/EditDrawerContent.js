@@ -3,54 +3,40 @@ import React, { useContext, useState, useEffect } from 'react'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import InputLabel from '@material-ui/core/InputLabel'
-import MenuItem from '@material-ui/core/MenuItem'
-import FormControl from '@material-ui/core/FormControl'
-import Select from '@material-ui/core/Select'
 
 import handleError from '../utils/handleError'
 import { snackbarMessage } from '../utils/snackbarMessage'
 import Context from '../context'
 import { useClient } from '../client'
-import { UPDATE_POEM_MUTATION } from '../graphql/mutations'
+import { UPDATE_STANZA_MUTATION } from '../graphql/mutations'
 
-const EditDrawerContent = ({ classes, formFields, setFormFields, onClose }) => {
+const EditDrawerContent = ({ classes, sections, setSections, onClose }) => {
   const client = useClient()
   const { dispatch, state: { ui: { drawer } } } = useContext(Context)
-
-  const [label, setLabel] = useState('')
-  const [type, setType] = useState('')
-
+  const [leadWord, setLeadWord] = useState('')
+  const [body, setBody] = useState('')
   useEffect(() => {
-    setLabel(drawer.label)
-    setType(drawer.type)
+    setLeadWord(drawer.leadWord)
+    setBody(drawer.body)
   }, [])
 
-  const handleUpdateField = async () => {
+  const handleUpdateStanza = async () => {
     try {
-      await client.request(UPDATE_POEM_MUTATION, {
-        _id: drawer._id,
-        type,
-        label,
+      const sectionIdx = sections.findIndex(section => section._id === drawer.sectionId)
+      const section = sections[sectionIdx]
+      section.stanzas.splice(drawer.idx, 1, { leadWord, body })
+      sections.splice(sectionIdx, 1, section)
+
+      await client.request(UPDATE_STANZA_MUTATION, {
+        sectionId: drawer.sectionId,
+        stanzas: section.stanzas
       })
 
-      const updatedFormFields = formFields.map(field => {
-        if (field._id === drawer._id) {
-          return {
-            ...field,
-            type,
-            label,
-          }
-        }
-
-        return field
-      })
-
-      setFormFields(updatedFormFields)
-      setLabel('')
-      setType('')
+      setSections(sections)
+      setLeadWord('')
+      setBody('')
       onClose()
-      snackbarMessage('Field Updated', dispatch)
+      snackbarMessage('Stanza Updated', dispatch)
     } catch (err) {
       handleError(err, dispatch)
     }
@@ -58,42 +44,34 @@ const EditDrawerContent = ({ classes, formFields, setFormFields, onClose }) => {
 
   return (
     <div className={classes.drawer}>
-      <Typography component="h2" variant="h5">
-        Edit Field
-			</Typography>
+      <Typography component='h2' variant='h5'>
+        Stanza
+      </Typography>
 
       <TextField
-        placeholder="Label"
+        placeholder='Lead Word'
         className={classes.textField}
-        margin="normal"
-        value={label}
-        onChange={e => setLabel(e.target.value)}
+        margin='normal'
+        value={leadWord}
+        onChange={e => setLeadWord(e.target.value)}
       />
 
-      <FormControl className={classes.formControl}>
-        <InputLabel htmlFor="field-type">Select Type</InputLabel>
-        <Select
-          value={type}
-          label="Type"
-          variant="outlined"
-          onChange={e => setType(e.target.value)}
-          inputProps={{
-            name: 'type',
-            id: 'field-type',
-          }}>
-          <MenuItem value="">
-            <em>Select</em>
-          </MenuItem>
-
-        </Select>
-      </FormControl>
+      <TextField
+        placeholder='Body'
+        className={classes.textField}
+        margin='normal'
+        value={body}
+        multiline
+        rows={10}
+        onChange={e => setBody(e.target.value)}
+      />
 
       <Button
-        variant="outlined"
+        variant='outlined'
         className={classes.submitButton}
-        onClick={() => handleUpdateField()}>
+        onClick={() => handleUpdateStanza()}>
         Update
-			</Button>
+      </Button>
     </div>
   )
 }

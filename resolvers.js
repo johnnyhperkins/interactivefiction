@@ -28,7 +28,7 @@ module.exports = {
       return poems
     }),
 
-    async getPoem(root, { _id }) {
+    async getPoem (root, { _id }) {
       const poem = await Poem.findOne({
         _id
       }).populate('sections')
@@ -36,7 +36,7 @@ module.exports = {
       return poem
     },
 
-    async getSections(root, { poemId }) {
+    async getSections (root, { poemId }) {
       const sections = await Section.find({
         poem: poemId
       })
@@ -46,7 +46,7 @@ module.exports = {
   },
 
   Mutation: {
-    async login(root, args) {
+    async login (root, args) {
       const user = await User.findOne({ email: args.email }).exec()
 
       if (!user) {
@@ -67,7 +67,7 @@ module.exports = {
       }
     },
 
-    async signup(root, args) {
+    async signup (root, args) {
       const userExists = await User.findOne({ email: args.email }).exec()
       if (userExists) {
         // throw error here?
@@ -165,25 +165,11 @@ module.exports = {
       return section
     })
 
-    // createStanza: authenticated(async (root, { input }) => {
-    // 	const stanza = await new Stanza({
-    // 		...input,
-    // 	}).save()
-
-    // 	await Section.findOneAndUpdate(
-    // 		{
-    // 			_id: input.poem,
-    // 		},
-    // 		{ $addToSet: { stanzas: stanza._id } },
-    // 		{ new: true },
-    // 	)
-
-    // 	return stanza
-    // }),
-
-    // updateStanza: authenticated(async (root, { _id, input }, ctx) => {
-    // 	return await Stanza.findOneAndUpdate({ _id }, input, { new: true })
-    // }),
+    // updateStanza: authenticated(async (root, { sectionId, idx, input }, ctx) => {
+    // 	return Section.findOneAndUpdate(
+    //     { _id: sectionId },
+    //     input, { new: true })
+    // })
 
     // deleteStanza: authenticated(async (root, { _id, sectionId }) => {
     // 	await Stanza.findByIdAndRemove(_id)
