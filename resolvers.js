@@ -108,13 +108,13 @@ module.exports = {
 		// }),
 
 		updatePoem: authenticated(async (root, { _id, input }, ctx) => {
-			debugger
+			
 			const poem = await Poem.findOneAndUpdate(
 				{ _id, author: ctx.currentUser._id },
 				input,
 				{ new: true },
 			).populate('sections')
-			
+
 			return poem
 		}),
 

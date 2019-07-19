@@ -66,7 +66,7 @@ const EditPoem = ({ classes, match, history }) => {
 			const { errors, data } = await updatePoem({
 				variables: { 
 					_id: poemId, 
-					input: { title } 
+					title
 				},
 			})
 			
@@ -133,17 +133,7 @@ const EditPoem = ({ classes, match, history }) => {
 					<Mutation
 						mutation={UPDATE_POEM_MUTATION}
 						errorPolicy="all"
-						update={(cache, { data: { updatePoem } }) => {
-							
-							const { getPoems } = cache.readQuery({
-								query: GET_POEMS_QUERY,
-							})
-							
-							cache.writeQuery({
-								query: GET_POEMS_QUERY,
-								data: { getPoems: getPoems.concat([ updatePoem ]) },
-							})
-						}}>
+						>
 						{updatePoem => (
 							<>
 							<TextField
@@ -178,9 +168,7 @@ const EditPoem = ({ classes, match, history }) => {
 		try {
 			await client.request(UPDATE_POEM_MUTATION_STRING, {
 				_id: poemId,
-				input: {
-					sections: sectionIds
-				},
+				sections: sectionIds
 			})
 
 			snackbarMessage('Updated', dispatch)

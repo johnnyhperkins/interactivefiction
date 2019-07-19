@@ -46,6 +46,8 @@ export const CREATE_POEM_MUTATION = gql`
 	}
 `
 
+// the rule is: the mutation takes in variables normally, and the graphql resolver
+// (i.e. updatePoem) parses the variables accordingly
 export const UPDATE_POEM_MUTATION = gql`
 	mutation($_id: ID!, $title: String, $sections: [ID!]) {
 		updatePoem(_id: $_id, input: { title: $title, sections: $sections }) {
