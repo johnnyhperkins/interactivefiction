@@ -111,7 +111,7 @@ module.exports = {
 			debugger
 			const poem = await Poem.findOneAndUpdate(
 				{ _id, author: ctx.currentUser._id },
-				{...input},
+				input,
 				{ new: true },
 			).populate('sections')
 			

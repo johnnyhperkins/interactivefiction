@@ -69,7 +69,7 @@ const EditPoem = ({ classes, match, history }) => {
 					input: { title } 
 				},
 			})
-			debugger
+			
 			if (errors) return handleError(errors, dispatch)
 			setEditTitle(false)
 			snackbarMessage('Saved', dispatch)
@@ -140,7 +140,7 @@ const EditPoem = ({ classes, match, history }) => {
 							})
 							
 							cache.writeQuery({
-								query: GET_POEM_QUERY,
+								query: GET_POEMS_QUERY,
 								data: { getPoems: getPoems.concat([ updatePoem ]) },
 							})
 						}}>
@@ -265,7 +265,7 @@ const EditPoem = ({ classes, match, history }) => {
 																		})
 				
 																		cache.writeQuery({
-																			query: GET_POEM_QUERY,
+																			query: GET_POEMS_QUERY,
 																			data: {
 																				getPoem: getPoem.sections.filter(section => section._id !== _id),
 																			},
