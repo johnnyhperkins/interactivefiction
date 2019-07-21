@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button'
 import EditIcon from '@material-ui/icons/Edit'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
+import AddIcon from '@material-ui/icons/Add'
 
 import Stanza from './Stanza'
 import styles from '../styles'
@@ -37,6 +38,28 @@ const Section = ({ section, classes, provided, poemId }) => {
         body
       }
     })
+  }
+
+  const handleAddStanza = (updateSection) => {
+    const blankStanza = { leadWord: '', body: '' }
+    if (section.stanzas.length < 3) {
+      return async () => {
+        const { errors, data } = await updateSection({
+          variables: {
+            _id: section._id,
+            stanzas: [...section.stanzas, blankStanza]
+          }
+        })
+
+        if (errors) return handleError(errors, dispatch)
+        console.log(data)
+
+        // startUpdateStanza()
+      }
+    } else {
+      snackbarMessage('A section can only have 3 stanzas', dispatch)
+    }
+
   }
 
   const handleUpdateSection = updateSection => {
@@ -83,6 +106,7 @@ const Section = ({ section, classes, provided, poemId }) => {
       <Typography variant='body1' align='center' className={classes.marginBottom30}>
         {firstLine}
         <EditIcon
+          className={classes.smallIcon}
           onClick={() => {
             setEditFirstLine(!editFirstLine)
           }}
@@ -96,6 +120,20 @@ const Section = ({ section, classes, provided, poemId }) => {
     <Grid container justify='center' spacing={32}>
       <Grid item sm={12}>
         {renderFirstLine(editFirstLine)}
+      </Grid>
+      <Grid item sm={12}>
+        <Mutation
+          mutation={UPDATE_SECTION_MUTATION}
+          errorPolicy='all'>
+          {updateSection => (
+            <Typography
+              variant='body1'
+              onClick={handleAddStanza(updateSection)}
+              align='center'>Add stanza <AddIcon />
+            </Typography>
+          )}
+        </Mutation>
+
       </Grid>
       {section.stanzas.map((stanza, idx) => {
         return (

@@ -131,49 +131,47 @@ const EditPoem = ({ classes, match, history }) => {
     )
   }
 
-  return (
-    sections && (
-      <div className={classes.root}>
-        <Grid container justify='center'>
-          <Grid item sm={6}>
-            {renderTitle(editTitle)}
-            {Boolean(sections.length) && (
-              <div>
-                <Link to={url} small='true'>
-                  View Poem
-                </Link>
+  return sections && (
+    <div className={classes.root}>
+      <Grid container justify='center'>
+        <Grid item sm={6}>
+          {renderTitle(editTitle)}
+          {Boolean(sections.length) && (
+            <div>
+              <Link to={url} small='true'>
+                View Poem
+              </Link>
+            </div>
+          )}
+          <Divider className={classes.divider} />
+          <List>
+            <ListItem className={classes.addPoemItem}>
+              <div className={classes.centerVertical}>
+                <Typography variant='body1'>Add Section</Typography>
+                <ListItemIcon
+                  className={classes.pointer}
+                  onClick={addSection}>
+                  <AddIcon />
+                </ListItemIcon>
               </div>
-            )}
-            <Divider className={classes.divider} />
-            <List>
-              <ListItem className={classes.addPoemItem}>
-                <div className={classes.centerVertical}>
-                  <Typography variant='body1'>Add Section</Typography>
-                  <ListItemIcon
-                    className={classes.pointer}
-                    onClick={addSection}>
-                    <AddIcon />
-                  </ListItemIcon>
-                </div>
-              </ListItem>
-            </List>
-            {Boolean(sections.length) &&
-              <Sections sections={sections} setSections={setSections} poemId={poemId} />
-            }
+            </ListItem>
+          </List>
+          {Boolean(sections.length) &&
+            <Sections sections={sections} setSections={setSections} poemId={poemId} />
+          }
 
-          </Grid>
-
-          <Drawer open={open} anchor='right' onClose={onClose}>
-            <EditDrawerContent
-              classes={classes}
-              sections={sections}
-              setSections={setSections}
-              onClose={onClose}
-            />
-          </Drawer>
         </Grid>
-      </div>
-    )
+
+        <Drawer open={open} anchor='right' onClose={onClose}>
+          <EditDrawerContent
+            classes={classes}
+            sections={sections}
+            setSections={setSections}
+            onClose={onClose}
+          />
+        </Drawer>
+      </Grid>
+    </div>
   )
 }
 

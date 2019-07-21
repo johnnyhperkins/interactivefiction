@@ -21,7 +21,6 @@ const DisplayPoem = ({ classes, match, history }) => {
   const [poem, setPoem] = useState(null)
   const [sections, setSections] = useState([])
   const [currentSectionIdx, setCurrentSectionIdx] = useState(0)
-  // const [selectedStanza, setSelectedStanza] = useState(null)
   const [renderedSections, setRenderedSections] = useState([])
   const client = useClient()
 
@@ -29,7 +28,6 @@ const DisplayPoem = ({ classes, match, history }) => {
 
   useEffect(() => {
     getPoem()
-    console.log(sections)
   }, [])
 
   const getPoem = async () => {

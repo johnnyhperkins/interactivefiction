@@ -11,6 +11,12 @@ export default {
     fontSize: '24px'
   },
 
+  smallIcon: {
+    fontSize: '16px',
+    color: '#aaa',
+    marginLeft: '16px'
+  },
+
   editFirstLine: {
     textAlign: 'center'
   },
