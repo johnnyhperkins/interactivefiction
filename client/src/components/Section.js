@@ -93,7 +93,7 @@ const Section = ({ section, classes, provided, poemId }) => {
 
   return (
 
-    <Grid container justify='center'>
+    <Grid container justify='center' spacing={32}>
       <Grid item sm={12}>
         {renderFirstLine(editFirstLine)}
       </Grid>

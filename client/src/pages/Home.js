@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 import { Query, Mutation } from 'react-apollo'
 
 import Grid from '@material-ui/core/Grid'
@@ -121,10 +121,10 @@ const Home = ({ classes, history, client }) => {
                 return poems.length ? (
                   renderPoems(poems)
                 ) : (
-                  <ListItem>
-                    <ListItemText primary='Click the plus button to create a poem.' />
-                  </ListItem>
-                )
+                    <ListItem>
+                      <ListItemText primary='Click the plus button to create a poem.' />
+                    </ListItem>
+                  )
               }}
             </Query>
             <Divider className={classes.divider} />

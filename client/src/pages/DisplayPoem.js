@@ -1,121 +1,133 @@
 import React, { useState, useEffect, useContext } from 'react'
-
-import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
+
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
+import Grid from '@material-ui/core/Grid'
+import RefreshIcon from '@material-ui/icons/Refresh'
 
-import { GET_POEM_QUERY } from '../graphql/queries'
+import { GET_POEM_QUERY_STRING } from '../graphql/queries'
 import Context from '../context'
 import { useClient } from '../client'
-
+import Container from '../components/Container'
+import DisplayStanza from '../components/DisplayStanza'
+import Stanza from '../components/Stanza'
 import handleError from '../utils/handleError'
 import Link from '../components/misc/Link'
-import { snackbarMessage } from '../utils/snackbarMessage'
+import styles from '../styles'
 
 const DisplayPoem = ({ classes, match, history }) => {
-	const { state: { currentUser }, dispatch } = useContext(Context)
-	const [ poem, setPoem ] = useState({
-		title: '',
-		author: '',
-	})
-	const [ sections, setSections ] = useState([])
-	const [ stanzas, setStanzas ] = useState([])
+  const { state: { currentUser }, dispatch } = useContext(Context)
+  const [poem, setPoem] = useState(null)
+  const [sections, setSections] = useState([])
+  const [currentSectionIdx, setCurrentSectionIdx] = useState(0)
+  // const [selectedStanza, setSelectedStanza] = useState(null)
+  const [renderedSections, setRenderedSections] = useState([])
+  const client = useClient()
 
-	const { poem_id: poemId } = match.params
+  const { poem_id: poemId } = match.params
 
-	const client = useClient()
+  useEffect(() => {
+    getPoem()
+    console.log(sections)
+  }, [])
 
-	useEffect(() => {
-		getPoem()
-	}, [])
+  const getPoem = async () => {
+    try {
+      const res = await client.request(GET_POEM_QUERY_STRING, {
+        _id: poemId
+      }) // WHAT THE HELL
 
-	const getPoem = async () => {
-		try {
-			const {
-				getPoem: { title, sections, author: { _id, name } },
-			} = await client.request(GET_POEM_QUERY, {
-				_id: poemId,
-			})
+      const { getPoem: { title, sections, author: { name, _id } } } = res
 
-			setPoem({
-				title,
-				author: name,
-				authorId: _id
-			})
-			setSections(sections)
-		} catch (err) {
-			handleError(err, dispatch)
-			history.push('/')
-		}
-	}
+      setPoem({
+        title: title,
+        author: name,
+        authorId: _id
+      })
 
-	const renderSection = section => {
-		const { stanzas, firstLine, _id } = section
-		return (
-			<Grid container>
-				<Typography variant="h4">{firstLine}</Typography>
-			</Grid>
-		)
-			
-	}
+      setSections(sections)
+    } catch (err) {
+      handleError(err, dispatch)
+      history.push('/')
+    }
+  }
 
-	return (
-		poem && (
-			<div className={classes.root}>
-				<Grid container justify="center">
-					<Grid item sm={6} className={classes.flexColumn}>
-						<Typography variant="h4">{poem.title}</Typography>
-						{currentUser &&
-						currentUser._id === poem.authorId && (
-							<div>
-								<Link to={`/poem/${poemId}`} small="true">
-									Edit Poem
-								</Link>
-							</div>
-						)}
-						<Divider className={classes.divider} />
-						<div>
-							{sections.map((section, key) => {
-								return (
-									<div key={key} className={classes.poemItem}>
-										{renderSection(section)}
-									</div>
-								)
-							})}
-						</div>
-					</Grid>
-				</Grid>
-			</div>
-		)
-	)
-}
+  const handleSelectStanza = (idx) => {
+    const stanza = sections[currentSectionIdx].stanzas[idx]
+    const renderedSection = {
+      firstLine: sections[currentSectionIdx].firstLine,
+      stanza
+    }
+    setRenderedSections([...renderedSections, renderedSection])
 
-const styles = {
-	root: {
-		padding: '50px 0 0 0',
-	},
-	flexColumn: {
-		display: 'flex',
-		flexDirection: 'column',
-	},
-	snackbarMessage: {
-		textTranspoem: 'uppercase',
-		fontWeight: 'bold',
-	},
-	textField: {
-		margin: '0 15px 0 0',
-	},
-	poemItem: {
-		marginBottom: 15,
-	},
-	submitButton: {
-		marginTop: 15,
-	},
-	divider: {
-		margin: '15px 0',
-	},
+    if (currentSectionIdx <= sections.length) {
+      setCurrentSectionIdx(currentSectionIdx + 1)
+    }
+  }
+
+  const handleReset = () => {
+    setCurrentSectionIdx(0)
+    setRenderedSections([])
+  }
+
+  const renderCurrentSection = () => {
+    const section = sections[currentSectionIdx]
+
+    return section && (
+      <Grid container justify='center' spacing={32}>
+        <Grid item sm={12}>
+          <Typography variant='body1' align='center'>{section.firstLine}</Typography>
+        </Grid>
+        {section.stanzas.map((stanza, idx) => {
+          return (
+            <Grid item sm={4} key={idx} className={classes.pointer}>
+              <DisplayStanza stanza={stanza} idx={idx} isHidden selectStanza={handleSelectStanza} />
+            </Grid>
+          )
+        })
+        }
+      </Grid>
+    )
+  }
+
+  const renderSections = () => {
+    return Boolean(renderedSections.length) && (
+      renderedSections.map((section, idx) => {
+        return (
+          <Grid container justify='center' spacing={32} key={idx}>
+            <Grid item sm={12}>
+              <Typography variant='body1' align='center'>{section.firstLine}</Typography>
+            </Grid>
+            <Grid item sm={4} className={classes.pointer}>
+              <Stanza stanza={section.stanza} />
+            </Grid>
+          </Grid>
+        )
+      }
+      )
+    )
+  }
+
+  return (
+    Boolean(sections.length && poem) && (
+      <Container justify='center' align spacing={16} >
+        <Typography variant='h4'>{poem.title}</Typography>
+        <Typography variant='body1'>By {poem.author}</Typography>
+        {
+          currentUser && currentUser._id === poem.authorId && (
+            <Link to={`/poem/${poemId}`} small='true'>
+              Edit Poem
+            </Link>
+          )
+        }
+        <Divider className={classes.divider} />
+        {renderSections()}
+        {renderCurrentSection()}
+        {currentSectionIdx === sections.length && <RefreshIcon className={classes.pointer} onClick={handleReset} />}
+      </Container >
+    )
+  )
 }
 
 export default withStyles(styles)(DisplayPoem)

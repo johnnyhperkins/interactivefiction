@@ -48,7 +48,7 @@ module.exports = gql`
 	type Query {
 		me: User
 		getPoems: [Poem!]!
-		getPoem(_id: ID!): Poem!
+		getPoem(_id: ID!): Poem
 		getSections(poemId: ID!): [Section!]!
 	}
 

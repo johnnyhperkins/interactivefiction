@@ -1,8 +1,7 @@
-const { AuthenticationError, ApolloError } = require('apollo-server')
+const { AuthenticationError } = require('apollo-server')
 const Poem = require('./models/Poem')
 const User = require('./models/User')
 const Section = require('./models/Section')
-const Stanza = require('./models/Stanza')
 const ObjectId = require('mongoose').Types.ObjectId
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -28,15 +27,16 @@ module.exports = {
       return poems
     }),
 
-    async getPoem (root, { _id }) {
+    async getPoem(root, { _id }) {
       const poem = await Poem.findOne({
         _id
       }).populate('sections')
+        .populate('author')
 
       return poem
     },
 
-    async getSections (root, { poemId }) {
+    async getSections(root, { poemId }) {
       const sections = await Section.find({
         poem: poemId
       })
@@ -46,7 +46,7 @@ module.exports = {
   },
 
   Mutation: {
-    async login (root, args) {
+    async login(root, args) {
       const user = await User.findOne({ email: args.email }).exec()
 
       if (!user) {
@@ -67,7 +67,7 @@ module.exports = {
       }
     },
 
-    async signup (root, args) {
+    async signup(root, args) {
       const userExists = await User.findOne({ email: args.email }).exec()
       if (userExists) {
         // throw error here?
