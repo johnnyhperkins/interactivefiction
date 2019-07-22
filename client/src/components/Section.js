@@ -41,9 +41,9 @@ const Section = ({ section, classes, provided, poemId }) => {
   }
 
   const handleAddStanza = (updateSection) => {
-    const blankStanza = { leadWord: '', body: '' }
-    if (section.stanzas.length < 3) {
-      return async () => {
+    return async () => {
+      if (section.stanzas.length < 3) {
+        const blankStanza = { leadWord: '', body: '' }
         const { errors, data } = await updateSection({
           variables: {
             _id: section._id,
@@ -52,14 +52,13 @@ const Section = ({ section, classes, provided, poemId }) => {
         })
 
         if (errors) return handleError(errors, dispatch)
-        console.log(data)
+        const { stanzas } = data.updateSection
 
-        // startUpdateStanza()
+        startUpdateStanza(blankStanza, stanzas.length - 1)
+      } else {
+        snackbarMessage('A section can only have 3 stanzas', dispatch)
       }
-    } else {
-      snackbarMessage('A section can only have 3 stanzas', dispatch)
     }
-
   }
 
   const handleUpdateSection = updateSection => {
@@ -114,9 +113,8 @@ const Section = ({ section, classes, provided, poemId }) => {
       </Typography>
     )
   }
-
+  console.log(section)
   return (
-
     <Grid container justify='center' spacing={32}>
       <Grid item sm={12}>
         {renderFirstLine(editFirstLine)}
@@ -135,7 +133,7 @@ const Section = ({ section, classes, provided, poemId }) => {
         </Mutation>
 
       </Grid>
-      {section.stanzas.map((stanza, idx) => {
+      {Boolean(section.stanzas.length) && section.stanzas.map((stanza, idx) => {
         return (
           <Grid item sm={4} key={idx} onClick={() => startUpdateStanza(stanza, idx)} className={classes.pointer}>
             <Stanza stanza={stanza} />

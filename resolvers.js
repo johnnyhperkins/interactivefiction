@@ -97,16 +97,6 @@ module.exports = {
       return newPoem.save()
     }),
 
-    // updateSectionOrder: authenticated(async (root, { poemId, sections }, ctx) => {
-    // 	const poem = await Poem.findOneAndUpdate(
-    // 		{ _id: poemId, author: ctx.currentUser._id },
-    // 		{ sections },
-    // 		{ new: true },
-    // 	)
-
-    // 	return poem
-    // }),
-
     updatePoem: authenticated(async (root, { _id, input }, ctx) => {
       const poem = await Poem.findOneAndUpdate(
         { _id, author: ctx.currentUser._id },
@@ -164,19 +154,5 @@ module.exports = {
       )
       return section
     })
-
-    // updateStanza: authenticated(async (root, { sectionId, idx, input }, ctx) => {
-    // 	return Section.findOneAndUpdate(
-    //     { _id: sectionId },
-    //     input, { new: true })
-    // })
-
-    // deleteStanza: authenticated(async (root, { _id, sectionId }) => {
-    // 	await Stanza.findByIdAndRemove(_id)
-    // 	await Section.findOneAndUpdate(
-    // 		{ _id: sectionId },
-    // 		{ $pull: { stanzas: _id } },
-    // 	)
-    // }),
   }
 }

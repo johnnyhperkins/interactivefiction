@@ -15,6 +15,9 @@ const EditDrawerContent = ({ classes, sections, setSections, onClose }) => {
   const { dispatch, state: { ui: { drawer } } } = useContext(Context)
   const [leadWord, setLeadWord] = useState('')
   const [body, setBody] = useState('')
+  const sectionIdx = sections.findIndex(section => section._id === drawer.sectionId)
+  const section = sections[sectionIdx]
+
   useEffect(() => {
     setLeadWord(drawer.leadWord)
     setBody(drawer.body)
@@ -22,8 +25,6 @@ const EditDrawerContent = ({ classes, sections, setSections, onClose }) => {
 
   const handleUpdateStanza = async () => {
     try {
-      const sectionIdx = sections.findIndex(section => section._id === drawer.sectionId)
-      const section = sections[sectionIdx]
       section.stanzas.splice(drawer.idx, 1, { leadWord, body })
       sections.splice(sectionIdx, 1, section)
 
@@ -37,6 +38,26 @@ const EditDrawerContent = ({ classes, sections, setSections, onClose }) => {
       setBody('')
       onClose()
       snackbarMessage('Stanza Updated', dispatch)
+    } catch (err) {
+      handleError(err, dispatch)
+    }
+  }
+
+  const handleDeleteStanza = async () => {
+    try {
+      section.stanzas.splice(drawer.idx, 1)
+      sections.splice(sectionIdx, 1, section)
+
+      await client.request(UPDATE_STANZA_MUTATION, {
+        sectionId: drawer.sectionId,
+        stanzas: section.stanzas
+      })
+
+      setSections(sections)
+      setLeadWord('')
+      setBody('')
+      onClose()
+      snackbarMessage('Stanza Removed', dispatch)
     } catch (err) {
       handleError(err, dispatch)
     }
@@ -62,7 +83,7 @@ const EditDrawerContent = ({ classes, sections, setSections, onClose }) => {
         margin='normal'
         value={body}
         multiline
-        rows={10}
+        rows={20}
         onChange={e => setBody(e.target.value)}
       />
 
@@ -71,6 +92,11 @@ const EditDrawerContent = ({ classes, sections, setSections, onClose }) => {
         className={classes.submitButton}
         onClick={() => handleUpdateStanza()}>
         Update
+      </Button>
+      <Button
+        className={classes.deleteButton}
+        onClick={() => handleDeleteStanza()}>
+        Delete
       </Button>
     </div>
   )

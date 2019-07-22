@@ -12,11 +12,6 @@ import {
   DELETE_SECTION_MUTATION
 } from '../graphql/mutations'
 
-import {
-  GET_POEM_QUERY,
-  GET_POEMS_QUERY
-} from '../graphql/queries'
-
 import Section from './Section'
 import styles from '../styles'
 import Context from '../context'
@@ -114,19 +109,7 @@ const Sections = ({ sections, classes, setSections, poemId }) => {
                       <Mutation
                         mutation={DELETE_SECTION_MUTATION}
                         onError={err => handleError(err, dispatch)}
-                        update={(cache, { data: { deleteSection: { _id, poemId } } }) => {
-                          const { getPoem } = cache.readQuery({
-                            query: GET_POEM_QUERY,
-                            variables: { _id: poemId }
-                          })
-
-                          cache.writeQuery({
-                            query: GET_POEMS_QUERY,
-                            data: {
-                              getPoem: getPoem.sections.filter(section => section._id !== _id)
-                            }
-                          })
-                        }}>
+                      >
                         {deletePoem => (
                           <Button onClick={() => startDeleteSection(section._id, deletePoem)}>
                             <DeleteIcon className={classes.deleteIcon} />

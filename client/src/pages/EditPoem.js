@@ -28,7 +28,8 @@ import {
   GET_POEM_QUERY_STRING
 } from '../graphql/queries'
 import {
-  UPDATE_POEM_MUTATION
+  UPDATE_POEM_MUTATION,
+  CREATE_SECTION_MUTATION
 } from '../graphql/mutations'
 
 import styles from '../styles'
@@ -48,6 +49,22 @@ const EditPoem = ({ classes, match, history }) => {
     getPoem()
   }, [])
 
+  const getPoem = async () => {
+    try {
+      const {
+        getPoem: { title, url, sections }
+      } = await client.request(GET_POEM_QUERY_STRING, {
+        _id: poemId
+      })
+
+      setUrl(url)
+      setTitle(title)
+      setSections(sections)
+    } catch (err) {
+      handleError(err, dispatch)
+    }
+  }
+
   const handleUpdatePoem = updatePoem => {
     return async () => {
       const { errors } = await updatePoem({
@@ -63,21 +80,19 @@ const EditPoem = ({ classes, match, history }) => {
     }
   }
 
-  const addSection = () => history.push(`/poem/${poemId}/section`)
-
-  const getPoem = async () => {
-    try {
-      const {
-        getPoem: { title, url, sections }
-      } = await client.request(GET_POEM_QUERY_STRING, {
-        _id: poemId
+  const handleCreateSection = (createSection) => {
+    return async () => {
+      const { errors } = await createSection({
+        variables: {
+          poemId,
+          firstLine: 'New Section',
+          stanzas: [{ leadWord: 'New Stanza', body: 'Click here to edit this stanza' }]
+        }
       })
 
-      setUrl(url)
-      setTitle(title)
-      setSections(sections)
-    } catch (err) {
-      handleError(err, dispatch)
+      if (errors) return handleError(errors, dispatch)
+      getPoem()
+      snackbarMessage('Section Created', dispatch)
     }
   }
 
@@ -146,14 +161,22 @@ const EditPoem = ({ classes, match, history }) => {
           <Divider className={classes.divider} />
           <List>
             <ListItem className={classes.addPoemItem}>
-              <div className={classes.centerVertical}>
-                <Typography variant='body1'>Add Section</Typography>
-                <ListItemIcon
-                  className={classes.pointer}
-                  onClick={addSection}>
-                  <AddIcon />
-                </ListItemIcon>
-              </div>
+              <Mutation
+                mutation={CREATE_SECTION_MUTATION}
+                errorPolicy='all'
+              >
+                {createSection => (
+                  <div className={classes.centerVertical}>
+                    <Typography variant='body1'>Add Section</Typography>
+                    <ListItemIcon
+                      className={classes.pointer}
+                      onClick={handleCreateSection(createSection)}>
+                      <AddIcon />
+                    </ListItemIcon>
+                  </div>
+                )}
+              </Mutation>
+
             </ListItem>
           </List>
           {Boolean(sections.length) &&

@@ -33,8 +33,17 @@ export default {
     alignItems: 'center'
   },
   submitButton: {
-    marginTop: 15
+    margin: '15px 0'
   },
+
+  deleteButton: {
+    color: '#fff',
+    background: '#d83434',
+    '&:hover': {
+      background: '#bd0b0b'
+    }
+  },
+
   root: {
     padding: '50px 0 0 0',
     display: 'flex',

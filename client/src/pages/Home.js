@@ -121,10 +121,10 @@ const Home = ({ classes, history, client }) => {
                 return poems.length ? (
                   renderPoems(poems)
                 ) : (
-                    <ListItem>
-                      <ListItemText primary='Click the plus button to create a poem.' />
-                    </ListItem>
-                  )
+                  <ListItem>
+                    <ListItemText primary='Click the plus button to create a poem.' />
+                  </ListItem>
+                )
               }}
             </Query>
             <Divider className={classes.divider} />
