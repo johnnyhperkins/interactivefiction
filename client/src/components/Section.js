@@ -113,7 +113,7 @@ const Section = ({ section, classes, provided, poemId }) => {
       </Typography>
     )
   }
-  console.log(section)
+
   return (
     <Grid container justify='center' spacing={32}>
       <Grid item sm={12}>

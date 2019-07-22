@@ -15,18 +15,6 @@ export const GET_POEMS_QUERY = gql`
       _id
       title
       url
-      author {
-        _id
-        name
-      }
-      sections {
-        _id
-        firstLine
-        stanzas {
-          leadWord
-          body
-        }
-      }
     }
   }
 `
