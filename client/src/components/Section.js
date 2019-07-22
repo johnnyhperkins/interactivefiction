@@ -43,7 +43,7 @@ const Section = ({ section, classes, provided, poemId }) => {
   const handleAddStanza = (updateSection) => {
     return async () => {
       if (section.stanzas.length < 3) {
-        const blankStanza = { leadWord: '', body: '' }
+        const blankStanza = { leadWord: '', body: 'Click here to edit this stanza' }
         const { errors, data } = await updateSection({
           variables: {
             _id: section._id,
@@ -119,20 +119,23 @@ const Section = ({ section, classes, provided, poemId }) => {
       <Grid item sm={12}>
         {renderFirstLine(editFirstLine)}
       </Grid>
-      <Grid item sm={12}>
-        <Mutation
-          mutation={UPDATE_SECTION_MUTATION}
-          errorPolicy='all'>
-          {updateSection => (
-            <Typography
-              variant='body1'
-              onClick={handleAddStanza(updateSection)}
-              align='center'>Add stanza <AddIcon />
-            </Typography>
-          )}
-        </Mutation>
+      {section.stanzas.length < 3 && (
+        <Grid item sm={12}>
+          <Mutation
+            mutation={UPDATE_SECTION_MUTATION}
+            errorPolicy='all'>
+            {updateSection => (
+              <Typography
+                variant='body1'
+                onClick={handleAddStanza(updateSection)}
+                align='center'>Add stanza <AddIcon />
+              </Typography>
+            )}
+          </Mutation>
 
-      </Grid>
+        </Grid>
+      )}
+
       {Boolean(section.stanzas.length) && section.stanzas.map((stanza, idx) => {
         return (
           <Grid item sm={4} key={idx} onClick={() => startUpdateStanza(stanza, idx)} className={classes.pointer}>
