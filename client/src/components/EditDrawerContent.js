@@ -13,8 +13,6 @@ import Context from '../context'
 import { useClient } from '../client'
 import { UPDATE_STANZA_MUTATION } from '../graphql/mutations'
 import { safeJsonParse } from '../utils/helpers'
-
-import 'draft-js/dist/Draft.css'
 import '../styles/RichEditor.css'
 
 const EditDrawerContent = ({ classes, sections, setSections, onClose }) => {
