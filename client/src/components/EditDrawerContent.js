@@ -1,17 +1,21 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Editor, EditorState, convertFromRaw, convertToRaw } from 'draft-js'
+import { Editor, EditorState, convertFromRaw, convertToRaw, RichUtils, getDefaultKeyBinding } from 'draft-js'
 
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 
+import BlockStyleControls from './misc/editor/BlockStyleControls'
+import InlineStyleControls from './misc/editor/InlineStylesControls'
 import handleError from '../utils/handleError'
 import { snackbarMessage } from '../utils/snackbarMessage'
 import Context from '../context'
 import { useClient } from '../client'
 import { UPDATE_STANZA_MUTATION } from '../graphql/mutations'
-import 'draft-js/dist/Draft.css'
 import { safeJsonParse } from '../utils/helpers'
+
+import 'draft-js/dist/Draft.css'
+import '../styles/RichEditor.css'
 
 const EditDrawerContent = ({ classes, sections, setSections, onClose }) => {
   const client = useClient()
@@ -28,6 +32,47 @@ const EditDrawerContent = ({ classes, sections, setSections, onClose }) => {
       setEditorState(EditorState.createWithContent(convertFromRaw(body)))
     }
   }, [])
+
+  const handleKeyCommand = (command, editorState) => {
+    const newState = RichUtils.handleKeyCommand(editorState, command)
+    if (newState) {
+      setEditorState(newState)
+      return true
+    }
+    return false
+  }
+
+  const mapKeyToEditorCommand = (e) => {
+    if (e.keyCode === 9 /* TAB */) {
+      const newEditorState = RichUtils.onTab(
+        e,
+        editorState,
+        4 /* maxDepth */
+      )
+      if (newEditorState !== editorState) {
+        setEditorState(newEditorState)
+      }
+      return
+    }
+    return getDefaultKeyBinding(e)
+  }
+  const toggleBlockType = (blockType) => {
+    setEditorState(
+      RichUtils.toggleBlockType(
+        editorState,
+        blockType
+      )
+    )
+  }
+
+  const toggleInlineStyle = (inlineStyle) => {
+    setEditorState(
+      RichUtils.toggleInlineStyle(
+        editorState,
+        inlineStyle
+      )
+    )
+  }
 
   const handleUpdateStanza = async () => {
     const body = JSON.stringify(convertToRaw(editorState.getCurrentContent()))
@@ -71,6 +116,30 @@ const EditDrawerContent = ({ classes, sections, setSections, onClose }) => {
     }
   }
 
+  let className = 'RichEditor-editor'
+  var contentState = editorState.getCurrentContent()
+  if (!contentState.hasText()) {
+    if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+      className += ' RichEditor-hidePlaceholder'
+    }
+  }
+
+  const styleMap = {
+    CODE: {
+      backgroundColor: 'rgba(0, 0, 0, 0.05)',
+      fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
+      fontSize: 16,
+      padding: 2
+    }
+  }
+
+  function getBlockStyle (block) {
+    switch (block.getType()) {
+      case 'blockquote': return 'RichEditor-blockquote'
+      default: return null
+    }
+  }
+
   return (
     <div className={classes.drawer}>
       <Typography component='h2' variant='h5'>
@@ -85,7 +154,27 @@ const EditDrawerContent = ({ classes, sections, setSections, onClose }) => {
         onChange={e => setLeadWord(e.target.value)}
       />
 
-      <Editor editorState={editorState} onChange={setEditorState} />
+      <div className='RichEditor-root'>
+        <BlockStyleControls
+          editorState={editorState}
+          onToggle={toggleBlockType}
+        />
+        <InlineStyleControls
+          editorState={editorState}
+          onToggle={toggleInlineStyle}
+        />
+        <div className={className}>
+          <Editor
+            blockStyleFn={getBlockStyle}
+            customStyleMap={styleMap}
+            editorState={editorState}
+            handleKeyCommand={handleKeyCommand}
+            keyBindingFn={mapKeyToEditorCommand}
+            onChange={setEditorState}
+            spellCheck
+          />
+        </div>
+      </div>
 
       <Button
         variant='outlined'
