@@ -7,18 +7,44 @@ export default {
     border: '1px solid #444',
     padding: 15
   },
-  editFirstLineField: {
-    fontSize: '24px'
+
+  center: {
+    textAlign: 'center'
+  },
+
+  dragContainer: {
+    cursor: 'pointer'
   },
 
   smallIcon: {
     fontSize: '16px',
     color: '#aaa',
-    marginLeft: '16px'
+    marginLeft: '16px',
+    cursor: 'pointer'
   },
 
-  editFirstLine: {
-    textAlign: 'center'
+  largeIcon: {
+    fontSize: '36px',
+    color: '#aaa',
+    cursor: 'pointer',
+    transition: '.2s ease-in-out all',
+    '&:hover': {
+      color: '#444'
+    }
+  },
+
+  editTitleField: {
+    fontSize: '24px'
+  },
+
+  regularIcon: {
+    fontSize: '24px',
+    cursor: 'pointer',
+    color: '#aaa',
+    transition: '.2s ease-in-out all',
+    '&:hover': {
+      color: '#444'
+    }
   },
 
   leadWord: {
@@ -36,11 +62,20 @@ export default {
     margin: '15px 0'
   },
 
-  deleteButton: {
-    color: '#fff',
-    background: '#d83434',
+  reorderIcon: {
+    color: '#aaa',
+    cursor: 'grab',
+    transition: '.2s ease-in-out all',
     '&:hover': {
-      background: '#bd0b0b'
+      color: '#444'
+    }
+  },
+  deleteIcon: {
+    cursor: 'pointer',
+    color: '#ffb8a2',
+    transition: '.2s ease-in-out all',
+    '&:hover': {
+      color: '#bd0b0b'
     }
   },
 
@@ -63,8 +98,17 @@ export default {
     display: 'flex',
     flexDirection: 'column'
   },
-  editTitleField: {
-    fontSize: '24px'
+  firstLine: {
+    textAlign: 'center',
+    color: '#444'
+  },
+  active: {
+    color: '#222'
+  },
+
+  editFirstLine: {
+    textAlign: 'center',
+    minHeight: 70
   },
 
   smallLink: {
@@ -75,7 +119,7 @@ export default {
     marginTop: 10,
     fontSize: 14,
     cursor: 'pointer',
-    fontFamily: 'Roboto'
+    fontFamily: 'Montserrat'
   },
   formControl: {
     width: '100%',
@@ -88,9 +132,7 @@ export default {
     background: '#fff',
     flexGrow: 2
   },
-  deleteIcon: {
-    color: 'red'
-  },
+
   addPoemItem: {
     minHeight: 78,
     display: 'flex',

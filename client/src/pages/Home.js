@@ -12,7 +12,7 @@ import TextField from '@material-ui/core/TextField'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import DeleteIcon from '@material-ui/icons/DeleteTwoTone'
+import DeleteIcon from '@material-ui/icons/Delete'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 
 import ReactLoading from 'react-loading'
@@ -94,9 +94,7 @@ const Home = ({ classes, history, client }) => {
               })
             }}>
             {deletePoem => (
-              <Button onClick={() => startDeletePoem(poem._id, deletePoem)}>
-                <DeleteIcon className={classes.deleteIcon} />
-              </Button>
+              <DeleteIcon className={classes.deleteIcon} onClick={() => startDeletePoem(poem._id, deletePoem)} />
             )}
           </Mutation>
         </ListItem>

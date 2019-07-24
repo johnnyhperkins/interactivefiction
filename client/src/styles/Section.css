@@ -1,0 +1,7 @@
+#root [data-react-beautiful-dnd-drag-handle="0"] {
+  cursor: default
+}
+
+.DraftEditor-root {
+  margin: 0 auto;
+}

@@ -1,0 +1,12 @@
+.display-stanza {
+  transition: 1s ease-in-out all;
+}
+
+.stanza {
+  transition: 1s ease-in-out;
+  transform: translate(0em,0);
+}
+
+.from-left, .from-right, .fade-in {
+  transform: translate(18em,0);
+}

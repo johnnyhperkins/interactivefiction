@@ -10,16 +10,18 @@ import { GET_POEM_QUERY_STRING } from '../graphql/queries'
 import Context from '../context'
 import { useClient } from '../client'
 import Container from '../components/Container'
-import DisplayStanza from '../components/DisplayStanza'
+import DisplayLeadWords from '../components/DisplayLeadWords'
 import Stanza from '../components/Stanza'
 import handleError from '../utils/handleError'
 import Link from '../components/misc/Link'
 import styles from '../styles'
+import '../styles/Stanza.css'
 
 const DisplayPoem = ({ classes, match, history }) => {
   const { state: { currentUser }, dispatch } = useContext(Context)
   const [poem, setPoem] = useState(null)
   const [sections, setSections] = useState([])
+  const [fadeDirection, setFadeDirection] = useState('')
   const [currentSectionIdx, setCurrentSectionIdx] = useState(0)
   const [renderedSections, setRenderedSections] = useState([])
   const client = useClient()
@@ -51,7 +53,20 @@ const DisplayPoem = ({ classes, match, history }) => {
     }
   }
 
+  const getFadeDirection = (idx) => {
+    switch (idx) {
+      case 0:
+        return 'from-left'
+      case 2:
+        return 'from-right'
+      default:
+        return 'fade-in'
+    }
+  }
+
   const handleSelectStanza = (idx) => {
+    // transition the stanza from left or right based on idx
+    setFadeDirection(getFadeDirection(idx))
     const stanza = sections[currentSectionIdx].stanzas[idx]
     const renderedSection = {
       firstLine: sections[currentSectionIdx].firstLine,
@@ -80,7 +95,7 @@ const DisplayPoem = ({ classes, match, history }) => {
         {section.stanzas.map((stanza, idx) => {
           return (
             <Grid item sm={4} key={idx} className={classes.pointer}>
-              <DisplayStanza stanza={stanza} idx={idx} isHidden selectStanza={handleSelectStanza} />
+              <DisplayLeadWords stanza={stanza} idx={idx} selectStanza={handleSelectStanza} />
             </Grid>
           )
         })
@@ -93,11 +108,12 @@ const DisplayPoem = ({ classes, match, history }) => {
     return Boolean(renderedSections.length) && (
       renderedSections.map((section, idx) => {
         return (
-          <Grid container justify='center' spacing={32} key={idx}>
+          <Grid container spacing={32} key={idx}>
             <Grid item sm={12}>
               <Typography variant='body1' align='center'>{section.firstLine}</Typography>
             </Grid>
-            <Grid item sm={4} className={classes.pointer}>
+
+            <Grid item sm={4} className={`stanza ${fadeDirection}`}>
               <Stanza stanza={section.stanza} />
             </Grid>
           </Grid>
@@ -107,9 +123,15 @@ const DisplayPoem = ({ classes, match, history }) => {
     )
   }
 
+  const renderResetButton = () => {
+    if (currentSectionIdx === sections.length || !sections[currentSectionIdx].stanzas.length) {
+      return <RefreshIcon className={classes.pointer} onClick={handleReset} />
+    }
+  }
+
   return (
     Boolean(sections.length && poem) && (
-      <Container justify='center' align spacing={16} >
+      <Container justify='center' spacing={16} >
         <Typography variant='h4'>{poem.title}</Typography>
         <Typography variant='body1'>By {poem.author}</Typography>
         {
@@ -122,7 +144,7 @@ const DisplayPoem = ({ classes, match, history }) => {
         <Divider className={classes.divider} />
         {renderSections()}
         {renderCurrentSection()}
-        {currentSectionIdx === sections.length && <RefreshIcon className={classes.pointer} onClick={handleReset} />}
+        {renderResetButton()}
       </Container >
     )
   )

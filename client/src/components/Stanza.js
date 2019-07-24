@@ -1,9 +1,12 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import styles from '../styles'
 import { Editor, EditorState, convertFromRaw } from 'draft-js'
 import { safeJsonParse } from '../utils/helpers'
+import styles from '../styles'
+import '../styles/Stanza.css'
+
+// transition classes will be from-left from-right fade-in
 
 const Stanza = ({ stanza: { leadWord, body: rawBody }, classes }) => {
   const renderBody = () => {
@@ -23,12 +26,12 @@ const Stanza = ({ stanza: { leadWord, body: rawBody }, classes }) => {
   }
 
   return (
-    <div>
+    <>
       <Typography
         variant='body1'
         className={classes.leadWord}>{leadWord}</Typography>
       {renderBody()}
-    </div>
+    </>
   )
 }
 

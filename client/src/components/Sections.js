@@ -1,17 +1,9 @@
 import React, { useContext } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { Mutation } from 'react-apollo'
 import styled from 'styled-components'
-
 import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
-import DeleteIcon from '@material-ui/icons/DeleteTwoTone'
 
-import {
-  UPDATE_POEM_MUTATION_STRING,
-  DELETE_SECTION_MUTATION
-} from '../graphql/mutations'
-
+import { UPDATE_POEM_MUTATION_STRING } from '../graphql/mutations'
 import Section from './Section'
 import styles from '../styles'
 import Context from '../context'
@@ -23,15 +15,13 @@ const SectionContainer = styled.div`
   padding: 10px;
   margin-bottom: 20px;
 `
-
 const SectionWrapper = styled.div`
-  border: 1px solid #aaa;
-  padding: 35px 25px
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 35px 0
 `
 
 const Sections = ({ sections, classes, setSections, poemId }) => {
   const { dispatch } = useContext(Context)
-
   const client = useClient()
 
   const updateSectionOrderInDB = async sectionIds => {
@@ -106,21 +96,17 @@ const Sections = ({ sections, classes, setSections, poemId }) => {
                 <Draggable draggableId={section._id} key={section._id} index={idx}>
                   {provided => (
                     <>
-                      <Mutation
-                        mutation={DELETE_SECTION_MUTATION}
-                        onError={err => handleError(err, dispatch)}
-                      >
-                        {deletePoem => (
-                          <Button onClick={() => startDeleteSection(section._id, deletePoem)}>
-                            <DeleteIcon className={classes.deleteIcon} />
-                          </Button>
-                        )}
-                      </Mutation>
                       <SectionWrapper
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         ref={provided.innerRef}>
-                        <Section key={idx} poemId={poemId} section={section} provided={provided} />
+
+                        <Section
+                          key={idx}
+                          poemId={poemId}
+                          startDeleteSection={startDeleteSection}
+                          section={section}
+                          provided={provided} />
                       </SectionWrapper>
                     </>
                   )}

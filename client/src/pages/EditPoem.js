@@ -1,22 +1,20 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Mutation } from 'react-apollo'
 
-import Grid from '@material-ui/core/Grid'
+import { unstable_Box as Box } from '@material-ui/core/Box'
 import { withStyles } from '@material-ui/core/styles'
+import Tooltip from '@material-ui/core/Tooltip'
 
-import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
+import Input from '@material-ui/core/Input'
 import Button from '@material-ui/core/Button'
 import EditIcon from '@material-ui/icons/Edit'
 import AddIcon from '@material-ui/icons/Add'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
 import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
 
 import Link from '../components/misc/Link'
 import handleError from '../utils/handleError'
+import Container from '../components/Container'
 import { snackbarMessage } from '../utils/snackbarMessage'
 import Context from '../context'
 import { useClient } from '../client'
@@ -33,6 +31,7 @@ import {
 } from '../graphql/mutations'
 
 import styles from '../styles'
+import { Grid } from '@material-ui/core'
 
 const EditPoem = ({ classes, match, history }) => {
   const { dispatch, state: { ui: { drawer: { open } } } } = useContext(Context)
@@ -109,92 +108,63 @@ const EditPoem = ({ classes, match, history }) => {
   }
 
   const renderTitle = bool => {
-    if (bool) {
-      return (
-        <div className={classes.editTitle}>
-          <Mutation
-            mutation={UPDATE_POEM_MUTATION}
-            errorPolicy='all'
-          >
-            {updatePoem => (
-              <>
-                <TextField
-                  placeholder='Title'
-                  label='Title'
-                  className={classes.editTitleField}
-                  value={title}
-                  onChange={e => setTitle(e.target.value)}
-                />
-                <Button onClick={handleUpdatePoem(updatePoem)}>
-                  Save
-                </Button>
-              </>
-            )}
-          </Mutation>
-        </div>
-      )
-    }
     return (
-      <Typography variant='h4'>
-        {title}
-        <EditIcon
-          onClick={() => {
-            setEditTitle(!editTitle)
-          }}
-        />
-      </Typography>
+      <div className={classes.editTitle}>
+        <Mutation mutation={UPDATE_POEM_MUTATION} errorPolicy='all'>
+          {updatePoem => (
+            <>
+              <Input
+                disableUnderline={!bool}
+                disabled={!bool}
+                className={classes.editTitleField}
+                inputProps={{ className: classes.active }}
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+              />
+              {bool && <Button onClick={handleUpdatePoem(updatePoem)}>Save</Button>}
+              {!bool && <EditIcon className={classes.regularIcon} onClick={() => setEditTitle(!editTitle)} />}
+            </>
+          )}
+        </Mutation>
+      </div>
     )
   }
 
   return sections && (
-    <div className={classes.root}>
-      <Grid container justify='center'>
-        <Grid item sm={6}>
-          {renderTitle(editTitle)}
-          {Boolean(sections.length) && (
-            <div>
-              <Link to={url} small='true'>
-                View Poem
-              </Link>
-            </div>
-          )}
-          <Divider className={classes.divider} />
-          <List>
-            <ListItem className={classes.addPoemItem}>
-              <Mutation
-                mutation={CREATE_SECTION_MUTATION}
-                errorPolicy='all'
-              >
-                {createSection => (
-                  <div className={classes.centerVertical}>
-                    <Typography variant='body1'>Add Section</Typography>
-                    <ListItemIcon
-                      className={classes.pointer}
-                      onClick={handleCreateSection(createSection)}>
-                      <AddIcon />
-                    </ListItemIcon>
-                  </div>
-                )}
-              </Mutation>
-
-            </ListItem>
-          </List>
-          {Boolean(sections.length) &&
-            <Sections sections={sections} setSections={setSections} poemId={poemId} />
-          }
-
-        </Grid>
-
-        <Drawer open={open} anchor='right' onClose={onClose}>
-          <EditDrawerContent
-            classes={classes}
-            sections={sections}
-            setSections={setSections}
-            onClose={onClose}
-          />
-        </Drawer>
+    <Container justify='center'>
+      <Grid item sm={12}>
+        {Boolean(sections.length) && (
+          <Link to={url} small='true'>
+              View Poem
+          </Link>
+        )}
       </Grid>
-    </div>
+      <Box justifyContent='space-between' display='flex'>
+        <div>
+          {renderTitle(editTitle)}
+        </div>
+        <Mutation mutation={CREATE_SECTION_MUTATION} errorPolicy='all'>
+          {createSection => (
+            <Tooltip title='Add Section'>
+              <AddIcon onClick={handleCreateSection(createSection)} className={`${classes.largeIcon}`} />
+            </Tooltip>
+          )}
+        </Mutation>
+      </Box>
+      <Divider className={classes.divider} />
+      {Boolean(sections.length) &&
+      <Sections sections={sections} setSections={setSections} poemId={poemId} />
+      }
+
+      <Drawer open={open} anchor='right' onClose={onClose}>
+        <EditDrawerContent
+          classes={classes}
+          sections={sections}
+          setSections={setSections}
+          onClose={onClose}
+        />
+      </Drawer>
+    </Container>
   )
 }
 

@@ -1,23 +1,28 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Mutation } from 'react-apollo'
 
-import TextField from '@material-ui/core/TextField'
+import Tooltip from '@material-ui/core/Tooltip'
+import Input from '@material-ui/core/Input'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import EditIcon from '@material-ui/icons/Edit'
-import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import AddIcon from '@material-ui/icons/Add'
+import { unstable_Box as Box } from '@material-ui/core/Box'
+import DeleteIcon from '@material-ui/icons/Delete'
+import ReorderIcon from '@material-ui/icons/ReorderTwoTone'
 
 import Stanza from './Stanza'
+import WithTooltip from './misc/WithTooltip'
 import styles from '../styles'
 import Context from '../context'
 import handleError from '../utils/handleError'
 import { snackbarMessage } from '../utils/snackbarMessage'
+import '../styles/Section.css'
 
-import { UPDATE_SECTION_MUTATION } from '../graphql/mutations'
+import { UPDATE_SECTION_MUTATION, DELETE_SECTION_MUTATION } from '../graphql/mutations'
 
-const Section = ({ section, classes, provided, poemId }) => {
+const Section = ({ section, startDeleteSection, classes, provided, poemId }) => {
   const { dispatch } = useContext(Context)
   const [firstLine, setFirstLine] = useState('')
   const [editFirstLine, setEditFirstLine] = useState(false)
@@ -76,70 +81,82 @@ const Section = ({ section, classes, provided, poemId }) => {
     }
   }
 
-  const renderFirstLine = bool => {
-    if (bool) {
-      return (
-        <div className={classes.editTitle}>
-          <Mutation
-            mutation={UPDATE_SECTION_MUTATION}
-            errorPolicy='all'>
-            {updateSection => (
-              <>
-                <TextField
-                  placeholder='FirstLine'
-                  label='FirstLine'
-                  className={classes.editFirstLine}
-                  value={firstLine}
-                  onChange={e => setFirstLine(e.target.value)}
-                />
-                <Button onClick={handleUpdateSection(updateSection)}>
-                  Save
-                </Button>
-              </>
-            )}
-          </Mutation>
-        </div>
-      )
-    }
+  const renderFirstLine = () => {
     return (
-      <Typography variant='body1' align='center' className={classes.marginBottom30}>
-        {firstLine}
-        <EditIcon
-          className={classes.smallIcon}
-          onClick={() => {
-            setEditFirstLine(!editFirstLine)
-          }}
-        />
-      </Typography>
+      <Mutation
+        mutation={UPDATE_SECTION_MUTATION}
+        errorPolicy='all'>
+        {updateSection => (
+          <div className={classes.editFirstLine}>
+            <Input
+              placeholder='First Line'
+              fullWidth
+              disabled={!editFirstLine}
+              disableUnderline={!editFirstLine}
+              inputProps={{ className: classes.firstLine }}
+              value={firstLine}
+              onChange={e => setFirstLine(e.target.value)}
+            />
+            {editFirstLine && (
+            <>
+              <Button onClick={handleUpdateSection(updateSection)}>
+                Save
+              </Button>
+              <Button color='secondary' onClick={() => setEditFirstLine(false)}>
+                Cancel
+              </Button>
+            </>
+            )}
+          </div>
+        )}
+      </Mutation>
     )
   }
 
   return (
     <Grid container justify='center' spacing={32}>
       <Grid item sm={12}>
-        {renderFirstLine(editFirstLine)}
-      </Grid>
-      {section.stanzas.length < 3 && (
-        <Grid item sm={12}>
+        <Box display='flex' justifyContent='space-between' alignItems='flex-end'>
           <Mutation
-            mutation={UPDATE_SECTION_MUTATION}
-            errorPolicy='all'>
-            {updateSection => (
-              <Typography
-                variant='body1'
-                onClick={handleAddStanza(updateSection)}
-                align='center'>Add stanza <AddIcon />
-              </Typography>
+            mutation={DELETE_SECTION_MUTATION}
+            onError={err => handleError(err, dispatch)}>
+            {deletePoem => (
+              <Tooltip title='Delete Section'>
+                <DeleteIcon color='secondary' className={classes.deleteIcon} onClick={() => startDeleteSection(section._id, deletePoem)} />
+              </Tooltip>
             )}
           </Mutation>
-
-        </Grid>
-      )}
+          <Tooltip title='Edit First Line'>
+            <EditIcon className={`${editFirstLine ? classes.active : ''} ${classes.regularIcon}`} onClick={() => { setEditFirstLine(!editFirstLine) }} />
+          </Tooltip>
+          {section.stanzas.length < 3 && (
+            <Mutation
+              mutation={UPDATE_SECTION_MUTATION}
+              errorPolicy='all'>
+              {updateSection => (
+                <Tooltip title='Add Stanza'>
+                  <AddIcon className={classes.regularIcon} onClick={handleAddStanza(updateSection)} />
+                </Tooltip>
+              )}
+            </Mutation>
+          )}
+          <Tooltip title='Reorder Section'>
+            <ReorderIcon className={classes.reorderIcon} />
+          </Tooltip>
+        </Box>
+      </Grid>
+      <Grid item sm={12}>
+        {renderFirstLine()}
+      </Grid>
 
       {Boolean(section.stanzas.length) && section.stanzas.map((stanza, idx) => {
         return (
           <Grid item sm={4} key={idx} onClick={() => startUpdateStanza(stanza, idx)} className={classes.pointer}>
-            <Stanza stanza={stanza} />
+            <Tooltip title='Edit Stanza'>
+              <WithTooltip tooltip>
+                <Stanza stanza={stanza} tooltip />
+              </WithTooltip>
+            </Tooltip>
           </Grid>
         )
       })
