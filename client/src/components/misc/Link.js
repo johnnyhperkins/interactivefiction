@@ -6,6 +6,7 @@ export default props => {
   const MyLink = styled(RouterLink)`
     color: ${props.color ? props.color : '#2196f3'};
     text-decoration: none;
+    display: 'block';
     font-size: 1rem;
     font-family: "Montserrat", "Helvetica", "Arial", sans-serif;
     font-weight: 400;

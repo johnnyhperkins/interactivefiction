@@ -14,6 +14,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import DeleteIcon from '@material-ui/icons/Delete'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
+import Tooltip from '@material-ui/core/Tooltip'
 
 import ReactLoading from 'react-loading'
 
@@ -52,7 +53,7 @@ const Home = ({ classes, history, client }) => {
     })
   }
 
-  const handleClick = id => {
+  const handleEditPoem = id => {
     history.push(`/poem/${id}`)
   }
 
@@ -71,13 +72,8 @@ const Home = ({ classes, history, client }) => {
   const renderPoems = poems => {
     return poems.map(poem => {
       return (
-        <ListItem key={poem._id}>
-          <ListItemIcon
-            className={classes.pointer}
-            onClick={() => handleClick(poem._id)}>
-            <EditIcon />
-          </ListItemIcon>
-          <ListItemText primary={poem.title} />
+        <ListItem key={poem._id} disableGutters>
+          <ListItemText primary={poem.title} onClick={() => handleEditPoem(poem._id)} className={classes.pointer} />
           <Mutation
             mutation={DELETE_POEM_MUTATION}
             onError={err => handleError(err, dispatch)}
@@ -94,7 +90,14 @@ const Home = ({ classes, history, client }) => {
               })
             }}>
             {deletePoem => (
-              <DeleteIcon className={classes.deleteIcon} onClick={() => startDeletePoem(poem._id, deletePoem)} />
+              <>
+                <Tooltip title='Edit Poem'>
+                  <EditIcon className={classes.regularIcon} onClick={() => handleEditPoem(poem._id)} style={{ marginRight: 16 }} />
+                </Tooltip>
+                <Tooltip title='Delete Poem'>
+                  <DeleteIcon className={classes.deleteIcon} onClick={() => startDeletePoem(poem._id, deletePoem)} />
+                </Tooltip>
+              </>
             )}
           </Mutation>
         </ListItem>
@@ -106,8 +109,7 @@ const Home = ({ classes, history, client }) => {
     <div className={classes.root}>
       <Grid container justify='center'>
         <Grid item sm={6}>
-          <Typography variant='h5'>My Poems</Typography>
-          <Divider className={classes.divider} />
+          <Typography variant='h5' className={classes.marginBottom30}>My Poems</Typography>
           <List>
             <Query query={GET_POEMS_QUERY}>
               {({ loading, error, data: { getPoems: poems } }) => {

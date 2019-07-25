@@ -140,18 +140,18 @@ const EditDrawerContent = ({ classes, sections, setSections, onClose }) => {
 
   return (
     <div className={classes.drawer}>
-      <Typography component='h2' variant='h5'>
+      <Typography component='h2' variant='h5' className={classes.marginBottom30}>
         Stanza
       </Typography>
 
       <TextField
         placeholder='Lead Word'
-        className={classes.textField}
+        label='Lead Word'
+        className={classes.marginBottom30}
         margin='normal'
         value={leadWord}
         onChange={e => setLeadWord(e.target.value)}
       />
-
       <div className='RichEditor-root'>
         <BlockStyleControls
           editorState={editorState}
@@ -181,7 +181,14 @@ const EditDrawerContent = ({ classes, sections, setSections, onClose }) => {
         Save
       </Button>
       <Button
-        className={classes.deleteButton}
+        variant='outlined'
+        onClick={() => onClose()}>
+        Cancel
+      </Button>
+      <Button
+        variant='outlined'
+        color='secondary'
+        className={classes.submitButton}
         onClick={() => handleDeleteStanza()}>
         Delete
       </Button>

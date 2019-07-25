@@ -1,4 +1,9 @@
 export default {
+  siteTitle: {
+    fontFamily: 'PT Mono',
+    textTransform: 'uppercase',
+    color: '#fff'
+  },
   snackbarMessage: {
     textTransform: 'uppercase',
     fontWeight: 'bold'
@@ -88,8 +93,16 @@ export default {
     boxSizing: 'border-box'
   },
 
+  navRoot: {
+    padding: 0
+  },
+
   marginBottom30: {
     marginBottom: 30
+  },
+
+  marginTop30: {
+    marginTop: 30
   },
 
   drawer: {
@@ -107,6 +120,7 @@ export default {
   },
 
   editFirstLine: {
+    marginTop: 30,
     textAlign: 'center',
     minHeight: 70
   },
@@ -131,6 +145,12 @@ export default {
     width: '90%',
     background: '#fff',
     flexGrow: 2
+  },
+  navBar: {
+    justifyContent: 'space-between',
+    display: 'flex',
+    alignItems: 'center',
+    padding: 0
   },
 
   addPoemItem: {

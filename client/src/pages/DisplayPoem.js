@@ -5,6 +5,7 @@ import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import RefreshIcon from '@material-ui/icons/Refresh'
+import { unstable_Box as Box } from '@material-ui/core/Box'
 
 import { GET_POEM_QUERY_STRING } from '../graphql/queries'
 import Context from '../context'
@@ -88,7 +89,7 @@ const DisplayPoem = ({ classes, match, history }) => {
     const section = sections[currentSectionIdx]
 
     return section && (
-      <Grid container justify='center' spacing={32}>
+      <Grid container justify='center' spacing={32} className={classes.marginTop30}>
         <Grid item sm={12}>
           <Typography variant='body1' align='center'>{section.firstLine}</Typography>
         </Grid>
@@ -108,7 +109,7 @@ const DisplayPoem = ({ classes, match, history }) => {
     return Boolean(renderedSections.length) && (
       renderedSections.map((section, idx) => {
         return (
-          <Grid container spacing={32} key={idx}>
+          <Grid container spacing={32} key={idx} className={classes.marginTop30}>
             <Grid item sm={12}>
               <Typography variant='body1' align='center'>{section.firstLine}</Typography>
             </Grid>
@@ -125,13 +126,13 @@ const DisplayPoem = ({ classes, match, history }) => {
 
   const renderResetButton = () => {
     if (currentSectionIdx === sections.length || !sections[currentSectionIdx].stanzas.length) {
-      return <RefreshIcon className={classes.pointer} onClick={handleReset} />
+      return <RefreshIcon className={classes.largeIcon} onClick={handleReset} />
     }
   }
 
   return (
     Boolean(sections.length && poem) && (
-      <Container justify='center' spacing={16} >
+      <Container justify='center' spacing={16} style={{ paddingBottom: '500px' }}>
         <Typography variant='h4'>{poem.title}</Typography>
         <Typography variant='body1'>By {poem.author}</Typography>
         {
@@ -144,7 +145,9 @@ const DisplayPoem = ({ classes, match, history }) => {
         <Divider className={classes.divider} />
         {renderSections()}
         {renderCurrentSection()}
-        {renderResetButton()}
+        <Box display='flex' justifyContent='center' className={classes.marginTop30}>
+          {renderResetButton()}
+        </Box>
       </Container >
     )
   )

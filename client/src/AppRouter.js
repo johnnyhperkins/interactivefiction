@@ -6,6 +6,7 @@ import DisplayPoem from './pages/DisplayPoem'
 import EditPoem from './pages/EditPoem'
 import withRoot from './withRoot'
 import Home from './pages/Home'
+import './styles/Base.css'
 
 import { ProtectedRoute, PublicRoute } from './utils/routeUtils'
 

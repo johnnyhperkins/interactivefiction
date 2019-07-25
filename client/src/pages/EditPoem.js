@@ -12,6 +12,7 @@ import AddIcon from '@material-ui/icons/Add'
 import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
 
+import Eye from '../components/Icons/Eye'
 import Link from '../components/misc/Link'
 import handleError from '../utils/handleError'
 import Container from '../components/Container'
@@ -21,6 +22,7 @@ import { useClient } from '../client'
 
 import Sections from '../components/Sections'
 import EditDrawerContent from '../components/EditDrawerContent'
+import '../styles/Base.css'
 
 import {
   GET_POEM_QUERY_STRING
@@ -31,7 +33,7 @@ import {
 } from '../graphql/mutations'
 
 import styles from '../styles'
-import { Grid } from '@material-ui/core'
+// import Grid from '@material-ui/core/Grid'
 
 const EditPoem = ({ classes, match, history }) => {
   const { dispatch, state: { ui: { drawer: { open } } } } = useContext(Context)
@@ -121,8 +123,25 @@ const EditPoem = ({ classes, match, history }) => {
                 value={title}
                 onChange={e => setTitle(e.target.value)}
               />
-              {bool && <Button onClick={handleUpdatePoem(updatePoem)}>Save</Button>}
-              {!bool && <EditIcon className={classes.regularIcon} onClick={() => setEditTitle(!editTitle)} />}
+              {bool && (
+                <>
+                  <Button onClick={handleUpdatePoem(updatePoem)}>Save</Button>
+                  <Button onClick={() => setEditTitle(!editTitle)} color='secondary'>Cancel</Button>
+                </>
+              )
+              }
+              {!bool &&
+                <>
+                  <Tooltip title='Edit poem title'>
+                    <EditIcon className={classes.regularIcon} onClick={() => setEditTitle(!editTitle)} />
+                  </Tooltip>
+                  {Boolean(sections.length) && (
+                    <Link to={url} small='true' style={{ marginLeft: '16px' }}>
+                      <Eye />
+                    </Link>
+                  )}
+                </>
+              }
             </>
           )}
         </Mutation>
@@ -132,13 +151,6 @@ const EditPoem = ({ classes, match, history }) => {
 
   return sections && (
     <Container justify='center'>
-      <Grid item sm={12}>
-        {Boolean(sections.length) && (
-          <Link to={url} small='true'>
-              View Poem
-          </Link>
-        )}
-      </Grid>
       <Box justifyContent='space-between' display='flex'>
         <div>
           {renderTitle(editTitle)}
@@ -146,7 +158,7 @@ const EditPoem = ({ classes, match, history }) => {
         <Mutation mutation={CREATE_SECTION_MUTATION} errorPolicy='all'>
           {createSection => (
             <Tooltip title='Add Section'>
-              <AddIcon onClick={handleCreateSection(createSection)} className={`${classes.largeIcon}`} />
+              <AddIcon onClick={handleCreateSection(createSection)} className={`${classes.largeIcon} pulse`} />
             </Tooltip>
           )}
         </Mutation>

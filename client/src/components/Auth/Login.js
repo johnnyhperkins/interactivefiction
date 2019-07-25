@@ -5,6 +5,8 @@ import { GoogleLogin } from 'react-google-login'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Divider from '@material-ui/core/Divider'
+import Container from '../Container'
+
 import { ME_QUERY } from '../../graphql/queries'
 import { BASE_URL } from '../../client'
 import EmailLogin from './EmailLogin'
@@ -44,13 +46,13 @@ const Login = ({ classes }) => {
     console.error('Error logging in ', err)
   }
   return (
-    <div className={classes.root}>
-      <Grid container justify='center' align='center'>
-        <Grid item xs={12} sm={6}>
-          <EmailLogin dispatch={dispatch} />
-          <Divider className={classes.divider} />
+    <Container justify='center' spacing={16}>
+      <EmailLogin dispatch={dispatch} />
+      <Divider className={classes.divider} />
+      <Grid container justify='center' style={{ textAlign: 'center' }} direction='column'>
+        <Grid item sm={12}>
           <Typography className={classes.marginBottom} variant='body1'>
-						Or
+            Or
           </Typography>
           <GoogleLogin
             onSuccess={onSuccess}
@@ -62,7 +64,7 @@ const Login = ({ classes }) => {
           />
         </Grid>
       </Grid>
-    </div>
+    </Container>
   )
 }
 
