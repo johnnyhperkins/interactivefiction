@@ -1,6 +1,7 @@
 {
 	"version": 2,
-	"name": "Interactivefiction",
+  "name": "Interactivefiction",
+  "alias": ["interactive-fiction.halaalyan.com", "interactivefiction.johnnyhperkins.now.sh"],
 	"builds": [
 		{
 			"src": "package.json",
