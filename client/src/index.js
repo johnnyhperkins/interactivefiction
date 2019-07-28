@@ -13,7 +13,7 @@ import AppRouter from './AppRouter'
 
 export const BASE_URL =
   process.env.NODE_ENV === 'production'
-    ? '<productionURL>'
+    ? 'https://interactivefiction-halaalyan.herokuapp.com/graphql'
     : 'http://localhost:4000/graphql'
 
 const httpLink = createHttpLink({

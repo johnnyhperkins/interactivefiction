@@ -1,6 +1,6 @@
 {
-	"version": 1,
-	"name": "InteractivePoetry",
+	"version": 2,
+	"name": "Interactivefiction",
 	"builds": [
 		{
 			"src": "package.json",

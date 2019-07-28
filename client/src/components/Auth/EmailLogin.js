@@ -48,7 +48,7 @@ const EmailLogin = ({ classes, dispatch }) => {
   return (
     <>
       <Grid container alignItems='center' direction='column'>
-        <Grid item={12}>
+        <Grid item xs={12}>
           {error && (
             <Typography variant='body1' className={classes.error}>
               {error}

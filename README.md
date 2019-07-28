@@ -1,8 +1,8 @@
-# Interactive Poetry Project
+# Interactive Fiction Project
 
-### [Interactive Poetry Project](https://interactive-poetry.johnnyhperkins.now.sh)
+### [Interactive Fiction Project](https://interactivefiction.johnnyhperkins.now.sh)
 
-Interactive Poetry is an idea pioneered by Hala Alyan and first published in Thrush. This project uses React Hooks, GraphQL/Apollo, and Mongoose.
+Interactive Fiction is an idea pioneered by Hala Alyan and first published in Thrush. This project uses React Hooks, GraphQL/Apollo, and Mongoose.
 
 ## Local set up
 
