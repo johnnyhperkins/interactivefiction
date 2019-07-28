@@ -24,7 +24,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   cors: {
-    origin: 'https://interactivefiction.johnnyhperkins.now.sh',
+    origin: 'https://interactive-fiction.halaalyan.com',
     credentials: true
   },
   debug: process.env.NODE_ENV !== 'production',
