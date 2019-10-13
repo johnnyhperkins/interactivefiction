@@ -1,4 +1,5 @@
-export default {
+import { makeStyles } from '@material-ui/styles'
+export default makeStyles({
   siteTitle: {
     fontFamily: 'PT Mono',
     textTransform: 'uppercase',
@@ -169,4 +170,4 @@ export default {
   pointer: {
     cursor: 'pointer'
   }
-}
+})

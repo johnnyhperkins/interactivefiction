@@ -1,9 +1,9 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
-import { withStyles } from '@material-ui/core/styles'
-import styles from '../styles'
+import useStyles from '../styles'
 
-const Container = ({ classes, children, ...rest }) => {
+export default function Container ({ children, ...rest }) {
+  const classes = useStyles()
   return (
     <div className={classes.root}>
       <Grid container {...rest}>
@@ -14,5 +14,3 @@ const Container = ({ classes, children, ...rest }) => {
     </div>
   )
 }
-
-export default withStyles(styles)(Container)

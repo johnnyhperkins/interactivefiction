@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Mutation } from 'react-apollo'
 
 import { unstable_Box as Box } from '@material-ui/core/Box'
-import { withStyles } from '@material-ui/core/styles'
 import Tooltip from '@material-ui/core/Tooltip'
 
 import Input from '@material-ui/core/Input'
@@ -32,10 +31,11 @@ import {
   CREATE_SECTION_MUTATION
 } from '../graphql/mutations'
 
-import styles from '../styles'
+import useStyles from '../styles'
 // import Grid from '@material-ui/core/Grid'
 
-const EditPoem = ({ classes, match, history }) => {
+export default function EditPoem ({ match, history }) {
+  const classes = useStyles()
   const { dispatch, state: { ui: { drawer: { open } } } } = useContext(Context)
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
@@ -179,5 +179,3 @@ const EditPoem = ({ classes, match, history }) => {
     </Container>
   )
 }
-
-export default withStyles(styles)(EditPoem)

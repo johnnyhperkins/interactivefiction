@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { GraphQLClient } from 'graphql-request'
 import { GoogleLogin } from 'react-google-login'
 
-import { withStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/styles'
 import Grid from '@material-ui/core/Grid'
 import Divider from '@material-ui/core/Divider'
 import Container from '../Container'
@@ -16,7 +16,20 @@ import Typography from '@material-ui/core/Typography'
 
 import Context from '../../context'
 
-const Login = ({ classes }) => {
+const useStyles = makeStyles({
+  root: {
+    padding: '50px 0 0 0'
+  },
+  marginBottom: {
+    marginBottom: 15
+  },
+  divider: {
+    margin: '15px 0'
+  }
+})
+
+export default function Login () {
+  const classes = useStyles()
   const { dispatch } = useContext(Context)
 
   const onSuccess = async googleUser => {
@@ -67,17 +80,3 @@ const Login = ({ classes }) => {
     </Container>
   )
 }
-
-const styles = {
-  root: {
-    padding: '50px 0 0 0'
-  },
-  marginBottom: {
-    marginBottom: 15
-  },
-  divider: {
-    margin: '15px 0'
-  }
-}
-
-export default withStyles(styles)(Login)
