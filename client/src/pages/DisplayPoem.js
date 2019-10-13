@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { withStyles } from '@material-ui/core/styles'
 
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
@@ -15,10 +14,11 @@ import DisplayLeadWords from '../components/DisplayLeadWords'
 import Stanza from '../components/Stanza'
 import handleError from '../utils/handleError'
 import Link from '../components/misc/Link'
-import styles from '../styles'
+import useStyles from '../styles'
 import '../styles/Stanza.css'
 
-const DisplayPoem = ({ classes, match, history }) => {
+export default function DisplayPoem ({ match, history }) {
+  const classes = useStyles()
   const { state: { currentUser }, dispatch } = useContext(Context)
   const [poem, setPoem] = useState(null)
   const [sections, setSections] = useState([])
@@ -152,5 +152,3 @@ const DisplayPoem = ({ classes, match, history }) => {
     )
   )
 }
-
-export default withStyles(styles)(DisplayPoem)

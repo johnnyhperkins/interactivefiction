@@ -1,11 +1,9 @@
 import React, { useContext } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import styled from 'styled-components'
-import { withStyles } from '@material-ui/core/styles'
 
 import { UPDATE_POEM_MUTATION_STRING } from '../graphql/mutations'
 import Section from './Section'
-import styles from '../styles'
 import Context from '../context'
 import handleError from '../utils/handleError'
 import { snackbarMessage } from '../utils/snackbarMessage'
@@ -20,7 +18,7 @@ const SectionWrapper = styled.div`
   padding: 35px 0
 `
 
-const Sections = ({ sections, classes, setSections, poemId }) => {
+export default function Sections ({ sections, setSections, poemId }) {
   const { dispatch } = useContext(Context)
   const client = useClient()
 
@@ -120,5 +118,3 @@ const Sections = ({ sections, classes, setSections, poemId }) => {
     </DragDropContext>
   )
 }
-
-export default withStyles(styles)(Sections)

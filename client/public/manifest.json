@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Interactive Fiction",
+  "name": "A Site To Create Interactive Poetry",
   "icons": [
     {
       "src": "favicon.ico",

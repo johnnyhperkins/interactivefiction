@@ -3,7 +3,6 @@ import { Mutation } from 'react-apollo'
 
 import Tooltip from '@material-ui/core/Tooltip'
 import Input from '@material-ui/core/Input'
-import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import EditIcon from '@material-ui/icons/Edit'
 import Grid from '@material-ui/core/Grid'
@@ -14,7 +13,7 @@ import ReorderIcon from '@material-ui/icons/ReorderTwoTone'
 
 import Stanza from './Stanza'
 import WithTooltip from './misc/WithTooltip'
-import styles from '../styles'
+import useStyles from '../styles'
 import Context from '../context'
 import handleError from '../utils/handleError'
 import { snackbarMessage } from '../utils/snackbarMessage'
@@ -22,7 +21,8 @@ import '../styles/Section.css'
 
 import { UPDATE_SECTION_MUTATION, DELETE_SECTION_MUTATION } from '../graphql/mutations'
 
-const Section = ({ section, startDeleteSection, classes, provided, poemId }) => {
+export default function Section ({ section, startDeleteSection, provided, poemId }) {
+  const classes = useStyles()
   const { dispatch } = useContext(Context)
   const [firstLine, setFirstLine] = useState('')
   const [editFirstLine, setEditFirstLine] = useState(false)
@@ -164,5 +164,3 @@ const Section = ({ section, startDeleteSection, classes, provided, poemId }) => 
     </Grid>
   )
 }
-
-export default withStyles(styles)(Section)

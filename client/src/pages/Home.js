@@ -3,7 +3,7 @@ import { Query, Mutation } from 'react-apollo'
 
 import Grid from '@material-ui/core/Grid'
 import Divider from '@material-ui/core/Divider'
-import { withStyles } from '@material-ui/core/styles'
+
 import EditIcon from '@material-ui/icons/Edit'
 import AddIcon from '@material-ui/icons/Add'
 import Button from '@material-ui/core/Button'
@@ -27,9 +27,10 @@ import {
 } from '../graphql/mutations'
 import { GET_POEMS_QUERY } from '../graphql/queries'
 
-import styles from '../styles'
+import useStyles from '../styles'
 
-const Home = ({ classes, history, client }) => {
+export default function Home ({ history, client }) {
+  const classes = useStyles()
   const { dispatch } = useContext(Context)
   const [addPoem, setAddPoem] = useState(false)
   const [title, setTitle] = useState('')
@@ -173,5 +174,3 @@ const Home = ({ classes, history, client }) => {
     </div>
   )
 }
-
-export default withStyles(styles)(Home)

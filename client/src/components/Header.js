@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Grid from '@material-ui/core/Grid'
@@ -7,9 +6,10 @@ import Grid from '@material-ui/core/Grid'
 import Link from './misc/Link'
 import Context from '../context'
 import SignOut from './Auth/Signout'
-import styles from '../styles'
+import useStyles from '../styles'
 
-const Header = ({ classes }) => {
+export default function Header () {
+  const classes = useStyles()
   const { state } = useContext(Context)
   const { currentUser, isGoogle } = state
   return (
@@ -33,9 +33,3 @@ const Header = ({ classes }) => {
     </AppBar>
   )
 }
-
-// const styles = {
-
-// };
-
-export default withStyles(styles)(Header)

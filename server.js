@@ -11,6 +11,11 @@ if (typeof localStorage === 'undefined' || localStorage === null) {
   localStorage = new LocalStorage('./scratch')
 }
 
+const cors = process.env.NODE_ENV !== 'production' ? true : {
+  origin: 'https://interactive-fiction.halaalyan.com',
+  credentials: true
+}
+
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -23,10 +28,7 @@ mongoose
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  cors: {
-    origin: 'https://interactive-fiction.halaalyan.com',
-    credentials: true
-  },
+  cors,
   debug: process.env.NODE_ENV !== 'production',
   introspection: process.env.NODE_ENV !== 'production',
   playground: process.env.NODE_ENV !== 'production',

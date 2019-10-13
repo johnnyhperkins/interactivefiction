@@ -1,14 +1,14 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import { Editor, EditorState, convertFromRaw } from 'draft-js'
 import { safeJsonParse } from '../utils/helpers'
-import styles from '../styles'
+import useStyles from '../styles'
 import '../styles/Stanza.css'
 
 // transition classes will be from-left from-right fade-in
 
-const Stanza = ({ stanza: { leadWord, body: rawBody }, classes }) => {
+export default function Stanza ({ stanza: { leadWord, body: rawBody } }) {
+  const classes = useStyles()
   const renderBody = () => {
     const [err, body] = safeJsonParse(rawBody)
     if (err) {
@@ -34,5 +34,3 @@ const Stanza = ({ stanza: { leadWord, body: rawBody }, classes }) => {
     </>
   )
 }
-
-export default withStyles(styles)(Stanza)
