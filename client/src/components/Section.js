@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Mutation } from 'react-apollo'
+import styled from 'styled-components'
 
 import Tooltip from '@material-ui/core/Tooltip'
 import Input from '@material-ui/core/Input'
@@ -26,6 +27,12 @@ export default function Section ({ section, startDeleteSection, provided, poemId
   const { dispatch } = useContext(Context)
   const [firstLine, setFirstLine] = useState('')
   const [editFirstLine, setEditFirstLine] = useState(false)
+
+  const AddStanzaContainer = styled.div`
+  display: flex;
+  padding-bottom: 15px;
+  justify-content: center;
+`
 
   useEffect(() => {
     setFirstLine(section.firstLine)
@@ -88,6 +95,9 @@ export default function Section ({ section, startDeleteSection, provided, poemId
         errorPolicy='all'>
         {updateSection => (
           <div className={classes.editFirstLine}>
+            <Tooltip title='Edit First Line'>
+              <EditIcon className={`${editFirstLine ? classes.active : ''} ${classes.regularIcon}`} onClick={() => { setEditFirstLine(!editFirstLine) }} />
+            </Tooltip>
             <Input
               placeholder='First Line'
               fullWidth
@@ -126,9 +136,16 @@ export default function Section ({ section, startDeleteSection, provided, poemId
               </Tooltip>
             )}
           </Mutation>
-          <Tooltip title='Edit First Line'>
-            <EditIcon className={`${editFirstLine ? classes.active : ''} ${classes.regularIcon}`} onClick={() => { setEditFirstLine(!editFirstLine) }} />
+          <Tooltip title='Reorder Section'>
+            <ReorderIcon className={classes.reorderIcon} />
           </Tooltip>
+        </Box>
+      </Grid>
+      <Grid item sm={12}>
+        {renderFirstLine()}
+      </Grid>
+      <Grid item sm={12}>
+        <AddStanzaContainer>
           {section.stanzas.length < 3 && (
             <Mutation
               mutation={UPDATE_SECTION_MUTATION}
@@ -140,15 +157,8 @@ export default function Section ({ section, startDeleteSection, provided, poemId
               )}
             </Mutation>
           )}
-          <Tooltip title='Reorder Section'>
-            <ReorderIcon className={classes.reorderIcon} />
-          </Tooltip>
-        </Box>
+        </AddStanzaContainer>
       </Grid>
-      <Grid item sm={12}>
-        {renderFirstLine()}
-      </Grid>
-
       {Boolean(section.stanzas.length) && section.stanzas.map((stanza, idx) => {
         return (
           <Grid item sm={4} key={idx} onClick={() => startUpdateStanza(stanza, idx)} className={classes.pointer}>

@@ -1,13 +1,15 @@
 import gql from 'graphql-tag'
 
-export const ME_QUERY = `query{
-  me {
-    name
-    _id
-    email
-    picture
+export const ME_QUERY = `
+  query {
+    me {
+      name
+      _id
+      email
+      picture
+    }
   }
-}`
+`
 
 export const GET_POEMS_QUERY = gql`
   query {
@@ -73,3 +75,11 @@ export const GET_STANZAS_QUERY = `
     }
   }
 `
+
+// export const UPLOAD_TO_DRIVE_QUERY = `
+//   query($_id: ID, $title: String, $payload: String) {
+//     uploadToDrive(_id: $_id, title: $title, payload: $payload) {
+//       title
+//     }
+//   }
+// `

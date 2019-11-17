@@ -4,6 +4,8 @@ import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import RefreshIcon from '@material-ui/icons/Refresh'
+import CodeRoundedIcon from '@material-ui/icons/CodeRounded'
+import Tooltip from '@material-ui/core/Tooltip'
 import { unstable_Box as Box } from '@material-ui/core/Box'
 
 import { GET_POEM_QUERY_STRING } from '../graphql/queries'
@@ -15,6 +17,7 @@ import Stanza from '../components/Stanza'
 import handleError from '../utils/handleError'
 import Link from '../components/misc/Link'
 import useStyles from '../styles'
+import { convertToHtml } from '../utils/helpers'
 import '../styles/Stanza.css'
 
 export default function DisplayPoem ({ match, history }) {
@@ -23,10 +26,10 @@ export default function DisplayPoem ({ match, history }) {
   const [poem, setPoem] = useState(null)
   const [sections, setSections] = useState([])
   const [fadeDirection, setFadeDirection] = useState('')
+  const [displayAsHtml, setDisplayAsHtml] = useState(false)
   const [currentSectionIdx, setCurrentSectionIdx] = useState(0)
   const [renderedSections, setRenderedSections] = useState([])
   const client = useClient()
-
   const { poem_id: poemId } = match.params
 
   useEffect(() => {
@@ -85,6 +88,10 @@ export default function DisplayPoem ({ match, history }) {
     setRenderedSections([])
   }
 
+  const handleDisplayAsHtml = () => setDisplayAsHtml(!displayAsHtml)
+
+  const renderAllSectionsAsHtml = () => <div dangerouslySetInnerHTML={{ __html: convertToHtml(sections) }} />
+
   const renderCurrentSection = () => {
     const section = sections[currentSectionIdx]
 
@@ -133,18 +140,32 @@ export default function DisplayPoem ({ match, history }) {
   return (
     Boolean(sections.length && poem) && (
       <Container justify='center' spacing={16} style={{ paddingBottom: '500px' }}>
-        <Typography variant='h4'>{poem.title}</Typography>
-        <Typography variant='body1'>By {poem.author}</Typography>
-        {
-          currentUser && currentUser._id === poem.authorId && (
-            <Link to={`/poem/${poemId}`} small='true'>
-              Edit Poem
-            </Link>
-          )
-        }
-        <Divider className={classes.divider} />
-        {renderSections()}
-        {renderCurrentSection()}
+        <Grid container spacing={0} justify='space-between'>
+          <Grid item xs={10}>
+            <Typography variant='h4'>{poem.title}</Typography>
+            <Typography variant='body1'>By {poem.author}</Typography>
+            {currentUser && currentUser._id === poem.authorId && (
+              <Link to={`/poem/${poemId}`} small='true'>
+                  Edit Poem
+              </Link>
+            )}
+          </Grid>
+          <Grid item xs={2} align='right'>
+            <Tooltip title='Display full poem as text'>
+              <CodeRoundedIcon color={displayAsHtml ? 'primary' : 'disabled'} onClick={handleDisplayAsHtml} />
+            </Tooltip>
+          </Grid>
+        </Grid>
+
+        {displayAsHtml
+          ? renderAllSectionsAsHtml()
+          : (
+            <>
+              {renderSections()}
+              {renderCurrentSection()}
+            </>
+          )}
+
         <Box display='flex' justifyContent='center' className={classes.marginTop30}>
           {renderResetButton()}
         </Box>
