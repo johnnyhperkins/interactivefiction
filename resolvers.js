@@ -5,6 +5,8 @@ const Section = require('./models/Section')
 const ObjectId = require('mongoose').Types.ObjectId
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+// const sendPoemToGoogleDrive = require('./utils/googleAuth')
+
 require('dotenv').config()
 
 const APP_SECRET = process.env.APP_SECRET
@@ -43,6 +45,15 @@ module.exports = {
 
       return sections
     }
+
+    // uploadToDrive: authenticated(async (root, { _id, title, payload }, ctx) => {
+    //   const poem = await Poem.findOne({
+    //     _id
+    //   })
+
+    //   await sendPoemToGoogleDrive(title, payload)
+    //   return poem
+    // })
   },
 
   Mutation: {

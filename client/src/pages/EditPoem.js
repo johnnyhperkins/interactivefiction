@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Mutation } from 'react-apollo'
+import styled from 'styled-components'
 
 import { unstable_Box as Box } from '@material-ui/core/Box'
 import Tooltip from '@material-ui/core/Tooltip'
-
 import Input from '@material-ui/core/Input'
 import Button from '@material-ui/core/Button'
 import EditIcon from '@material-ui/icons/Edit'
 import AddIcon from '@material-ui/icons/Add'
-import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
 
 import Eye from '../components/Icons/Eye'
@@ -18,11 +17,9 @@ import Container from '../components/Container'
 import { snackbarMessage } from '../utils/snackbarMessage'
 import Context from '../context'
 import { useClient } from '../client'
-
 import Sections from '../components/Sections'
 import EditDrawerContent from '../components/EditDrawerContent'
 import '../styles/Base.css'
-
 import {
   GET_POEM_QUERY_STRING
 } from '../graphql/queries'
@@ -32,7 +29,6 @@ import {
 } from '../graphql/mutations'
 
 import useStyles from '../styles'
-// import Grid from '@material-ui/core/Grid'
 
 export default function EditPoem ({ match, history }) {
   const classes = useStyles()
@@ -45,6 +41,12 @@ export default function EditPoem ({ match, history }) {
   const { id: poemId } = match.params
 
   const client = useClient()
+
+  const AddSectionContainer = styled.div`
+  display: flex;
+  padding: 25px 0;
+  justify-content: center;
+`
 
   useEffect(() => {
     getPoem()
@@ -86,8 +88,8 @@ export default function EditPoem ({ match, history }) {
       const { errors } = await createSection({
         variables: {
           poemId,
-          firstLine: 'New Section',
-          stanzas: [{ leadWord: 'New Stanza', body: 'Click here to edit this stanza' }]
+          firstLine: 'New Section\'s First line',
+          stanzas: [{ leadWord: 'New Stanza\'s lead word', body: 'Click here to edit this stanza' }]
         }
       })
 
@@ -109,39 +111,26 @@ export default function EditPoem ({ match, history }) {
     })
   }
 
-  const renderTitle = bool => {
+  const renderTitle = editMode => {
     return (
       <div className={classes.editTitle}>
         <Mutation mutation={UPDATE_POEM_MUTATION} errorPolicy='all'>
           {updatePoem => (
             <>
               <Input
-                disableUnderline={!bool}
-                disabled={!bool}
+                disableUnderline={!editMode}
+                disabled={!editMode}
                 className={classes.editTitleField}
                 inputProps={{ className: classes.active }}
                 value={title}
                 onChange={e => setTitle(e.target.value)}
               />
-              {bool && (
+              {editMode && (
                 <>
                   <Button onClick={handleUpdatePoem(updatePoem)}>Save</Button>
                   <Button onClick={() => setEditTitle(!editTitle)} color='secondary'>Cancel</Button>
                 </>
-              )
-              }
-              {!bool &&
-                <>
-                  <Tooltip title='Edit poem title'>
-                    <EditIcon className={classes.regularIcon} onClick={() => setEditTitle(!editTitle)} />
-                  </Tooltip>
-                  {Boolean(sections.length) && (
-                    <Link to={url} small='true' style={{ marginLeft: '16px' }}>
-                      <Eye />
-                    </Link>
-                  )}
-                </>
-              }
+              )}
             </>
           )}
         </Mutation>
@@ -155,6 +144,19 @@ export default function EditPoem ({ match, history }) {
         <div>
           {renderTitle(editTitle)}
         </div>
+        <div>
+          {!editTitle &&
+          <Tooltip title='Edit poem title'>
+            <EditIcon className={classes.regularIcon} onClick={() => setEditTitle(!editTitle)} />
+          </Tooltip>}
+          {Boolean(sections.length) && (
+            <Link to={url} small='true' style={{ marginLeft: '16px' }}>
+              <Eye />
+            </Link>
+          )}
+        </div>
+      </Box>
+      <AddSectionContainer>
         <Mutation mutation={CREATE_SECTION_MUTATION} errorPolicy='all'>
           {createSection => (
             <Tooltip title='Add Section'>
@@ -162,8 +164,7 @@ export default function EditPoem ({ match, history }) {
             </Tooltip>
           )}
         </Mutation>
-      </Box>
-      <Divider className={classes.divider} />
+      </AddSectionContainer>
       {Boolean(sections.length) &&
       <Sections sections={sections} setSections={setSections} poemId={poemId} />
       }

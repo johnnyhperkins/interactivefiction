@@ -50,6 +50,7 @@ module.exports = gql`
     getPoems: [Poem!]!
     getPoem(_id: ID!): Poem
     getSections(poemId: ID!): [Section!]!
+    # uploadToDrive(_id: ID, title: String, payload: String): Poem
   }
 
   type AuthPayload {

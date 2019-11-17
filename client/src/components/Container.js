@@ -7,7 +7,7 @@ export default function Container ({ children, ...rest }) {
   return (
     <div className={classes.root}>
       <Grid container {...rest}>
-        <Grid item sm={6}>
+        <Grid item sm={7}>
           {children}
         </Grid>
       </Grid>

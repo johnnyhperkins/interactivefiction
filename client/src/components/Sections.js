@@ -10,12 +10,12 @@ import { snackbarMessage } from '../utils/snackbarMessage'
 import { useClient } from '../client'
 
 const SectionContainer = styled.div`
-  padding: 10px;
-  margin-bottom: 20px;
+  
 `
 const SectionWrapper = styled.div`
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  padding: 35px 0
+  border: 1px dashed #ccc;
+  padding: 25px 25px;
+  margin-bottom: 25px;
 `
 
 export default function Sections ({ sections, setSections, poemId }) {

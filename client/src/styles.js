@@ -121,7 +121,6 @@ export default makeStyles({
   },
 
   editFirstLine: {
-    marginTop: 30,
     textAlign: 'center',
     minHeight: 70
   },
