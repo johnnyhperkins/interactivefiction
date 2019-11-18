@@ -26,6 +26,7 @@ import {
   DELETE_POEM_MUTATION
 } from '../graphql/mutations'
 import { GET_POEMS_QUERY } from '../graphql/queries'
+import Feed from '../components/Feed'
 
 import useStyles from '../styles'
 
@@ -109,7 +110,7 @@ export default function Home ({ history, client }) {
   return (
     <div className={classes.root}>
       <Grid container justify='center'>
-        <Grid item sm={6}>
+        <Grid item sm={7}>
           <Typography variant='h5' className={classes.marginBottom30}>My Poems</Typography>
           <List>
             <Query query={GET_POEMS_QUERY}>
@@ -128,7 +129,6 @@ export default function Home ({ history, client }) {
                 )
               }}
             </Query>
-            <Divider className={classes.divider} />
             <ListItem className={classes.addPoemItem}>
               <div className={classes.centerVertical}>
                 <ListItemIcon
@@ -169,6 +169,8 @@ export default function Home ({ history, client }) {
               )}
             </ListItem>
           </List>
+          <Divider className={classes.divider} />
+          <Feed />
         </Grid>
       </Grid>
     </div>

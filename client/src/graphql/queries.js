@@ -22,6 +22,22 @@ export const GET_POEMS_QUERY = gql`
   }
 `
 
+export const GET_FEED_QUERY = gql`
+  query {
+    getFeed {
+      _id
+      title
+      url
+      published
+      author {
+        _id
+        name
+        picture
+      }
+    }
+  }
+`
+
 export const GET_POEM_QUERY = gql`
   query($_id: ID!) {
     getPoem(_id: $_id) {
