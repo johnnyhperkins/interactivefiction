@@ -17,7 +17,6 @@ const verifyAuthToken = async (token, userType) => {
   try {
     // For now this function only supports email signed up & google auth users.
     // More auth methods could be added here in the future.
-
     if (userType === 'email') {
       const { userId } = jwt.verify(token, APP_SECRET)
 

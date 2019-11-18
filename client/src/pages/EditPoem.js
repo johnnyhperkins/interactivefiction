@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Mutation } from 'react-apollo'
 import styled from 'styled-components'
 
+import Typography from '@material-ui/core/Typography'
 import { unstable_Box as Box } from '@material-ui/core/Box'
 import Tooltip from '@material-ui/core/Tooltip'
 import Input from '@material-ui/core/Input'
@@ -34,6 +35,7 @@ export default function EditPoem ({ match, history }) {
   const classes = useStyles()
   const { dispatch, state: { ui: { drawer: { open } } } } = useContext(Context)
   const [title, setTitle] = useState('')
+  const [published, setPublished] = useState(null)
   const [url, setUrl] = useState('')
   const [sections, setSections] = useState([])
   const [editTitle, setEditTitle] = useState(false)
@@ -43,10 +45,10 @@ export default function EditPoem ({ match, history }) {
   const client = useClient()
 
   const AddSectionContainer = styled.div`
-  display: flex;
-  padding: 25px 0;
-  justify-content: center;
-`
+    display: flex;
+    padding: 25px 0;
+    justify-content: center;
+  `
 
   useEffect(() => {
     getPoem()
@@ -55,11 +57,11 @@ export default function EditPoem ({ match, history }) {
   const getPoem = async () => {
     try {
       const {
-        getPoem: { title, url, sections }
+        getPoem: { title, url, sections, published }
       } = await client.request(GET_POEM_QUERY_STRING, {
         _id: poemId
       })
-
+      setPublished(published)
       setUrl(url)
       setTitle(title)
       setSections(sections)
@@ -68,17 +70,21 @@ export default function EditPoem ({ match, history }) {
     }
   }
 
-  const handleUpdatePoem = updatePoem => {
+  const handleUpdatePoem = (updatePoem, { updateTitle, updatePublished }) => {
     return async () => {
+      const payload = {
+        _id: poemId
+      }
+      if (updateTitle) payload.title = updateTitle
+      if (updatePublished) payload.published = updatePublished
+
       const { errors } = await updatePoem({
-        variables: {
-          _id: poemId,
-          title
-        }
+        variables: payload
       })
 
       if (errors) return handleError(errors, dispatch)
       setEditTitle(false)
+      setPublished(updatePublished)
       snackbarMessage('Saved', dispatch)
     }
   }
@@ -125,9 +131,17 @@ export default function EditPoem ({ match, history }) {
                 value={title}
                 onChange={e => setTitle(e.target.value)}
               />
+
+              <Typography
+                color={published ? 'error' : 'default'}
+                className={classes.pointer}
+                onClick={handleUpdatePoem(updatePoem, { updatePublished: !published })} >
+                {published ? 'Published' : 'Not Published'}
+              </Typography>
+
               {editMode && (
                 <>
-                  <Button onClick={handleUpdatePoem(updatePoem)}>Save</Button>
+                  <Button onClick={handleUpdatePoem(updatePoem, { updateTitle: title })}>Save</Button>
                   <Button onClick={() => setEditTitle(!editTitle)} color='secondary'>Cancel</Button>
                 </>
               )}

@@ -14,6 +14,7 @@ module.exports = gql`
     sections: [Section!]
     title: String!
     url: String
+    published: Boolean
   }
 
   type Section {
@@ -42,6 +43,7 @@ module.exports = gql`
 
   input PoemInput {
     title: String
+    published: Boolean
     sections: [ID!]
   }
 

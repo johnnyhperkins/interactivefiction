@@ -17,6 +17,7 @@ export const GET_POEMS_QUERY = gql`
       _id
       title
       url
+      published
     }
   }
 `
@@ -27,6 +28,7 @@ export const GET_POEM_QUERY = gql`
       _id
       title
       url
+      published
       author {
         _id
         name
@@ -49,6 +51,7 @@ export const GET_POEM_QUERY_STRING = `
       _id
       title
       url
+      published
       author {
         _id
         name
