@@ -20,7 +20,7 @@ const verifyAuthToken = async (token, userType) => {
     if (userType === 'email') {
       const { userId } = jwt.verify(token, APP_SECRET)
 
-      return await User.findById(userId)
+      return User.findById(userId)
     } else if (userType === 'google') {
       const ticket = await client.verifyIdToken({
         idToken: token,

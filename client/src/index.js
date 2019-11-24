@@ -8,7 +8,7 @@ import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createHttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
-
+import NotMobileFriendlyWarning from './components/misc/NotMobileFriendlyWarning'
 import AppRouter from './AppRouter'
 
 export const BASE_URL =
@@ -28,8 +28,8 @@ const authLink = setContext((_, { headers }) => {
 
   let token
   let usertype
-  if (localStorage.getItem('bbToken')) {
-    token = localStorage.getItem('bbToken')
+  if (sessionStorage.getItem('bbToken')) {
+    token = sessionStorage.getItem('bbToken')
     usertype = 'email'
   } else if (window.gapi) {
     token = window.gapi.auth2
@@ -70,6 +70,9 @@ const client = new ApolloClient({
 const Root = () => {
   const initialState = useContext(Context)
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  const windowWidth = window.innerWidth
+  if (windowWidth < 700 && !state.ignoreMobileWarning) return <NotMobileFriendlyWarning dispatch={dispatch} />
   return (
     <ApolloProvider client={client}>
       <Context.Provider value={{ state, dispatch }}>

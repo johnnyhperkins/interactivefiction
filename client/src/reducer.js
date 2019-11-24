@@ -46,6 +46,12 @@ export default function reducer (state, { type, payload }) {
         ...state,
         warningModal: payload
       }
+
+    case 'IGNORE_WARNING':
+      return {
+        ...state,
+        ignoreMobileWarning: payload
+      }
     default:
       return state
   }

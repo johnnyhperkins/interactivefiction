@@ -52,7 +52,9 @@ module.exports = {
       }
       if (ctx.currentUser) query.author = { $ne: ctx.currentUser._id }
 
-      return Poem.find(query).limit(10)
+      return Poem
+        .find(query)
+        .limit(10)
         .populate('author')
     }
 

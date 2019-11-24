@@ -15,6 +15,7 @@ module.exports = gql`
     title: String!
     url: String
     published: Boolean
+    createdAt: String
   }
 
   type Section {

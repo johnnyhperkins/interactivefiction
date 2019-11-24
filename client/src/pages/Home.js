@@ -14,16 +14,18 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import DeleteIcon from '@material-ui/icons/Delete'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
+import Eye from '../components/Icons/Eye'
 import Tooltip from '@material-ui/core/Tooltip'
 
 import ReactLoading from 'react-loading'
-
+import Link from '../components/misc/Link'
 import handleError from '../utils/handleError'
 import { snackbarMessage } from '../utils/snackbarMessage'
 import Context from '../context'
 import {
   CREATE_POEM_MUTATION,
-  DELETE_POEM_MUTATION
+  DELETE_POEM_MUTATION,
+  UPDATE_POEM_MUTATION
 } from '../graphql/mutations'
 import { GET_POEMS_QUERY } from '../graphql/queries'
 import Feed from '../components/Feed'
@@ -59,6 +61,20 @@ export default function Home ({ history, client }) {
     history.push(`/poem/${id}`)
   }
 
+  const handleUpdatePoem = (updatePoem, poemId, { updatePublished }) => {
+    return async () => {
+      const { errors } = await updatePoem({
+        variables: {
+          _id: poemId,
+          published: updatePublished
+        }
+      })
+
+      if (errors) return handleError(errors, dispatch)
+      snackbarMessage('Saved', dispatch)
+    }
+  }
+
   const handleCreatePoem = createPoem => {
     return async () => {
       const { errors } = await createPoem({
@@ -77,6 +93,19 @@ export default function Home ({ history, client }) {
         <ListItem key={poem._id} disableGutters>
           <ListItemText primary={poem.title} onClick={() => handleEditPoem(poem._id)} className={classes.pointer} />
           <Mutation
+            mutation={UPDATE_POEM_MUTATION}>
+            {updatePoem => (
+              <Typography
+                color={poem.published ? 'default' : 'error'}
+                className={classes.pointer}
+                onClick={handleUpdatePoem(updatePoem, poem._id, { updatePublished: !poem.published })}
+                style={{ marginRight: 16 }} >
+                {poem.published ? 'Published' : 'Not Published'}
+
+              </Typography>
+            )}
+          </Mutation>
+          <Mutation
             mutation={DELETE_POEM_MUTATION}
             onError={err => handleError(err, dispatch)}
             update={(cache, { data: { deletePoem: { _id } } }) => {
@@ -93,6 +122,11 @@ export default function Home ({ history, client }) {
             }}>
             {deletePoem => (
               <>
+                <Link to={poem.url} style={{ marginRight: '16px' }}>
+                  <Tooltip title='View Poem'>
+                    <Eye />
+                  </Tooltip>
+                </Link>
                 <Tooltip title='Edit Poem'>
                   <EditIcon className={classes.regularIcon} onClick={() => handleEditPoem(poem._id)} style={{ marginRight: 16 }} />
                 </Tooltip>
@@ -134,7 +168,9 @@ export default function Home ({ history, client }) {
                 <ListItemIcon
                   className={classes.pointer}
                   onClick={() => setAddPoem(!addPoem)}>
-                  <AddIcon />
+                  <Tooltip title='Create a Poem'>
+                    <AddIcon />
+                  </Tooltip>
                 </ListItemIcon>
                 {addPoem && (
                   <TextField
@@ -161,7 +197,7 @@ export default function Home ({ history, client }) {
                     })
                   }}>
                   {createPoem => (
-                    <Button onClick={handleCreatePoem(createPoem)}>
+                    <Button variant='outlined' onClick={handleCreatePoem(createPoem)}>
                       Create Poem
                     </Button>
                   )}

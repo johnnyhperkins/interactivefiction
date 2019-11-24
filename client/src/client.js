@@ -13,7 +13,7 @@ export const useClient = () => {
         usertype: ''
       }
     }
-    const jwtToken = localStorage.getItem('bbToken')
+    const jwtToken = sessionStorage.getItem('bbToken')
 
     if (jwtToken) {
       headers.headers = {

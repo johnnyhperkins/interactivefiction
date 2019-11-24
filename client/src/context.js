@@ -1,6 +1,7 @@
 import { createContext } from 'react'
 
 const Context = createContext({
+  ignoreMobileWarning: false,
   currentUser: null,
   isAuth: false,
   isGoogle: false,

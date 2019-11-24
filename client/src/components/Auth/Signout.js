@@ -34,7 +34,7 @@ const Signout = ({ currentUser, isGoogle, client }) => {
   const { dispatch } = useContext(Context)
   const onSignout = () => {
     client.cache.reset()
-    localStorage.removeItem('bbToken')
+    sessionStorage.removeItem('bbToken')
     dispatch({ type: 'SIGNOUT_USER' })
   }
 
