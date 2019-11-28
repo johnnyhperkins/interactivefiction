@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react'
-import { Query, Mutation } from 'react-apollo'
+import { Mutation } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 
 import Grid from '@material-ui/core/Grid'
 import Divider from '@material-ui/core/Divider'
@@ -37,6 +38,7 @@ export default function Home ({ history, client }) {
   const { dispatch } = useContext(Context)
   const [addPoem, setAddPoem] = useState(false)
   const [title, setTitle] = useState('')
+  const { loading, error, data, refetch } = useQuery(GET_POEMS_QUERY)
 
   const startDeletePoem = (poemId, deletePoem) => {
     const action = async () => {
@@ -80,6 +82,7 @@ export default function Home ({ history, client }) {
       const { errors } = await createPoem({
         variables: { title }
       })
+      refetch()
       if (errors) return handleError(errors, dispatch)
       setAddPoem(false)
       setTitle('')
@@ -141,28 +144,24 @@ export default function Home ({ history, client }) {
     })
   }
 
+  if (loading) return <ReactLoading color='#2196f3' />
+  if (error) return <Typography>{error.message}</Typography>
+
   return (
     <div className={classes.root}>
       <Grid container justify='center'>
         <Grid item sm={7}>
           <Typography variant='h5' className={classes.marginBottom30}>My Poems</Typography>
           <List>
-            <Query query={GET_POEMS_QUERY}>
-              {({ loading, error, data: { getPoems: poems } }) => {
-                if (loading) return <ReactLoading color='#2196f3' />
-                if (error) {
-                  return <Typography>{error.message}</Typography>
-                }
 
-                return poems.length ? (
-                  renderPoems(poems)
-                ) : (
-                  <ListItem>
-                    <ListItemText primary='Click the plus button to create a poem.' />
-                  </ListItem>
-                )
-              }}
-            </Query>
+            {data.getPoems.length ? (
+              renderPoems(data.getPoems)
+            ) : (
+              <ListItem>
+                <ListItemText primary='Click the plus button to create a poem.' />
+              </ListItem>
+            )}
+
             <ListItem className={classes.addPoemItem}>
               <div className={classes.centerVertical}>
                 <ListItemIcon
