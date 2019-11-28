@@ -3,13 +3,10 @@ import { useQuery } from '@apollo/react-hooks'
 import Link from './misc/Link'
 import moment from 'moment'
 import ReactLoading from 'react-loading'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
 import { GET_FEED_QUERY } from '../graphql/queries'
 import useStyles from '../styles'
+
+import { Grid, Typography, List, ListItem, ListItemText } from '@material-ui/core'
 
 export default function Feed ({ history, client }) {
   const classes = useStyles()

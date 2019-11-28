@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 
-import Typography from '@material-ui/core/Typography'
-import Grid from '@material-ui/core/Grid'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import CodeRoundedIcon from '@material-ui/icons/CodeRounded'
-import Tooltip from '@material-ui/core/Tooltip'
 import { unstable_Box as Box } from '@material-ui/core/Box'
 
 import { GET_POEM_QUERY_STRING } from '../graphql/queries'
@@ -18,6 +15,8 @@ import Link from '../components/misc/Link'
 import useStyles from '../styles'
 import { convertToHtml } from '../utils/helpers'
 import '../styles/Stanza.css'
+
+import { Typography, Grid, Tooltip } from '@material-ui/core'
 
 export default function DisplayPoem ({ match, history }) {
   const classes = useStyles()
@@ -94,7 +93,7 @@ export default function DisplayPoem ({ match, history }) {
     const section = sections[currentSectionIdx]
 
     return section && (
-      <Grid container justify='center' spacing={32} className={classes.marginTop30}>
+      <Grid container justify='center' spacing={4} className={classes.marginTop30}>
         <Grid item sm={12}>
           <Typography variant='body1' align='center'>{section.firstLine}</Typography>
         </Grid>
@@ -114,7 +113,7 @@ export default function DisplayPoem ({ match, history }) {
     return Boolean(renderedSections.length) && (
       renderedSections.map((section, idx) => {
         return (
-          <Grid container spacing={32} key={idx} className={classes.marginTop30}>
+          <Grid container spacing={4} key={idx} className={classes.marginTop30}>
             <Grid item sm={12}>
               <Typography variant='body1' align='center'>{section.firstLine}</Typography>
             </Grid>
@@ -137,7 +136,7 @@ export default function DisplayPoem ({ match, history }) {
 
   return (
     Boolean(sections.length && poem) && (
-      <Container justify='center' spacing={16} style={{ paddingBottom: '500px' }}>
+      <Container justify='center' spacing={2} style={{ paddingBottom: '500px' }}>
         <Grid container spacing={0} justify='space-between'>
           <Grid item xs={10}>
             <Typography variant='h4'>{poem.title}</Typography>

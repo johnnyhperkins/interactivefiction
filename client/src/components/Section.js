@@ -2,11 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Mutation } from 'react-apollo'
 import styled from 'styled-components'
 
-import Tooltip from '@material-ui/core/Tooltip'
-import Input from '@material-ui/core/Input'
-import Button from '@material-ui/core/Button'
 import EditIcon from '@material-ui/icons/Edit'
-import Grid from '@material-ui/core/Grid'
 import AddIcon from '@material-ui/icons/Add'
 import { unstable_Box as Box } from '@material-ui/core/Box'
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -21,6 +17,8 @@ import { snackbarMessage } from '../utils/snackbarMessage'
 import '../styles/Section.css'
 
 import { UPDATE_SECTION_MUTATION, DELETE_SECTION_MUTATION } from '../graphql/mutations'
+
+import { Tooltip, Input, Button, Grid } from '@material-ui/core'
 
 export default function Section ({ section, startDeleteSection, provided, poemId }) {
   const classes = useStyles()
@@ -124,7 +122,7 @@ export default function Section ({ section, startDeleteSection, provided, poemId
   }
 
   return (
-    <Grid container justify='center' spacing={32}>
+    <Grid container justify='center' spacing={4}>
       <Grid item sm={12}>
         <Box display='flex' justifyContent='space-between' alignItems='flex-end'>
           <Mutation
@@ -162,7 +160,7 @@ export default function Section ({ section, startDeleteSection, provided, poemId
       {Boolean(section.stanzas.length) && section.stanzas.map((stanza, idx) => {
         return (
           <Grid item sm={4} key={idx} onClick={() => startUpdateStanza(stanza, idx)} className={classes.pointer}>
-            <Tooltip title='Edit Stanza'>
+            <Tooltip title='Edit Stanza' placement='top'>
               <WithTooltip tooltip>
                 <Stanza stanza={stanza} tooltip />
               </WithTooltip>

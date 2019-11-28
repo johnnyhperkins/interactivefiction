@@ -3,8 +3,8 @@ import Context from '../../context'
 import { withApollo } from 'react-apollo'
 import { GoogleLogout } from 'react-google-login'
 import ExitToApp from '@material-ui/icons/ExitToApp'
-import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
+import { Typography } from '@material-ui/core'
 
 const useStyles = makeStyles({
   root: {

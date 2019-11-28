@@ -2,16 +2,10 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Mutation } from 'react-apollo'
 import styled from 'styled-components'
 
-import Typography from '@material-ui/core/Typography'
 import { unstable_Box as Box } from '@material-ui/core/Box'
-import Tooltip from '@material-ui/core/Tooltip'
-import Switch from '@material-ui/core/Switch'
-import Input from '@material-ui/core/Input'
-import Button from '@material-ui/core/Button'
 import EditIcon from '@material-ui/icons/Edit'
 import AddIcon from '@material-ui/icons/Add'
 import Eye from '../components/Icons/Eye'
-import Drawer from '@material-ui/core/Drawer'
 
 import Link from '../components/misc/Link'
 import handleError from '../utils/handleError'
@@ -31,6 +25,8 @@ import {
 } from '../graphql/mutations'
 
 import useStyles from '../styles'
+
+import { Typography, Tooltip, Switch, Input, Button, Drawer } from '@material-ui/core'
 
 export default function EditPoem ({ match, history }) {
   const classes = useStyles()

@@ -3,8 +3,6 @@ import { GraphQLClient } from 'graphql-request'
 import { GoogleLogin } from 'react-google-login'
 
 import { makeStyles } from '@material-ui/styles'
-import Grid from '@material-ui/core/Grid'
-import Divider from '@material-ui/core/Divider'
 import Container from '../Container'
 
 import { ME_QUERY } from '../../graphql/queries'
@@ -12,9 +10,10 @@ import { BASE_URL } from '../../client'
 import EmailLogin from './EmailLogin'
 import processSignIn from '../../utils/processSignIn'
 import handleError from '../../utils/handleError'
-import Typography from '@material-ui/core/Typography'
 
 import Context from '../../context'
+
+import { Grid, Divider, Typography } from '@material-ui/core'
 
 const useStyles = makeStyles({
   root: {
@@ -59,7 +58,7 @@ export default function Login () {
     console.error('Error logging in ', err)
   }
   return (
-    <Container justify='center' spacing={16}>
+    <Container justify='center' spacing={2}>
       <EmailLogin dispatch={dispatch} />
       <Divider className={classes.divider} />
       <Grid container justify='center' style={{ textAlign: 'center' }} direction='column'>

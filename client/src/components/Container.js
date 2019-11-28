@@ -1,6 +1,6 @@
 import React from 'react'
-import Grid from '@material-ui/core/Grid'
 import useStyles from '../styles'
+import { Grid } from '@material-ui/core'
 
 export default function Container ({ children, ...rest }) {
   const classes = useStyles()
