@@ -6,9 +6,10 @@ const PoemSchema = new mongoose.Schema(
     sections: [{ type: mongoose.Schema.ObjectId, ref: 'Section' }],
     url: String,
     createdAt: { type: Date, default: Date.now },
-    author: { type: mongoose.Schema.ObjectId, ref: 'User' }
+    author: { type: mongoose.Schema.ObjectId, ref: 'User' },
+    published: { type: Boolean, default: false }
   },
-  { timestamps: true },
+  { timestamps: true }
 )
 
 module.exports = mongoose.model('Poem', PoemSchema)

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
 
-import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import RefreshIcon from '@material-ui/icons/Refresh'

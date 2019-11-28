@@ -15,7 +15,7 @@
 		{
 			"src": "/static/(.*)",
 			"headers": {
-				"cache-control": "s-maxage=31536000,immutable"
+				"cache-control": "s-maxage=6000"
 			},
 			"dest": "/static/$1"
 		},

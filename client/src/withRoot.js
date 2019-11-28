@@ -4,6 +4,9 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 
 const theme = createMuiTheme({
   palette: {
+    johnny: {
+      main: '#ccc'
+    },
     background: {
       default: '#fff'
     },
@@ -20,7 +23,10 @@ const theme = createMuiTheme({
   },
   typography: {
     useNextVariants: true,
-    fontFamily: 'Montserrat'
+    fontFamily: 'Montserrat',
+    disabled: {
+      main: '#ccc'
+    }
   }
 })
 

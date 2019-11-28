@@ -44,6 +44,18 @@ module.exports = {
       })
 
       return sections
+    },
+
+    async getFeed (root, args, ctx) {
+      const query = {
+        published: true
+      }
+      if (ctx.currentUser) query.author = { $ne: ctx.currentUser._id }
+
+      return Poem
+        .find(query)
+        .limit(10)
+        .populate('author')
     }
 
     // uploadToDrive: authenticated(async (root, { _id, title, payload }, ctx) => {

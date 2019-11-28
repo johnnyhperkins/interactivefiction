@@ -6,11 +6,6 @@ const mongoose = require('mongoose')
 require('dotenv').config()
 const { findOrCreateUser } = require('./controllers/userController')
 
-if (typeof localStorage === 'undefined' || localStorage === null) {
-  const LocalStorage = require('node-localstorage').LocalStorage
-  localStorage = new LocalStorage('./scratch')
-}
-
 const cors = process.env.NODE_ENV !== 'production' ? true : {
   origin: 'https://interactive-fiction.halaalyan.com',
   credentials: true

@@ -31,7 +31,7 @@ const EmailLogin = ({ classes, dispatch }) => {
     }
 
     // TO DO: figure out how to save session tokens somewhere other than localstorage
-    localStorage.setItem('bbToken', token)
+    sessionStorage.setItem('bbToken', token)
 
     const client = new GraphQLClient(BASE_URL, {
       headers: {

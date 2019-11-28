@@ -14,6 +14,8 @@ module.exports = gql`
     sections: [Section!]
     title: String!
     url: String
+    published: Boolean
+    createdAt: String
   }
 
   type Section {
@@ -42,6 +44,7 @@ module.exports = gql`
 
   input PoemInput {
     title: String
+    published: Boolean
     sections: [ID!]
   }
 
@@ -50,7 +53,7 @@ module.exports = gql`
     getPoems: [Poem!]!
     getPoem(_id: ID!): Poem
     getSections(poemId: ID!): [Section!]!
-    # uploadToDrive(_id: ID, title: String, payload: String): Poem
+    getFeed: [Poem!]!
   }
 
   type AuthPayload {

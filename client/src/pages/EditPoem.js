@@ -2,15 +2,17 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Mutation } from 'react-apollo'
 import styled from 'styled-components'
 
+import Typography from '@material-ui/core/Typography'
 import { unstable_Box as Box } from '@material-ui/core/Box'
 import Tooltip from '@material-ui/core/Tooltip'
+import Switch from '@material-ui/core/Switch'
 import Input from '@material-ui/core/Input'
 import Button from '@material-ui/core/Button'
 import EditIcon from '@material-ui/icons/Edit'
 import AddIcon from '@material-ui/icons/Add'
+import Eye from '../components/Icons/Eye'
 import Drawer from '@material-ui/core/Drawer'
 
-import Eye from '../components/Icons/Eye'
 import Link from '../components/misc/Link'
 import handleError from '../utils/handleError'
 import Container from '../components/Container'
@@ -34,6 +36,7 @@ export default function EditPoem ({ match, history }) {
   const classes = useStyles()
   const { dispatch, state: { ui: { drawer: { open } } } } = useContext(Context)
   const [title, setTitle] = useState('')
+  const [published, setPublished] = useState(false)
   const [url, setUrl] = useState('')
   const [sections, setSections] = useState([])
   const [editTitle, setEditTitle] = useState(false)
@@ -43,10 +46,15 @@ export default function EditPoem ({ match, history }) {
   const client = useClient()
 
   const AddSectionContainer = styled.div`
-  display: flex;
-  padding: 25px 0;
-  justify-content: center;
-`
+    display: flex;
+    padding: 25px 0;
+    justify-content: center;
+  `
+  const PublishControls = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  `
 
   useEffect(() => {
     getPoem()
@@ -55,30 +63,34 @@ export default function EditPoem ({ match, history }) {
   const getPoem = async () => {
     try {
       const {
-        getPoem: { title, url, sections }
+        getPoem: { title, url, sections, published }
       } = await client.request(GET_POEM_QUERY_STRING, {
         _id: poemId
       })
-
       setUrl(url)
       setTitle(title)
       setSections(sections)
+      setPublished(published)
     } catch (err) {
       handleError(err, dispatch)
     }
   }
 
-  const handleUpdatePoem = updatePoem => {
+  const handleUpdatePoem = (updatePoem, { updateTitle, updatePublished }) => {
     return async () => {
+      const payload = {
+        _id: poemId
+      }
+      if (updateTitle) payload.title = updateTitle
+      if (updatePublished !== undefined) payload.published = updatePublished
+
       const { errors } = await updatePoem({
-        variables: {
-          _id: poemId,
-          title
-        }
+        variables: payload
       })
 
       if (errors) return handleError(errors, dispatch)
       setEditTitle(false)
+      setPublished(updatePublished)
       snackbarMessage('Saved', dispatch)
     }
   }
@@ -113,35 +125,49 @@ export default function EditPoem ({ match, history }) {
 
   const renderTitle = editMode => {
     return (
-      <div className={classes.editTitle}>
-        <Mutation mutation={UPDATE_POEM_MUTATION} errorPolicy='all'>
-          {updatePoem => (
-            <>
-              <Input
-                disableUnderline={!editMode}
-                disabled={!editMode}
-                className={classes.editTitleField}
-                inputProps={{ className: classes.active }}
-                value={title}
-                onChange={e => setTitle(e.target.value)}
-              />
-              {editMode && (
-                <>
-                  <Button onClick={handleUpdatePoem(updatePoem)}>Save</Button>
-                  <Button onClick={() => setEditTitle(!editTitle)} color='secondary'>Cancel</Button>
-                </>
-              )}
-            </>
-          )}
-        </Mutation>
-      </div>
+      <Mutation mutation={UPDATE_POEM_MUTATION} errorPolicy='all'>
+        {updatePoem => (
+          <>
+            <Input
+              disableUnderline={!editMode}
+              disabled={!editMode}
+              className={classes.editTitleField}
+              inputProps={{ className: classes.editTitleFieldInput }}
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+            />
+
+            {!editMode && (
+              <PublishControls>
+                <Switch
+                  checked={published}
+                  onChange={handleUpdatePoem(updatePoem, { updatePublished: !published })}
+                  color='primary'
+                />
+                <Typography
+                  color={published ? 'primary' : 'error'}
+                  className={classes.pointer}
+                  onClick={handleUpdatePoem(updatePoem, { updatePublished: !published })} >
+                  {published ? 'Published' : 'Not Published'}
+                </Typography>
+              </PublishControls>)}
+
+            {editMode && (
+              <div style={{ marginTop: 10 }}>
+                <Button variant='outlined' onClick={handleUpdatePoem(updatePoem, { updateTitle: title })}>Save</Button>
+                <Button onClick={() => setEditTitle(!editTitle)} color='secondary'>Cancel</Button>
+              </div>
+            )}
+          </>
+        )}
+      </Mutation>
     )
   }
 
   return sections && (
     <Container justify='center'>
       <Box justifyContent='space-between' display='flex'>
-        <div>
+        <div className={classes.editTitle}>
           {renderTitle(editTitle)}
         </div>
         <div>
