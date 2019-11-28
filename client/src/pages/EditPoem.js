@@ -57,7 +57,7 @@ export default function EditPoem ({ match, history }) {
   `
 
   useEffect(() => {
-    getPoem()
+    return getPoem()
   }, [])
 
   const getPoem = async () => {

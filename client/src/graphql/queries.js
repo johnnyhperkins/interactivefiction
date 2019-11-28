@@ -47,6 +47,7 @@ export const GET_POEM_QUERY = gql`
       title
       url
       published
+      createdAt
       author {
         _id
         name
@@ -70,6 +71,7 @@ export const GET_POEM_QUERY_STRING = `
       title
       url
       published
+      createdAt
       author {
         _id
         name
