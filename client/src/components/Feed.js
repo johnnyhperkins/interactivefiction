@@ -1,5 +1,5 @@
 import React from 'react'
-import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 import Link from './misc/Link'
 import moment from 'moment'
 import ReactLoading from 'react-loading'
@@ -13,6 +13,10 @@ import useStyles from '../styles'
 
 export default function Feed ({ history, client }) {
   const classes = useStyles()
+  const { loading, error, data } = useQuery(GET_FEED_QUERY)
+
+  if (loading) return <ReactLoading color='#2196f3' />
+  if (error) return <Typography>{error.message}</Typography>
 
   const renderFeed = poems => {
     return poems.map(poem => {
@@ -32,15 +36,7 @@ export default function Feed ({ history, client }) {
         <Grid item sm={12}>
           <Typography variant='h5' className={classes.marginBottom30}>Recently Published</Typography>
           <List>
-            <Query query={GET_FEED_QUERY}>
-              {({ loading, error, data: { getFeed: poems } }) => {
-                if (loading) return <ReactLoading color='#2196f3' />
-                if (error) {
-                  return <Typography>{error.message}</Typography>
-                }
-                return renderFeed(poems)
-              }}
-            </Query>
+            {renderFeed(data.getFeed)}
           </List>
         </Grid>
       </Grid>

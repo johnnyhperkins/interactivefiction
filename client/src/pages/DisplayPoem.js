@@ -32,29 +32,28 @@ export default function DisplayPoem ({ match, history }) {
   const { poem_id: poemId } = match.params
 
   useEffect(() => {
+    async function getPoem () {
+      try {
+        const res = await client.request(GET_POEM_QUERY_STRING, {
+          _id: poemId
+        }) // WHAT THE HELL
+
+        const { getPoem: { title, sections, author: { name, _id } } } = res
+
+        setPoem({
+          title: title,
+          author: name,
+          authorId: _id
+        })
+
+        setSections(sections)
+      } catch (err) {
+        handleError(err, dispatch)
+        history.push('/')
+      }
+    }
     getPoem()
   }, [])
-
-  const getPoem = async () => {
-    try {
-      const res = await client.request(GET_POEM_QUERY_STRING, {
-        _id: poemId
-      }) // WHAT THE HELL
-
-      const { getPoem: { title, sections, author: { name, _id } } } = res
-
-      setPoem({
-        title: title,
-        author: name,
-        authorId: _id
-      })
-
-      setSections(sections)
-    } catch (err) {
-      handleError(err, dispatch)
-      history.push('/')
-    }
-  }
 
   const getFadeDirection = (idx) => {
     switch (idx) {

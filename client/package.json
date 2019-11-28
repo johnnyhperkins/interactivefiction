@@ -6,6 +6,7 @@
 		"@material-ui/core": "^3.9.3",
 		"@material-ui/icons": "^3.0.2",
 		"@material-ui/styles": "^4.3.0",
+		"apollo": "^2.21.1",
 		"apollo-cache-inmemory": "^1.4.2",
 		"apollo-client": "^2.6.4",
 		"apollo-link-context": "^1.0.17",

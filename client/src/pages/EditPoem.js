@@ -57,7 +57,22 @@ export default function EditPoem ({ match, history }) {
   `
 
   useEffect(() => {
-    return getPoem()
+    async function getPoem () {
+      try {
+        const {
+          getPoem: { title, url, sections, published }
+        } = await client.request(GET_POEM_QUERY_STRING, {
+          _id: poemId
+        })
+        setUrl(url)
+        setTitle(title)
+        setSections(sections)
+        setPublished(published)
+      } catch (err) {
+        handleError(err, dispatch)
+      }
+    }
+    getPoem()
   }, [])
 
   const getPoem = async () => {
