@@ -2,21 +2,10 @@ import React, { useState, useContext } from 'react'
 import { Mutation } from 'react-apollo'
 import { useQuery } from '@apollo/react-hooks'
 
-import Grid from '@material-ui/core/Grid'
-import Divider from '@material-ui/core/Divider'
-
 import EditIcon from '@material-ui/icons/Edit'
 import AddIcon from '@material-ui/icons/Add'
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
-import TextField from '@material-ui/core/TextField'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
 import DeleteIcon from '@material-ui/icons/Delete'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
 import Eye from '../components/Icons/Eye'
-import Tooltip from '@material-ui/core/Tooltip'
 
 import ReactLoading from 'react-loading'
 import Link from '../components/misc/Link'
@@ -32,6 +21,19 @@ import { GET_POEMS_QUERY } from '../graphql/queries'
 import Feed from '../components/Feed'
 
 import useStyles from '../styles'
+
+import {
+  Grid,
+  Divider,
+  Button,
+  Typography,
+  TextField,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Tooltip
+} from '@material-ui/core'
 
 export default function Home ({ history, client }) {
   const classes = useStyles()
@@ -99,7 +101,7 @@ export default function Home ({ history, client }) {
             mutation={UPDATE_POEM_MUTATION}>
             {updatePoem => (
               <Typography
-                color={poem.published ? 'default' : 'error'}
+                color={poem.published ? 'primary' : 'error'}
                 className={classes.pointer}
                 onClick={handleUpdatePoem(updatePoem, poem._id, { updatePublished: !poem.published })}
                 style={{ marginRight: 16 }} >

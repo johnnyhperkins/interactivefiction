@@ -1,9 +1,6 @@
 import React from 'react'
-import Grid from '@material-ui/core/Grid'
-import Button from '@material-ui/core/Button'
-import AppBar from '@material-ui/core/AppBar'
 import useStyles from '../../styles'
-import Typography from '@material-ui/core/Typography'
+import { Grid, Button, AppBar, Typography } from '@material-ui/core'
 
 export default function ({ dispatch }) {
   const classes = useStyles()

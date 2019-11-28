@@ -1,9 +1,9 @@
 import React from 'react'
-import Typography from '@material-ui/core/Typography'
 import { Editor, EditorState, convertFromRaw } from 'draft-js'
 import { safeJsonParse } from '../utils/helpers'
 import useStyles from '../styles'
 import '../styles/Stanza.css'
+import { Typography } from '@material-ui/core'
 
 // transition classes will be from-left from-right fade-in
 

@@ -1,19 +1,15 @@
 import React, { useState } from 'react'
 import { GraphQLClient } from 'graphql-request'
 
-import Grid from '@material-ui/core/Grid'
-import Divider from '@material-ui/core/Divider'
-import { withStyles } from '@material-ui/core/styles'
 import { ME_QUERY } from '../../graphql/queries'
-import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
 
 import { BASE_URL } from '../../client'
 import { LOGIN_MUTATION, SIGNUP_MUTATION } from '../../graphql/mutations'
 import { Mutation } from 'react-apollo'
 import processSignIn from '../../utils/processSignIn'
 import handleError from '../../utils/handleError'
+
+import { Grid, Divider, withStyles, TextField, Typography, Button } from '@material-ui/core'
 
 const EmailLogin = ({ classes, dispatch }) => {
   const [login, setLogin] = useState(true)

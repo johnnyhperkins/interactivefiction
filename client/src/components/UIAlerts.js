@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
-import Snackbar from '@material-ui/core/Snackbar'
-import IconButton from '@material-ui/core/IconButton'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import Context from '../context'
 import { makeStyles } from '@material-ui/styles'
+
+import { Snackbar, IconButton } from '@material-ui/core'
 
 const useStyles = makeStyles({
   snackbarMessage: {

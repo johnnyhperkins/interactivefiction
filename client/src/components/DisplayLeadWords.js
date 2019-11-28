@@ -1,7 +1,7 @@
 import React from 'react'
-import Typography from '@material-ui/core/Typography'
 import useStyles from '../styles'
 import '../styles/Stanza.css'
+import { Typography } from '@material-ui/core'
 
 export default function DisplayLeadWords ({ stanza: { leadWord }, testSlide, selectStanza, idx }) {
   const classes = useStyles()

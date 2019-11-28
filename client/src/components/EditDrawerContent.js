@@ -1,10 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Editor, EditorState, convertFromRaw, convertToRaw, RichUtils, getDefaultKeyBinding } from 'draft-js'
 
-import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-
 import BlockStyleControls from './misc/editor/BlockStyleControls'
 import InlineStyleControls from './misc/editor/InlineStylesControls'
 import handleError from '../utils/handleError'
@@ -14,6 +10,8 @@ import { useClient } from '../client'
 import { UPDATE_STANZA_MUTATION } from '../graphql/mutations'
 import { safeJsonParse } from '../utils/helpers'
 import '../styles/RichEditor.css'
+
+import { TextField, Typography, Button } from '@material-ui/core'
 
 const EditDrawerContent = ({ classes, sections, setSections, onClose }) => {
   const client = useClient()

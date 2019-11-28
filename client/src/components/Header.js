@@ -1,12 +1,11 @@
 import React, { useContext } from 'react'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Grid from '@material-ui/core/Grid'
 
 import Link from './misc/Link'
 import Context from '../context'
 import SignOut from './Auth/Signout'
 import useStyles from '../styles'
+
+import { AppBar, Toolbar, Grid } from '@material-ui/core'
 
 export default function Header () {
   const classes = useStyles()
@@ -14,7 +13,7 @@ export default function Header () {
   const { currentUser, isGoogle } = state
   return (
     <AppBar position='static'>
-      <Grid container justify='center' spacing={16}>
+      <Grid container justify='center' spacing={2}>
         <Grid item sm={7}>
           <Toolbar className={classes.navBar}>
             <Link to='/'>
