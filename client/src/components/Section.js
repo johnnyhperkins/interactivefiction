@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import EditIcon from '@material-ui/icons/Edit'
 import AddIcon from '@material-ui/icons/Add'
-import { unstable_Box as Box } from '@material-ui/core/Box'
+import Box from '@material-ui/core/Box'
 import DeleteIcon from '@material-ui/icons/Delete'
 import ReorderIcon from '@material-ui/icons/ReorderTwoTone'
 
