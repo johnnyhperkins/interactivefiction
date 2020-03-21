@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Mutation } from 'react-apollo'
 import styled from 'styled-components'
 
-import { unstable_Box as Box } from '@material-ui/core/Box'
+import Box from '@material-ui/core/Box'
 import EditIcon from '@material-ui/icons/Edit'
 import AddIcon from '@material-ui/icons/Add'
 import Eye from '../components/Icons/Eye'

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 
 import RefreshIcon from '@material-ui/icons/Refresh'
 import CodeRoundedIcon from '@material-ui/icons/CodeRounded'
-import { unstable_Box as Box } from '@material-ui/core/Box'
+import Box from '@material-ui/core/Box'
 
 import { GET_POEM_QUERY_STRING } from '../graphql/queries'
 import Context from '../context'
