@@ -23,6 +23,15 @@ export default function reducer (state, { type, payload }) {
         isGoogle: false
       }
 
+    case 'UPDATE_USER':
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          ...payload
+        }
+      }
+
     case 'SNACKBAR':
       return {
         ...state,

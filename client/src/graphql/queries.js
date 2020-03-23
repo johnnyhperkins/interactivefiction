@@ -19,6 +19,7 @@ export const GET_POEMS_QUERY = gql`
       url
       published
       createdAt
+      likes
     }
   }
 `
@@ -31,6 +32,7 @@ export const GET_FEED_QUERY = gql`
       url
       published
       createdAt
+      likes
       author {
         _id
         name
@@ -48,6 +50,7 @@ export const GET_POEM_QUERY = gql`
       url
       published
       createdAt
+      likes
       author {
         _id
         name
@@ -72,6 +75,7 @@ export const GET_POEM_QUERY_STRING = `
       url
       published
       createdAt
+      likes
       author {
         _id
         name

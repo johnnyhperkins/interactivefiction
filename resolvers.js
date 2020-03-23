@@ -110,6 +110,16 @@ module.exports = {
       }
     },
 
+    updateUser: authenticated(async (root, input, ctx) => {
+      const user = await User.findOneAndUpdate(
+        { _id: ctx.currentUser._id },
+        input,
+        { new: true }
+      )
+
+      return user
+    }),
+
     createPoem: authenticated(async (root, { title }, ctx) => {
       const newPoem = new Poem({
         title,
@@ -176,6 +186,16 @@ module.exports = {
         { $pull: { sections: _id } }
       )
       return section
+    }),
+
+    toggleLike: authenticated(async (root, { poemId }, ctx) => {
+      const userId = ctx.currentUser._id
+      const poem = await Poem.findOne({ _id: poemId })
+
+      poem.likes.includes(userId) ? poem.likes.pull(userId) : poem.likes.push(userId)
+      await poem.save()
+
+      return poem
     })
   }
 }
