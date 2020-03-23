@@ -28,6 +28,29 @@ export const LOGIN_MUTATION = gql`
   }
 `
 
+// User
+
+export const UPDATE_USER_MUTATION = gql`
+  mutation updateUserMutation($name: String, $email: String) {
+    updateUser(name: $name, email: $email) {
+      _id
+      name
+      email
+    }
+  }
+`
+
+// Likes
+
+export const TOGGLE_LIKE_MUTATION = gql`
+  mutation toggleLikeMutation($poemId: ID!) {
+    toggleLike(poemId: $poemId) {
+      _id
+      likes
+    }
+  }
+`
+
 // Poem
 
 export const CREATE_POEM_MUTATION = gql`

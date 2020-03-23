@@ -181,7 +181,7 @@ export default function EditPoem ({ match, history }) {
         <div className={classes.editTitle}>
           {renderTitle(editTitle)}
         </div>
-        <div>
+        <>
           {!editTitle &&
           <Tooltip title='Edit poem title'>
             <EditIcon className={classes.regularIcon} onClick={() => setEditTitle(!editTitle)} />
@@ -191,7 +191,7 @@ export default function EditPoem ({ match, history }) {
               <Eye />
             </Link>
           )}
-        </div>
+        </>
       </Box>
       <AddSectionContainer>
         <Mutation mutation={CREATE_SECTION_MUTATION} errorPolicy='all'>

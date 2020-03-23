@@ -16,6 +16,7 @@ module.exports = gql`
     url: String
     published: Boolean
     createdAt: String
+    likes: [ID!]
   }
 
   type Section {
@@ -73,5 +74,8 @@ module.exports = gql`
     createSection(poemId: ID!, input: SectionInput): Section
     updateSection(_id: ID!, input: SectionInput): Section
     deleteSection(_id: ID!, poemId: ID!): Poem
+
+    updateUser(name: String, email: String): User
+    toggleLike(poemId: ID!): Poem
   }
 `

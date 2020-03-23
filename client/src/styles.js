@@ -55,6 +55,15 @@ export default makeStyles({
     color: '#222',
     textOverflow: 'ellipsis'
   },
+  editUsernameField: {
+    fontSize: '50px!important',
+    width: '100%'
+  },
+  editUsernameFieldInput: {
+    color: '#222',
+    fontSize: '50px!important',
+    textOverflow: 'ellipsis'
+  },
   firstLine: {
     color: '#444',
     textAlign: 'center'
@@ -87,6 +96,10 @@ export default makeStyles({
   },
   marginTop30: {
     marginTop: 30
+  },
+  likeIcon: {
+    marginRight: 15,
+    cursor: 'pointer'
   },
   navBar: {
     alignItems: 'center',

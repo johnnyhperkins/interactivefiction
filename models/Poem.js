@@ -7,7 +7,8 @@ const PoemSchema = new mongoose.Schema(
     url: String,
     createdAt: { type: Date, default: Date.now },
     author: { type: mongoose.Schema.ObjectId, ref: 'User' },
-    published: { type: Boolean, default: false }
+    published: { type: Boolean, default: false },
+    likes: [{ type: mongoose.Schema.ObjectId, ref: 'User' }]
   },
   { timestamps: true }
 )
