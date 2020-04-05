@@ -40,7 +40,6 @@ export default function FavoritesList ({ history }) {
   if (error) return <Typography>{error.message}</Typography>
 
   const renderFavoritesList = poems => {
-    console.log({ poems })
     return poems.map(poem => {
       return (
         <ListItem disableGutters key={poem._id}>
