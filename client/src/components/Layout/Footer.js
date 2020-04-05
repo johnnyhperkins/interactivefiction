@@ -1,9 +1,9 @@
 import React from 'react'
+import { Grid } from '@material-ui/core'
 
 import UIAlerts from '../UIAlerts'
-
-import WarningModal from '../WarningModal'
-import { Grid } from '@material-ui/core'
+import WarningModal from '../Modals/WarningModal'
+import InfoModal from '../Modals/InfoModal'
 
 const Footer = () => {
   return (
@@ -11,6 +11,7 @@ const Footer = () => {
       <Grid item xs={12}>
         <UIAlerts />
         <WarningModal />
+        <InfoModal />
       </Grid>
     </Grid>
   )

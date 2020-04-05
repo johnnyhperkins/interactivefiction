@@ -3,6 +3,15 @@ export default makeStyles({
   active: {
     color: '#222'
   },
+  activeRegularIcon: {
+    '&:hover': {
+      color: '#aaa'
+    },
+    color: '#444',
+    cursor: 'pointer',
+    fontSize: '24px',
+    transition: '.2s ease-in-out all'
+  },
   addPoemItem: {
     alignItems: 'center',
     display: 'flex',
@@ -12,6 +21,9 @@ export default makeStyles({
   border: {
     border: '1px solid #444',
     padding: 15
+  },
+  buttonIcon: {
+    marginLeft: '5px'
   },
   center: {
     textAlign: 'center'
@@ -29,7 +41,7 @@ export default makeStyles({
     transition: '.2s ease-in-out all'
   },
   divider: {
-    margin: '15px 0'
+    margin: '15px 0!important'
   },
   dragContainer: {
     cursor: 'pointer'
@@ -37,7 +49,7 @@ export default makeStyles({
   drawer: {
     display: 'flex',
     flexDirection: 'column',
-    padding: '35px',
+    padding: '35px!important',
     width: '350px'
   },
   editFirstLine: {
@@ -48,7 +60,7 @@ export default makeStyles({
     width: '50%'
   },
   editTitleField: {
-    fontSize: '24px',
+    fontSize: '24px!important',
     width: '100%'
   },
   editTitleFieldInput: {
@@ -69,7 +81,7 @@ export default makeStyles({
     textAlign: 'center'
   },
   formControl: {
-    marginTop: 15,
+    marginTop: '15px!important',
     width: '100%'
   },
   formItem: {
@@ -88,18 +100,18 @@ export default makeStyles({
   },
   leadWord: {
     fontStyle: 'italic',
-    marginBottom: 20,
+    marginBottom: '20px!important',
     textAlign: 'center'
   },
+  likeIcon: {
+    cursor: 'pointer',
+    marginRight: '15px!important'
+  },
   marginBottom30: {
-    marginBottom: 30
+    marginBottom: '30px!important'
   },
   marginTop30: {
-    marginTop: 30
-  },
-  likeIcon: {
-    marginRight: 15,
-    cursor: 'pointer'
+    marginTop: '30px!important'
   },
   navBar: {
     alignItems: 'center',
@@ -109,6 +121,10 @@ export default makeStyles({
   },
   navRoot: {
     padding: 0
+  },
+  picture: {
+    borderRadius: '90%',
+    height: '40px'
   },
   pointer: {
     cursor: 'pointer'
@@ -138,6 +154,10 @@ export default makeStyles({
     justifyContent: 'space-between',
     padding: '50px 0 0 0'
   },
+  signout: {
+    cursor: 'pointer',
+    display: 'flex'
+  },
   siteTitle: {
     color: '#fff',
     fontFamily: 'PT Mono',
@@ -163,6 +183,10 @@ export default makeStyles({
     fontWeight: 'bold',
     textTransform: 'uppercase'
   },
+  stanza: {
+    border: '1px dotted #ccc',
+    cursor: 'pointer'
+  },
   submitButton: {
     margin: '15px 0'
   },
@@ -171,5 +195,8 @@ export default makeStyles({
     flexGrow: 2,
     margin: '0 15px',
     width: '90%'
+  },
+  white: {
+    color: 'white'
   }
 })

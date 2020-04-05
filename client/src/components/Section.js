@@ -30,7 +30,7 @@ export default function Section ({ section, startDeleteSection, provided, poemId
   display: flex;
   padding-bottom: 15px;
   justify-content: center;
-`
+  `
 
   useEffect(() => {
     setFirstLine(section.firstLine)
@@ -159,7 +159,7 @@ export default function Section ({ section, startDeleteSection, provided, poemId
       </Grid>
       {Boolean(section.stanzas.length) && section.stanzas.map((stanza, idx) => {
         return (
-          <Grid item sm={4} key={idx} onClick={() => startUpdateStanza(stanza, idx)} className={classes.pointer}>
+          <Grid item sm={4} key={idx} onClick={() => startUpdateStanza(stanza, idx)} className={classes.stanza}>
             <Tooltip title='Edit Stanza' placement='top'>
               <WithTooltip tooltip>
                 <Stanza stanza={stanza} tooltip />

@@ -16,6 +16,7 @@ module.exports = gql`
     url: String
     published: Boolean
     createdAt: String
+    updatedAt: String
     likes: [ID!]
   }
 

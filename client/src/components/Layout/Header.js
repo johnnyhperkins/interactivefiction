@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 
 import Link from '../misc/Link'
+import NavMenu from '../Menu/NavMenu'
 import Context from '../../context'
-import SignOut from '../Auth/Signout'
 import useStyles from '../../styles'
 
 import { AppBar, Toolbar, Grid } from '@material-ui/core'
@@ -15,12 +15,12 @@ export default function Header () {
     <AppBar position='static'>
       <Grid container justify='center' spacing={2}>
         <Grid item sm={7}>
-          <Toolbar className={classes.navBar}>
+          <Toolbar className={classes.navBar} disableGutters>
             <Link to='/'>
               <h2 className={classes.siteTitle}>Interactive Fiction</h2>
             </Link>
             {currentUser ? (
-              <SignOut currentUser={currentUser} isGoogle={isGoogle} />
+              <NavMenu currentUser={currentUser} isGoogle={isGoogle} />
             ) : (
               <Link to='/login' color='white'>
             Log In

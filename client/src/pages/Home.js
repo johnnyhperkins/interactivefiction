@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { Mutation } from 'react-apollo'
 import { useQuery } from '@apollo/react-hooks'
+import moment from 'moment'
 
 import EditIcon from '@material-ui/icons/Edit'
 import AddIcon from '@material-ui/icons/Add'
@@ -11,6 +12,7 @@ import ReactLoading from 'react-loading'
 import Link from '../components/misc/Link'
 import handleError from '../utils/handleError'
 import { snackbarMessage } from '../utils/snackbarMessage'
+import { outputLikesText } from '../utils/helpers'
 import Context from '../context'
 import {
   CREATE_POEM_MUTATION,
@@ -37,8 +39,7 @@ import {
 
 export default function Home ({ history, client }) {
   const classes = useStyles()
-  const { dispatch, state } = useContext(Context)
-  const { currentUser } = state
+  const { dispatch } = useContext(Context)
   const [addPoem, setAddPoem] = useState(false)
   const [title, setTitle] = useState('')
   const { loading, error, data, refetch } = useQuery(GET_POEMS_QUERY)
@@ -97,7 +98,11 @@ export default function Home ({ history, client }) {
     return poems.map(poem => {
       return (
         <ListItem key={poem._id} disableGutters>
-          <ListItemText primary={poem.title} onClick={() => handleEditPoem(poem._id)} className={classes.pointer} />
+          <ListItemText
+            primary={poem.title}
+            onClick={() => handleEditPoem(poem._id)}
+            secondary={`Last updated ${moment(parseInt(poem.updatedAt)).format('MMMM Do YYYY')} ${outputLikesText(poem.likes.length)}`}
+            className={classes.pointer} />
           <Mutation
             mutation={UPDATE_POEM_MUTATION}>
             {updatePoem => (
@@ -154,18 +159,17 @@ export default function Home ({ history, client }) {
     <div className={classes.root}>
       <Grid container justify='center'>
         <Grid item sm={7}>
-          <Typography variant='h5' className={classes.marginBottom30}>{`${currentUser.name}'s poems`}</Typography>
           <List>
-
+            <Typography variant='h5' className={classes.marginBottom30}>Your poems</Typography>
             {data.getPoems.length ? (
               renderPoems(data.getPoems)
             ) : (
-              <ListItem>
+              <ListItem disableGutters>
                 <ListItemText primary='Click the plus button to create a poem.' />
               </ListItem>
             )}
 
-            <ListItem className={classes.addPoemItem}>
+            <ListItem className={classes.addPoemItem} disableGutters>
               <div className={classes.centerVertical}>
                 <ListItemIcon
                   className={classes.pointer}
@@ -199,7 +203,7 @@ export default function Home ({ history, client }) {
                     })
                   }}>
                   {createPoem => (
-                    <Button variant='outlined' onClick={handleCreatePoem(createPoem)}>
+                    <Button onClick={handleCreatePoem(createPoem)}>
                       Create Poem
                     </Button>
                   )}

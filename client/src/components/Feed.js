@@ -8,6 +8,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import { Grid, Typography, List, ListItem, ListItemText } from '@material-ui/core'
 
 import Context from '../context'
+import { outputLikesText } from '../utils/helpers'
 import { GET_FEED_QUERY, GET_FAVORITES_QUERY } from '../graphql/queries'
 import { TOGGLE_LIKE_MUTATION } from '../graphql/mutations'
 import useStyles from '../styles'
@@ -47,7 +48,7 @@ export default function Feed ({ history, client }) {
           <Link to={poem.url}>
             <ListItemText
               primary={poem.title}
-              secondary={`By ${poem.author.name} // ${moment(parseInt(poem.createdAt)).format('MMMM Do YYYY')} // ${poem.likes.length} likes`}
+              secondary={`By ${poem.author.name} // ${moment(parseInt(poem.createdAt)).format('MMMM Do YYYY')} ${outputLikesText(poem.likes.length)}`}
               className={classes.pointer} />
           </Link>
         </ListItem>
@@ -59,7 +60,7 @@ export default function Feed ({ history, client }) {
     <div className={classes.root}>
       <Grid container justify='center'>
         <Grid item sm={12}>
-          <Typography variant='h5' className={classes.marginBottom30}>Recently Published</Typography>
+          <Typography variant='h5'>Recently Published Poems By Other Poets</Typography>
           <List>
             {renderFeed(data.getFeed)}
           </List>

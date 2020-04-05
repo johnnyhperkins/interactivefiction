@@ -24,6 +24,11 @@ const Context = createContext({
     message: '',
     action: null
   },
+  infoModal: {
+    modalOpen: false,
+    title: '',
+    message: ''
+  },
   poems: [],
   currentPoem: null,
   currentSections: []
