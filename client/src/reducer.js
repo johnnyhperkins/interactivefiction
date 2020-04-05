@@ -56,6 +56,12 @@ export default function reducer (state, { type, payload }) {
         warningModal: payload
       }
 
+    case 'TOGGLE_INFO_MODAL':
+      return {
+        ...state,
+        infoModal: payload
+      }
+
     case 'IGNORE_WARNING':
       return {
         ...state,

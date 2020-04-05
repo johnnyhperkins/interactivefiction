@@ -3,6 +3,15 @@ export default makeStyles({
   active: {
     color: '#222'
   },
+  activeRegularIcon: {
+    '&:hover': {
+      color: '#aaa'
+    },
+    color: '#444',
+    cursor: 'pointer',
+    fontSize: '24px',
+    transition: '.2s ease-in-out all'
+  },
   addPoemItem: {
     alignItems: 'center',
     display: 'flex',
@@ -12,6 +21,9 @@ export default makeStyles({
   border: {
     border: '1px solid #444',
     padding: 15
+  },
+  buttonIcon: {
+    marginLeft: '5px'
   },
   center: {
     textAlign: 'center'
@@ -91,15 +103,15 @@ export default makeStyles({
     marginBottom: '20px!important',
     textAlign: 'center'
   },
+  likeIcon: {
+    cursor: 'pointer',
+    marginRight: '15px!important'
+  },
   marginBottom30: {
     marginBottom: '30px!important'
   },
   marginTop30: {
     marginTop: '30px!important'
-  },
-  likeIcon: {
-    marginRight: '15px!important',
-    cursor: 'pointer'
   },
   navBar: {
     alignItems: 'center',
@@ -110,6 +122,10 @@ export default makeStyles({
   navRoot: {
     padding: 0
   },
+  picture: {
+    borderRadius: '90%',
+    height: '40px'
+  },
   pointer: {
     cursor: 'pointer'
   },
@@ -118,15 +134,6 @@ export default makeStyles({
       color: '#444'
     },
     color: '#aaa',
-    cursor: 'pointer',
-    fontSize: '24px',
-    transition: '.2s ease-in-out all'
-  },
-  activeRegularIcon: {
-    '&:hover': {
-      color: '#aaa'
-    },
-    color: '#444',
     cursor: 'pointer',
     fontSize: '24px',
     transition: '.2s ease-in-out all'
@@ -146,6 +153,10 @@ export default makeStyles({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: '50px 0 0 0'
+  },
+  signout: {
+    cursor: 'pointer',
+    display: 'flex'
   },
   siteTitle: {
     color: '#fff',
@@ -184,5 +195,8 @@ export default makeStyles({
     flexGrow: 2,
     margin: '0 15px',
     width: '90%'
+  },
+  white: {
+    color: 'white'
   }
 })

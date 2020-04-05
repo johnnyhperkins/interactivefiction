@@ -17,7 +17,7 @@ const likeComponents = {
   unliked: FavoriteBorderIcon
 }
 
-export default function FavoritesList ({ history }) {
+export default function FavoritesList () {
   const classes = useStyles()
   const { loading, error, data, refetch } = useQuery(GET_FAVORITES_QUERY)
   const { refetch: refetchFeed } = useQuery(GET_FEED_QUERY)

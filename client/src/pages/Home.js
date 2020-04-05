@@ -39,8 +39,7 @@ import {
 
 export default function Home ({ history, client }) {
   const classes = useStyles()
-  const { dispatch, state } = useContext(Context)
-  const { currentUser } = state
+  const { dispatch } = useContext(Context)
   const [addPoem, setAddPoem] = useState(false)
   const [title, setTitle] = useState('')
   const { loading, error, data, refetch } = useQuery(GET_POEMS_QUERY)
@@ -160,9 +159,8 @@ export default function Home ({ history, client }) {
     <div className={classes.root}>
       <Grid container justify='center'>
         <Grid item sm={7}>
-          <Typography variant='h5' className={classes.marginBottom30}>{`${currentUser.name}'s poems`}</Typography>
           <List>
-
+            <Typography variant='h5' className={classes.marginBottom30}>Your poems</Typography>
             {data.getPoems.length ? (
               renderPoems(data.getPoems)
             ) : (

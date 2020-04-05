@@ -28,7 +28,7 @@ import useStyles from '../styles'
 
 import { Typography, Tooltip, Switch, Input, Button, Drawer } from '@material-ui/core'
 
-export default function EditPoem ({ match, history }) {
+export default function EditPoem ({ match }) {
   const classes = useStyles()
   const { dispatch, state: { ui: { drawer: { open } } } } = useContext(Context)
   const [title, setTitle] = useState('')

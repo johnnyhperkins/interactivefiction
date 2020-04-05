@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import Context from '../context'
+import Context from '../../context'
 
 import {
   Button,
@@ -10,16 +10,16 @@ import {
   DialogTitle
 } from '@material-ui/core'
 
-const WarningModal = () => {
+const InfoModal = () => {
   const {
-    state: { warningModal: { modalOpen, title, message, action } },
+    state: { infoModal: { modalOpen, title, message } },
     dispatch
   } = useContext(Context)
 
   const handleClose = () => {
     dispatch({
-      type: 'TOGGLE_WARNING_MODAL',
-      payload: { modalOpen: false, title: '', message: '', action: null }
+      type: 'TOGGLE_INFO_MODAL',
+      payload: { modalOpen: false, title: '', message: '' }
     })
   }
 
@@ -36,21 +36,14 @@ const WarningModal = () => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color='primary'>
-					Cancel
-        </Button>
+        <Button onClick={handleClose} color='primary'>Cancel</Button>
         <Button
-          onClick={() => {
-            action()
-            handleClose()
-          }}
+          onClick={handleClose}
           color='primary'
-          autoFocus>
-					Ok
-        </Button>
+          autoFocus>Ok</Button>
       </DialogActions>
     </Dialog>
   )
 }
 
-export default WarningModal
+export default InfoModal
