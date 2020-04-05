@@ -19,6 +19,7 @@ export const GET_POEMS_QUERY = gql`
       url
       published
       createdAt
+      updatedAt
       likes
     }
   }

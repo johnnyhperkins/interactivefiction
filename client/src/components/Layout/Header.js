@@ -15,7 +15,7 @@ export default function Header () {
     <AppBar position='static'>
       <Grid container justify='center' spacing={2}>
         <Grid item sm={7}>
-          <Toolbar className={classes.navBar}>
+          <Toolbar className={classes.navBar} disableGutters>
             <Link to='/'>
               <h2 className={classes.siteTitle}>Interactive Fiction</h2>
             </Link>

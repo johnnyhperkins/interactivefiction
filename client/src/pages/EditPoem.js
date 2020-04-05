@@ -177,15 +177,14 @@ export default function EditPoem ({ match, history }) {
 
   return sections && (
     <Container justify='center'>
+      <Tooltip title='Edit poem title' placement='top'>
+        <EditIcon className={editTitle ? classes.activeRegularIcon : classes.regularIcon} onClick={() => setEditTitle(!editTitle)} />
+      </Tooltip>
       <Box justifyContent='space-between' display='flex'>
         <div className={classes.editTitle}>
           {renderTitle(editTitle)}
         </div>
         <>
-          {!editTitle &&
-          <Tooltip title='Edit poem title'>
-            <EditIcon className={classes.regularIcon} onClick={() => setEditTitle(!editTitle)} />
-          </Tooltip>}
           {Boolean(sections.length) && (
             <Link to={url} small='true' style={{ marginLeft: '16px' }}>
               <Eye />

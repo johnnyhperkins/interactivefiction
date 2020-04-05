@@ -29,7 +29,7 @@ export default makeStyles({
     transition: '.2s ease-in-out all'
   },
   divider: {
-    margin: '15px 0'
+    margin: '15px 0!important'
   },
   dragContainer: {
     cursor: 'pointer'
@@ -37,7 +37,7 @@ export default makeStyles({
   drawer: {
     display: 'flex',
     flexDirection: 'column',
-    padding: '35px',
+    padding: '35px!important',
     width: '350px'
   },
   editFirstLine: {
@@ -48,7 +48,7 @@ export default makeStyles({
     width: '50%'
   },
   editTitleField: {
-    fontSize: '24px',
+    fontSize: '24px!important',
     width: '100%'
   },
   editTitleFieldInput: {
@@ -69,7 +69,7 @@ export default makeStyles({
     textAlign: 'center'
   },
   formControl: {
-    marginTop: 15,
+    marginTop: '15px!important',
     width: '100%'
   },
   formItem: {
@@ -88,17 +88,17 @@ export default makeStyles({
   },
   leadWord: {
     fontStyle: 'italic',
-    marginBottom: 20,
+    marginBottom: '20px!important',
     textAlign: 'center'
   },
   marginBottom30: {
-    marginBottom: 30
+    marginBottom: '30px!important'
   },
   marginTop30: {
-    marginTop: 30
+    marginTop: '30px!important'
   },
   likeIcon: {
-    marginRight: 15,
+    marginRight: '15px!important',
     cursor: 'pointer'
   },
   navBar: {
@@ -118,6 +118,15 @@ export default makeStyles({
       color: '#444'
     },
     color: '#aaa',
+    cursor: 'pointer',
+    fontSize: '24px',
+    transition: '.2s ease-in-out all'
+  },
+  activeRegularIcon: {
+    '&:hover': {
+      color: '#aaa'
+    },
+    color: '#444',
     cursor: 'pointer',
     fontSize: '24px',
     transition: '.2s ease-in-out all'
@@ -162,6 +171,10 @@ export default makeStyles({
   snackbarMessage: {
     fontWeight: 'bold',
     textTransform: 'uppercase'
+  },
+  stanza: {
+    border: '1px dotted #ccc',
+    cursor: 'pointer'
   },
   submitButton: {
     margin: '15px 0'

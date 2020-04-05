@@ -9,6 +9,11 @@ export function safeJsonParse (str) {
   }
 }
 
+export function outputLikesText (likeCount) {
+  if (!likeCount) return ''
+  return likeCount > 1 ? `// ${likeCount} likes` : `// ${likeCount} like`
+}
+
 export function convertToHtml (sections) {
   let html = ''
   sections.forEach(section => {

@@ -59,7 +59,7 @@ export default function FavoritesList ({ history }) {
     <div className={classes.root}>
       <Grid container justify='center'>
         <Grid item sm={12}>
-          <Typography variant='h5' className={classes.marginBottom30}>Favorited Poems</Typography>
+          <Typography variant='h5'>Favorited Poems</Typography>
           <List>
             {renderFavoritesList(data.getFavorites)}
           </List>
