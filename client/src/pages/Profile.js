@@ -1,31 +1,19 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Mutation } from 'react-apollo'
-// import { useQuery } from '@apollo/react-hooks'
-// import DeleteIcon from '@material-ui/icons/Delete'
-// import Eye from '../components/Icons/Eye'
-import Container from '../components/Container'
-
-// import ReactLoading from 'react-loading'
-// import Link from '../components/misc/Link'
+import Container from '../components/Layout/Container'
 import handleError from '../utils/handleError'
 import { snackbarMessage } from '../utils/snackbarMessage'
 import Context from '../context'
 import { UPDATE_USER_MUTATION } from '../graphql/mutations'
-// import { GET_POEMS_QUERY } from '../graphql/queries'
+import FavoritesList from '../components/Profile/FavoritesList'
 
 import useStyles from '../styles'
 
 import {
   Grid,
-  // Divider,
   Button,
   Typography,
-  // TextField,
   Input,
-  // List,
-  // ListItem,
-  // ListItemText,
-  // ListItemIcon,
   Divider,
   Tooltip
 } from '@material-ui/core'
@@ -61,7 +49,6 @@ export default function Profile ({ history, client }) {
   }
 
   useEffect(() => {
-    console.log('currentUser', currentUser)
     setUsername(currentUser.name)
   }, [])
 
@@ -117,7 +104,7 @@ export default function Profile ({ history, client }) {
         </Grid>
         <Grid item xs={10}>
           <Divider className={classes.divider} />
-          <Typography variant='h5'>Favorited Poems</Typography>
+          <FavoritesList className={classes.favoritesList} />
         </Grid>
       </Grid>
     </Container>

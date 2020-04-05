@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 
-import Link from './misc/Link'
-import Context from '../context'
-import SignOut from './Auth/Signout'
-import useStyles from '../styles'
+import Link from '../misc/Link'
+import Context from '../../context'
+import SignOut from '../Auth/Signout'
+import useStyles from '../../styles'
 
 import { AppBar, Toolbar, Grid } from '@material-ui/core'
 

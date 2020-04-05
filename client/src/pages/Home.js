@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { Mutation } from 'react-apollo'
 import { useQuery } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
 
 import EditIcon from '@material-ui/icons/Edit'
 import AddIcon from '@material-ui/icons/Add'
@@ -18,7 +17,7 @@ import {
   DELETE_POEM_MUTATION,
   UPDATE_POEM_MUTATION
 } from '../graphql/mutations'
-import { GET_POEMS_QUERY, ME_QUERY } from '../graphql/queries'
+import { GET_POEMS_QUERY } from '../graphql/queries'
 import Feed from '../components/Feed'
 
 import useStyles from '../styles'
@@ -38,11 +37,11 @@ import {
 
 export default function Home ({ history, client }) {
   const classes = useStyles()
-  const { dispatch } = useContext(Context)
+  const { dispatch, state } = useContext(Context)
+  const { currentUser } = state
   const [addPoem, setAddPoem] = useState(false)
   const [title, setTitle] = useState('')
   const { loading, error, data, refetch } = useQuery(GET_POEMS_QUERY)
-  const { data: meData } = useQuery(gql`${ME_QUERY}`)
 
   const startDeletePoem = (poemId, deletePoem) => {
     const action = async () => {
@@ -155,7 +154,7 @@ export default function Home ({ history, client }) {
     <div className={classes.root}>
       <Grid container justify='center'>
         <Grid item sm={7}>
-          <Typography variant='h5' className={classes.marginBottom30}>{`${meData && meData.me.name}'s poems`}</Typography>
+          <Typography variant='h5' className={classes.marginBottom30}>{`${currentUser.name}'s poems`}</Typography>
           <List>
 
             {data.getPoems.length ? (

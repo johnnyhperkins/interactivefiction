@@ -56,7 +56,11 @@ module.exports = {
         .find(query)
         .limit(10)
         .populate('author')
-    }
+    },
+
+    getFavorites: authenticated(async (root, input, ctx) => {
+      return Poem.find({ likes: ctx.currentUser._id }).populate('author')
+    })
 
     // uploadToDrive: authenticated(async (root, { _id, title, payload }, ctx) => {
     //   const poem = await Poem.findOne({

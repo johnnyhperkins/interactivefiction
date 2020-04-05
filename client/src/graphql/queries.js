@@ -42,6 +42,24 @@ export const GET_FEED_QUERY = gql`
   }
 `
 
+export const GET_FAVORITES_QUERY = gql`
+  query {
+    getFavorites {
+      _id
+      title
+      url
+      published
+      createdAt
+      likes
+      author {
+        _id
+        name
+        picture
+      }
+    }
+  }
+`
+
 export const GET_POEM_QUERY = gql`
   query($_id: ID!) {
     getPoem(_id: $_id) {

@@ -3,7 +3,7 @@ import { GraphQLClient } from 'graphql-request'
 import { GoogleLogin } from 'react-google-login'
 
 import { makeStyles } from '@material-ui/styles'
-import Container from '../Container'
+import Container from '../Layout/Container'
 
 import { ME_QUERY } from '../../graphql/queries'
 import { BASE_URL } from '../../client'
