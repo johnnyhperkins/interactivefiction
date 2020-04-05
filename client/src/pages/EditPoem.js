@@ -9,7 +9,7 @@ import Eye from '../components/Icons/Eye'
 
 import Link from '../components/misc/Link'
 import handleError from '../utils/handleError'
-import Container from '../components/Container'
+import Container from '../components/Layout/Container'
 import { snackbarMessage } from '../utils/snackbarMessage'
 import Context from '../context'
 import { useClient } from '../client'

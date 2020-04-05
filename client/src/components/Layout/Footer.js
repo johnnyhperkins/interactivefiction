@@ -1,8 +1,8 @@
 import React from 'react'
 
-import UIAlerts from './UIAlerts'
+import UIAlerts from '../UIAlerts'
 
-import WarningModal from './WarningModal'
+import WarningModal from '../WarningModal'
 import { Grid } from '@material-ui/core'
 
 const Footer = () => {

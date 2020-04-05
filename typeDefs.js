@@ -55,6 +55,7 @@ module.exports = gql`
     getPoem(_id: ID!): Poem
     getSections(poemId: ID!): [Section!]!
     getFeed: [Poem!]!
+    getFavorites: [Poem!]!
   }
 
   type AuthPayload {
