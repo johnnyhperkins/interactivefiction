@@ -28,7 +28,7 @@ const Public = ({ component: Component, ...rest }) => {
     <Route
       render={props => (
         <div>
-          <Header />
+          <Header history={props.history} />
           <Component {...props} />
           <Footer />
         </div>

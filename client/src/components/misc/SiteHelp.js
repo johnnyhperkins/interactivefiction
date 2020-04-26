@@ -1,13 +1,11 @@
-import React, {
-  // useState,
-  useContext } from 'react'
+import React, { useContext } from 'react'
 
 import HelpIcon from '@material-ui/icons/Help'
 import Context from '../../context'
 import helpMapInfo from './constants/helpMapInfo'
 import useStyles from '../../styles'
 
-export default function NavMenu ({ history }) {
+export default function SiteHelp ({ history }) {
   const classes = useStyles()
   const path = history?.location?.pathname
   const helpType = path && path.split('/')[1]

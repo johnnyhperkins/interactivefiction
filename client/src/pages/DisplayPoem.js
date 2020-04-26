@@ -103,8 +103,7 @@ export default function DisplayPoem ({ match, history }) {
               <DisplayLeadWords stanza={stanza} idx={idx} selectStanza={handleSelectStanza} />
             </Grid>
           )
-        })
-        }
+        })}
       </Grid>
     )
   }
