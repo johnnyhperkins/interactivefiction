@@ -129,7 +129,7 @@ module.exports = {
         title,
         author: ctx.currentUser._id
       })
-      newPoem.url = `/${ctx.currentUser.name.replace(/ /g, '')}/${newPoem._id}`
+      newPoem.url = `/poems/${ctx.currentUser.name.replace(/ /g, '')}/${newPoem._id}`
 
       return newPoem.save()
     }),
