@@ -2,18 +2,16 @@ import React, { useState, useContext } from 'react'
 import { withApollo } from 'react-apollo'
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
-// import { Typography } from '@material-ui/core'
 import Link from '../../components/misc/Link'
 import Context from '../../context'
-// import Button from '@material-ui/core/Button'
-// import HelpIcon from '@material-ui/icons/Help'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import SiteHelp from '../misc/SiteHelp'
 
 import useStyles from '../../styles'
 import SignOut from '../Auth/Signout'
 
-const NavMenu = ({ currentUser, isGoogle, client }) => {
+const NavMenu = ({ currentUser, isGoogle, client, history }) => {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -44,8 +42,7 @@ const NavMenu = ({ currentUser, isGoogle, client }) => {
 
   return (
     <>
-      {/* <HelpIcon /> */}
-      {/* <Typography variant='body1' className={classes.white}>Help</Typography> */}
+      <SiteHelp history={history} />
       {isGoogle ? (
         <img
           onClick={handleNavClick}
@@ -65,7 +62,9 @@ const NavMenu = ({ currentUser, isGoogle, client }) => {
         <MenuItem onClick={() => {
           openInfoModal()
           handleClose()
-        }}>About</MenuItem>
+        }}
+        >About
+        </MenuItem>
         <MenuItem onClick={handleClose}><SignOut currentUser={currentUser} isGoogle={isGoogle} onSignout={onSignout} /></MenuItem>
       </Menu>
     </>

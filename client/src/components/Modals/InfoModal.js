@@ -28,7 +28,8 @@ const InfoModal = () => {
       open={modalOpen}
       onClose={handleClose}
       aria-labelledby='alert-dialog-title'
-      aria-describedby='alert-dialog-description'>
+      aria-describedby='alert-dialog-description'
+    >
       <DialogTitle id='alert-dialog-title'>{title}</DialogTitle>
       <DialogContent>
         <DialogContentText id='alert-dialog-description'>
@@ -36,11 +37,12 @@ const InfoModal = () => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color='primary'>Cancel</Button>
         <Button
           onClick={handleClose}
           color='primary'
-          autoFocus>Ok</Button>
+          autoFocus
+        >Close
+        </Button>
       </DialogActions>
     </Dialog>
   )

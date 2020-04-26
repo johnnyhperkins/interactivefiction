@@ -166,7 +166,7 @@ export default function DisplayPoem ({ match, history }) {
         <Box display='flex' justifyContent='center' className={classes.marginTop30}>
           {renderResetButton()}
         </Box>
-      </Container >
+      </Container>
     )
   )
 }

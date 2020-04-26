@@ -27,7 +27,6 @@
 	},
 	"devDependencies": {
 		"nodemon": "^1.18.10",
-		"standard": "^13.0.2",
 		"standardjs": "^1.0.0-alpha"
 	},
 	"engines": {

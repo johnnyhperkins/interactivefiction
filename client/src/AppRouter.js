@@ -18,7 +18,7 @@ const AppRouter = () => {
         <ProtectedRoute exact path='/poem/:id' component={EditPoem} />
         <ProtectedRoute exact path='/profile/:user_id' component={Profile} />
         <ProtectedRoute exact path='/' component={Home} />
-        <PublicRoute exact path='/:username/:poem_id' component={DisplayPoem} />
+        <PublicRoute exact path='/poems/:username/:poem_id' component={DisplayPoem} />
         <PublicRoute path='/login' component={Splash} />
       </Switch>
     </Router>

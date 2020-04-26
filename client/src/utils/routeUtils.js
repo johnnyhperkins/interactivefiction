@@ -13,7 +13,7 @@ const Protected = ({ component: Component, ...rest }) => {
           <Redirect to='/login' />
         ) : (
           <div>
-            <Header />
+            <Header history={props.history} />
             <Component {...props} />
             <Footer />
           </div>

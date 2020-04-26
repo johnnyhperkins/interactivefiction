@@ -32,7 +32,7 @@ export default function Feed ({ history, client }) {
   }
 
   const renderLike = (userIds = [], poemId) => {
-    const LikeIcon = userIds.includes(userId) ? likeComponents['liked'] : likeComponents['unliked']
+    const LikeIcon = userIds.includes(userId) ? likeComponents.liked : likeComponents.unliked
 
     return <LikeIcon className={classes.likeIcon} onClick={() => handleToggleLike(poemId)} />
   }
@@ -49,7 +49,8 @@ export default function Feed ({ history, client }) {
             <ListItemText
               primary={poem.title}
               secondary={`By ${poem.author.name} // ${moment(parseInt(poem.createdAt)).format('MMMM Do YYYY')} ${outputLikesText(poem.likes.length)}`}
-              className={classes.pointer} />
+              className={classes.pointer}
+            />
           </Link>
         </ListItem>
       )
